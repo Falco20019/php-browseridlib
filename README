@@ -1,0 +1,54 @@
+
+---------------------
+BrowserID PHP Library
+---------------------
+
+(1) Summary
+(2) Requirements
+(3) Release notes
+(4) Websites
+(5) License
+
+
+(1) Summary
+
+The library offers functions for verifying BrowserID assertions directly on the server
+as relaying party. Verifying the assertions directly has the advantage that the assertion
+is not sent over the internet and to reduce dependencies on others.
+
+Since BrowserID is highly under developement right now, this library may be out 
+of date the time you use it. Until the protocol get's stable, the usage is only 
+advised for experimental usage. If you want to use BrowserID in the experimental 
+state, it's recommented to use https://browserid.org/verify for verification.
+
+
+(2) Requirements
+
+This library uses anonymous functions and functions like openssl_get_md_methods that
+are only available since PHP 5.3.0 Therefore you must use a version >= 5.3.0 for it
+to work.
+
+
+(3) Release notes
+
+This library offers the working state as of 2011-07-06. All functions available at 
+https://github.com/mozilla/browserid/tree/dev/verifier/lib were ported for usage 
+with PHP.
+
+
+(4) Websites
+
+BrowserID at GitHub :
+- https://github.com/mozilla/browserid
+
+The VerifiedEmailProtocol :
+- https://wiki.mozilla.org/Identity/Verified_Email_Protocol
+
+BrowserID Main Page : 
+- https://browserid.org/
+
+
+(7) License
+
+As the original WampServer, this addon is released under the terms of GNU GPL license.
+

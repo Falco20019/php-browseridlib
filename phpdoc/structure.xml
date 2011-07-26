@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <project version="0.12.0" title="">
-  <file path="idassertion.php" hash="1fb81126bc407ebbed1f88508f2740bd">
+  <file path="idassertion.php" hash="57373f8c53fff972d1f8fe97ab92837f">
     <docblock>
       <description>BrowserID assertion implementation</description>
       <long-description>&lt;p&gt;Implementation of the VerifiedEmailProtocol based on:
@@ -10,7 +10,7 @@ https://wiki.mozilla.org/Labs/Identity/VerifiedEmailProtocol&lt;/p&gt;
 https://github.com/mozilla/browserid/tree/dev/verifier/lib&lt;/p&gt;
 </long-description>
       <tag name="author" description="Benjamin Kr&#xE4;mer &amp;lt;benjamin.kraemer@alien-scripts.de&amp;gt;"/>
-      <tag name="package" description="BrowserIDLib"/>
+      <tag name="package" description="php-browseridlib"/>
     </docblock>
     <include type="Require Once" line="14">
       <name>jwt.php</name>
@@ -29,7 +29,7 @@ draft-hammer-hostmeta&lt;/p&gt;
 &lt;p&gt;http://tools.ietf.org/html/rfc5785
 http://tools.ietf.org/html/draft-hammer-hostmeta-13&lt;/p&gt;
 </long-description>
-        <tag name="package" description="BrowserIDLib" line="16"/>
+        <tag name="package" description="php-browseridlib" line="16"/>
       </docblock>
       <constant namespace="default" line="39">
         <name>NO_HOST_META</name>
@@ -161,7 +161,7 @@ the result for the upcoming assertions</description>
         <description>BrowserID assertion</description>
         <long-description>&lt;p&gt;A class for creating assertions and verifying them.&lt;/p&gt;
 </long-description>
-        <tag name="package" description="BrowserIDLib" line="186"/>
+        <tag name="package" description="php-browseridlib" line="186"/>
       </docblock>
       <property final="false" static="false" visibility="private" line="198">
         <name>$assertion</name>
@@ -269,7 +269,7 @@ relaying party</description>
       </method>
     </class>
   </file>
-  <file path="jwt.php" hash="3c6b763d2bfd222fa627c730e71dde2c">
+  <file path="jwt.php" hash="5d46304e0d195d9098b268a1fb9c5987">
     <docblock>
       <description>JSON Web Token implementation</description>
       <long-description>&lt;p&gt;Implementation of the JWT protocol based on:
@@ -279,7 +279,7 @@ http://self-issued.info/docs/draft-jones-json-web-token-01.html&lt;/p&gt;
 https://github.com/mozilla/browserid/tree/dev/verifier/lib&lt;/p&gt;
 </long-description>
       <tag name="author" description="Benjamin Kr&#xE4;mer &amp;lt;benjamin.kraemer@alien-scripts.de&amp;gt;"/>
-      <tag name="package" description="BrowserIDLib"/>
+      <tag name="package" description="php-browseridlib"/>
     </docblock>
     <class final="false" abstract="false" line="21" namespace="default">
       <name>JWTInternals</name>
@@ -290,7 +290,7 @@ https://github.com/mozilla/browserid/tree/dev/verifier/lib&lt;/p&gt;
         <long-description>&lt;p&gt;Static functions for encoding and decoding strings using Base64 and
 encode/decode it for usage in URLs&lt;/p&gt;
 </long-description>
-        <tag name="package" description="BrowserIDLib" line="14"/>
+        <tag name="package" description="php-browseridlib" line="14"/>
       </docblock>
       <method final="false" abstract="false" static="true" visibility="public" line="29">
         <name>base64url_encode</name>
@@ -339,7 +339,7 @@ encode/decode it for usage in URLs&lt;/p&gt;
         <description>HMAC Hashing Interface</description>
         <long-description>&lt;p&gt;Offers methods for signing and verifiying data using HMAC&lt;/p&gt;
 </long-description>
-        <tag name="package" description="BrowserIDLib" line="45"/>
+        <tag name="package" description="php-browseridlib" line="45"/>
       </docblock>
       <property final="false" static="false" visibility="private" line="60">
         <name>$hash</name>
@@ -470,7 +470,7 @@ message digest.</description>
         <description>RSA-SHA Hashing Interface</description>
         <long-description>&lt;p&gt;Offers methods for signing and verifiying data using RSA-SHA&lt;/p&gt;
 </long-description>
-        <tag name="package" description="BrowserIDLib" line="124"/>
+        <tag name="package" description="php-browseridlib" line="124"/>
       </docblock>
       <property final="false" static="false" visibility="private" line="139">
         <name>$hash</name>
@@ -598,7 +598,7 @@ hashing algorithms in openssl_get_md_methods()</description>
         <long-description>&lt;p&gt;Implementation of the JWT protocol based on:
 http://self-issued.info/docs/draft-jones-json-web-token-01.html&lt;/p&gt;
 </long-description>
-        <tag name="package" description="BrowserIDLib" line="233"/>
+        <tag name="package" description="php-browseridlib" line="233"/>
       </docblock>
       <property final="false" static="false" visibility="private" line="246">
         <name>$objectStr</name>
@@ -801,7 +801,7 @@ with the key</description>
         <description>Unsupported algorithm</description>
         <long-description>&lt;p&gt;The algorithm used is not supported by your PHP installation&lt;/p&gt;
 </long-description>
-        <tag name="package" description="BrowserIDLib" line="379"/>
+        <tag name="package" description="php-browseridlib" line="379"/>
       </docblock>
       <method final="false" abstract="false" static="false" visibility="public" line="391">
         <name>__construct</name>
@@ -836,7 +836,7 @@ with the key</description>
         <description>Unimplemented algorithm</description>
         <long-description>&lt;p&gt;The algorithm used is not implemented yet&lt;/p&gt;
 </long-description>
-        <tag name="package" description="BrowserIDLib" line="397"/>
+        <tag name="package" description="php-browseridlib" line="397"/>
       </docblock>
       <method final="false" abstract="false" static="false" visibility="public" line="409">
         <name>__construct</name>
@@ -871,7 +871,7 @@ with the key</description>
         <description>Malformed webtoken</description>
         <long-description>&lt;p&gt;The webtoken is not well-formed&lt;/p&gt;
 </long-description>
-        <tag name="package" description="BrowserIDLib" line="415"/>
+        <tag name="package" description="php-browseridlib" line="415"/>
       </docblock>
       <method final="false" abstract="false" static="false" visibility="public" line="427">
         <name>__construct</name>
@@ -906,7 +906,7 @@ with the key</description>
         <description>Malformed signature</description>
         <long-description>&lt;p&gt;The signature supplied is not in the PEM format&lt;/p&gt;
 </long-description>
-        <tag name="package" description="BrowserIDLib" line="433"/>
+        <tag name="package" description="php-browseridlib" line="433"/>
       </docblock>
       <method final="false" abstract="false" static="false" visibility="public" line="445">
         <name>__construct</name>
@@ -935,7 +935,7 @@ with the key</description>
     </class>
   </file>
   <package name=""/>
-  <package name="BrowserIDLib"/>
+  <package name="php-browseridlib"/>
   <namespace name="default"/>
   <marker>todo</marker>
   <marker>fixme</marker>

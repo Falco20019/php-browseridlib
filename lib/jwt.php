@@ -9,14 +9,14 @@
  * https://github.com/mozilla/browserid/tree/dev/verifier/lib
  *
  * @author Benjamin Krämer <benjamin.kraemer@alien-scripts.de>
- * @package BrowserIDLib
+ * @package php-browseridlib
  */
 /**
  * Base64 URL encoding/decoding
  * 
  * Static functions for encoding and decoding strings using Base64 and
  * encode/decode it for usage in URLs
- * @package BrowserIDLib
+ * @package php-browseridlib
  */
 class JWTInternals {
 
@@ -46,7 +46,7 @@ class JWTInternals {
  * HMAC Hashing Interface
  * 
  * Offers methods for signing and verifiying data using HMAC
- * @package BrowserIDLib
+ * @package php-browseridlib
  */
 class HMACAlgorithm {
 
@@ -125,7 +125,7 @@ class HMACAlgorithm {
  * RSA-SHA Hashing Interface
  * 
  * Offers methods for signing and verifiying data using RSA-SHA
- * @package BrowserIDLib
+ * @package php-browseridlib
  */
 class RSASHAAlgorithm {
 
@@ -235,7 +235,7 @@ class RSASHAAlgorithm {
  *
  * Implementation of the JWT protocol based on:
  * http://self-issued.info/docs/draft-jones-json-web-token-01.html
- * @package BrowserIDLib
+ * @package php-browseridlib
  */
 class WebToken {
 
@@ -380,7 +380,7 @@ class WebToken {
  * Unsupported algorithm
  * 
  * The algorithm used is not supported by your PHP installation
- * @package BrowserIDLib
+ * @package php-browseridlib
  */
 class NoSuchAlgorithmException extends Exception {
 
@@ -398,7 +398,7 @@ class NoSuchAlgorithmException extends Exception {
  * Unimplemented algorithm
  * 
  * The algorithm used is not implemented yet
- * @package BrowserIDLib
+ * @package php-browseridlib
  */
 class NotImplementedException extends Exception {
 
@@ -416,7 +416,7 @@ class NotImplementedException extends Exception {
  * Malformed webtoken
  * 
  * The webtoken is not well-formed
- * @package BrowserIDLib
+ * @package php-browseridlib
  */
 class MalformedWebTokenException extends Exception {
 
@@ -434,7 +434,7 @@ class MalformedWebTokenException extends Exception {
  * Malformed signature
  * 
  * The signature supplied is not in the PEM format
- * @package BrowserIDLib
+ * @package php-browseridlib
  */
 class MalformedSignatureException extends Exception {
 

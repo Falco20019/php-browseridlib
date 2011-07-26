@@ -9,7 +9,7 @@
  * https://github.com/mozilla/browserid/tree/dev/verifier/lib
  *
  * @author Benjamin Krämer <benjamin.kraemer@alien-scripts.de>
- * @package BrowserIDLib
+ * @package php-browseridlib
  */
 require_once("jwt.php");
 
@@ -23,7 +23,7 @@ require_once("jwt.php");
  * 
  * http://tools.ietf.org/html/rfc5785
  * http://tools.ietf.org/html/draft-hammer-hostmeta-13
- * @package BrowserIDLib
+ * @package php-browseridlib
  */
 class Webfinger {
 
@@ -187,7 +187,7 @@ class Webfinger {
  * BrowserID assertion
  * 
  * A class for creating assertions and verifying them.
- * @package BrowserIDLib
+ * @package php-browseridlib
  */
 class IDAssertion {
 
