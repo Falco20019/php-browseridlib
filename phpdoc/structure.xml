@@ -1,0 +1,942 @@
+<?xml version="1.0"?>
+<project version="0.12.0" title="">
+  <file path="idassertion.php" hash="1fb81126bc407ebbed1f88508f2740bd">
+    <docblock>
+      <description>BrowserID assertion implementation</description>
+      <long-description>&lt;p&gt;Implementation of the VerifiedEmailProtocol based on:
+https://wiki.mozilla.org/Labs/Identity/VerifiedEmailProtocol&lt;/p&gt;
+
+&lt;p&gt;This code is also based on the scripts found at browserid's github repository:
+https://github.com/mozilla/browserid/tree/dev/verifier/lib&lt;/p&gt;
+</long-description>
+      <tag name="author" description="Benjamin Kr&#xE4;mer &amp;lt;benjamin.kraemer@alien-scripts.de&amp;gt;"/>
+      <tag name="package" description="BrowserIDLib"/>
+    </docblock>
+    <include type="Require Once" line="14">
+      <name>jwt.php</name>
+    </include>
+    <class final="false" abstract="false" line="28" namespace="default">
+      <name>Webfinger</name>
+      <extends/>
+      <full_name>\Webfinger</full_name>
+      <docblock>
+        <description>Webfinger implementation</description>
+        <long-description>&lt;p&gt;An implementation of the webfinger protocol for looking up user data
+assuming that site-level metadata is retrieved through HTTPS using the
+.well-known/host-meta mechanism described in IETF RFC 5785 and
+draft-hammer-hostmeta&lt;/p&gt;
+
+&lt;p&gt;http://tools.ietf.org/html/rfc5785
+http://tools.ietf.org/html/draft-hammer-hostmeta-13&lt;/p&gt;
+</long-description>
+        <tag name="package" description="BrowserIDLib" line="16"/>
+      </docblock>
+      <constant namespace="default" line="39">
+        <name>NO_HOST_META</name>
+        <value>NO</value>
+        <docblock>
+          <description>A constant defining that no host-meta data was found for a domain</description>
+          <long-description>
+</long-description>
+        </docblock>
+      </constant>
+      <property final="false" static="true" visibility="private" line="34">
+        <name>$hostMetaCache</name>
+        <default>array</default>
+        <docblock>
+          <description>A cache for host-meta templates</description>
+          <long-description>
+</long-description>
+          <tag name="var" description="The array contains templates for the domains" type="array" line="30">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="true" visibility="private" line="47">
+        <name>extractLRDDTemplateFromHostMeta</name>
+        <docblock>
+          <description>Extract the LRDD template from the host-meta data</description>
+          <long-description>
+</long-description>
+          <tag name="param" description="A xml-string containing the host-meta" type="string" variable="$docBytes" line="41">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag name="param" description="The name of the domain the host-meta belongs to" type="string" variable="$domain" line="41">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag name="return" description="The URL of the LRDD template or null if not found in the host-meta" type="string" line="41">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+        <argument line="47">
+          <name>$docBytes</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="47">
+          <name>$domain</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="private" line="81">
+        <name>retrieveTemplateForDomain</name>
+        <docblock>
+          <description>Gets the /.well-known/host-meta template for the domain and caches
+the result for the upcoming assertions</description>
+          <long-description>
+</long-description>
+          <tag name="param" description="The domain of the issuer" type="string" variable="$domain" line="74">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag name="param" description="A function to be called on success" type="callback" variable="$continueFn" line="74">
+            <type by_reference="false">callback</type>
+          </tag>
+          <tag name="param" description="A function to be called on error" type="callback" variable="$errorFn" line="74">
+            <type by_reference="false">callback</type>
+          </tag>
+        </docblock>
+        <argument line="81">
+          <name>$domain</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="81">
+          <name>$continueFn</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="81">
+          <name>$errorFn</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" line="121">
+        <name>resolvePublicKeysForAddress</name>
+        <docblock>
+          <description>Retrieves the list of public keys for all devices of a user by the issuer</description>
+          <long-description>
+</long-description>
+          <tag name="param" description="The e-mail address of the user" type="string" variable="$addr" line="114">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag name="param" description="The issuer" type="string" variable="$issuer" line="114">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag name="param" description="A function called on success" type="callback" variable="$successCallback" line="114">
+            <type by_reference="false">callback</type>
+          </tag>
+          <tag name="param" description="A function called on error" type="callback" variable="$errorCallback" line="114">
+            <type by_reference="false">callback</type>
+          </tag>
+        </docblock>
+        <argument line="121">
+          <name>$addr</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="121">
+          <name>$issuer</name>
+          <default>NULL</default>
+          <type/>
+        </argument>
+        <argument line="121">
+          <name>$successCallback</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="121">
+          <name>$errorCallback</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+    </class>
+    <class final="false" abstract="false" line="192" namespace="default">
+      <name>IDAssertion</name>
+      <extends/>
+      <full_name>\IDAssertion</full_name>
+      <docblock>
+        <description>BrowserID assertion</description>
+        <long-description>&lt;p&gt;A class for creating assertions and verifying them.&lt;/p&gt;
+</long-description>
+        <tag name="package" description="BrowserIDLib" line="186"/>
+      </docblock>
+      <property final="false" static="false" visibility="private" line="198">
+        <name>$assertion</name>
+        <default/>
+        <docblock>
+          <description>A serialized JSON Web Token</description>
+          <long-description>
+</long-description>
+          <tag name="var" description="The webtoken" type="string" line="194">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" line="204">
+        <name>__construct</name>
+        <docblock>
+          <description>Creates an instance to verify this assertion</description>
+          <long-description>
+</long-description>
+          <tag name="param" description="The assertion to be verified" type="string" variable="$assertion" line="200">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+        <argument line="204">
+          <name>$assertion</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" line="217">
+        <name>create</name>
+        <docblock>
+          <description>Creates an assertion for the user that can be validated by the
+relaying party</description>
+          <long-description>
+</long-description>
+          <tag name="param" description="The email to be used for authentication" type="string" variable="$email" line="208">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag name="param" description="A Unix timestamp with microseconds defining the lifetime of the assertion" type="int" variable="$validUntil" line="208">
+            <type by_reference="false">int</type>
+          </tag>
+          <tag name="param" description="The domain of the relaying party" type="string" variable="$audience" line="208">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag name="param" description="The private key used for signing in PEM format" type="string" variable="$privateKeyData" line="208">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag name="return" description="" type="\type" line="208">
+            <type by_reference="false">\type</type>
+          </tag>
+        </docblock>
+        <argument line="217">
+          <name>$email</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="217">
+          <name>$validUntil</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="217">
+          <name>$audience</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="217">
+          <name>$privateKeyData</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" line="234">
+        <name>verify</name>
+        <docblock>
+          <description>Verifies the assigned assertion and calls a callback on success or error</description>
+          <long-description>
+</long-description>
+          <tag name="param" description="The domain of the relaying party" type="string" variable="$forAudience" line="228">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag name="param" description="A function to be called on success" type="callback" variable="$onSuccess" line="228">
+            <type by_reference="false">callback</type>
+          </tag>
+          <tag name="param" description="A function to be called on error" type="callback" variable="$onError" line="228">
+            <type by_reference="false">callback</type>
+          </tag>
+        </docblock>
+        <argument line="234">
+          <name>$forAudience</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="234">
+          <name>$onSuccess</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="234">
+          <name>$onError</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+    </class>
+  </file>
+  <file path="jwt.php" hash="3c6b763d2bfd222fa627c730e71dde2c">
+    <docblock>
+      <description>JSON Web Token implementation</description>
+      <long-description>&lt;p&gt;Implementation of the JWT protocol based on:
+http://self-issued.info/docs/draft-jones-json-web-token-01.html&lt;/p&gt;
+
+&lt;p&gt;This code is also based on the scripts found at browserid's github repository:
+https://github.com/mozilla/browserid/tree/dev/verifier/lib&lt;/p&gt;
+</long-description>
+      <tag name="author" description="Benjamin Kr&#xE4;mer &amp;lt;benjamin.kraemer@alien-scripts.de&amp;gt;"/>
+      <tag name="package" description="BrowserIDLib"/>
+    </docblock>
+    <class final="false" abstract="false" line="21" namespace="default">
+      <name>JWTInternals</name>
+      <extends/>
+      <full_name>\JWTInternals</full_name>
+      <docblock>
+        <description>Base64 URL encoding/decoding</description>
+        <long-description>&lt;p&gt;Static functions for encoding and decoding strings using Base64 and
+encode/decode it for usage in URLs&lt;/p&gt;
+</long-description>
+        <tag name="package" description="BrowserIDLib" line="14"/>
+      </docblock>
+      <method final="false" abstract="false" static="true" visibility="public" line="29">
+        <name>base64url_encode</name>
+        <docblock>
+          <description>Encodes data with MIME base64 and make it URL-safe</description>
+          <long-description>
+</long-description>
+          <tag name="param" description="The message to encode" type="string" variable="$data" line="23">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag name="return" description="The encoded message" type="string" line="23">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+        <argument line="29">
+          <name>$data</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" line="39">
+        <name>base64url_decode</name>
+        <docblock>
+          <description>Decodes data made URL-safe and encoded with MIME base64</description>
+          <long-description>
+</long-description>
+          <tag name="param" description="The message to decode" type="string" variable="$data" line="33">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag name="return" description="The decoded message" type="string" line="33">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+        <argument line="39">
+          <name>$data</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+    </class>
+    <class final="false" abstract="false" line="51" namespace="default">
+      <name>HMACAlgorithm</name>
+      <extends/>
+      <full_name>\HMACAlgorithm</full_name>
+      <docblock>
+        <description>HMAC Hashing Interface</description>
+        <long-description>&lt;p&gt;Offers methods for signing and verifiying data using HMAC&lt;/p&gt;
+</long-description>
+        <tag name="package" description="BrowserIDLib" line="45"/>
+      </docblock>
+      <property final="false" static="false" visibility="private" line="60">
+        <name>$hash</name>
+        <default/>
+        <docblock>
+          <description>The hashing algorithm used to sign or verify data. Has to be supported
+by the PHP Version and is checked against the list of available
+hashing algorithms in hash_algos()</description>
+          <long-description>
+</long-description>
+          <tag name="var" description="The hashing algorithm" type="string" line="53">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="private" line="68">
+        <name>$key</name>
+        <default/>
+        <docblock>
+          <description>Shared secret key used for generating the HMAC variant of the
+message digest.</description>
+          <long-description>
+</long-description>
+          <tag name="var" description="The shared secret key" type="string" line="62">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="private" line="75">
+        <name>$data</name>
+        <default/>
+        <docblock>
+          <description>The message to be hashed.</description>
+          <long-description>
+</long-description>
+          <tag name="var" description="The message" type="string" line="70">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" line="82">
+        <name>__construct</name>
+        <docblock>
+          <description/>
+          <long-description>
+</long-description>
+          <tag name="param" description="The hashing algorithm" type="string" variable="$hash" line="77">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag name="param" description="The shared secret key" type="string" variable="$key" line="77">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag name="throws" description="The algorithm is not supported" type="\NoSuchAlgorithmException" line="77">
+            <type by_reference="false">\NoSuchAlgorithmException</type>
+          </tag>
+        </docblock>
+        <argument line="82">
+          <name>$hash</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="82">
+          <name>$key</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" line="93">
+        <name>finalize</name>
+        <docblock>
+          <description>Not needed for HMAC</description>
+          <long-description>
+</long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" line="101">
+        <name>update</name>
+        <docblock>
+          <description>Set the message to be hashed</description>
+          <long-description>
+</long-description>
+          <tag name="param" description="The message" type="string" variable="$data" line="97">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+        <argument line="101">
+          <name>$data</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" line="109">
+        <name>sign</name>
+        <docblock>
+          <description>Generates the signature using the specified algorithm</description>
+          <long-description>
+</long-description>
+          <tag name="return" description="The hashed message" type="string" line="105">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" line="118">
+        <name>verify</name>
+        <docblock>
+          <description>Verifies the signature</description>
+          <long-description>
+</long-description>
+          <tag name="param" description="The signature given" type="string" variable="$sig" line="113">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag name="return" description="Returns true if the signature was valid" type="bool" line="113">
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+        <argument line="118">
+          <name>$sig</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+    </class>
+    <class final="false" abstract="false" line="130" namespace="default">
+      <name>RSASHAAlgorithm</name>
+      <extends/>
+      <full_name>\RSASHAAlgorithm</full_name>
+      <docblock>
+        <description>RSA-SHA Hashing Interface</description>
+        <long-description>&lt;p&gt;Offers methods for signing and verifiying data using RSA-SHA&lt;/p&gt;
+</long-description>
+        <tag name="package" description="BrowserIDLib" line="124"/>
+      </docblock>
+      <property final="false" static="false" visibility="private" line="139">
+        <name>$hash</name>
+        <default/>
+        <docblock>
+          <description>The hashing algorithm used to sign or verify data. Has to be supported
+by the PHP Version and is checked against the list of available
+hashing algorithms in openssl_get_md_methods()</description>
+          <long-description>
+</long-description>
+          <tag name="var" description="The hashing algorithm" type="string" line="132">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="private" line="146">
+        <name>$keyPEM</name>
+        <default/>
+        <docblock>
+          <description>A PEM formatted private/public key used for signing or validating</description>
+          <long-description>
+</long-description>
+          <tag name="var" description="The key" type="string" line="141">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="private" line="153">
+        <name>$data</name>
+        <default/>
+        <docblock>
+          <description>The message to be hashed.</description>
+          <long-description>
+</long-description>
+          <tag name="var" description="The message" type="string" line="148">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" line="159">
+        <name>__construct</name>
+        <docblock>
+          <description/>
+          <long-description>
+</long-description>
+          <tag name="param" description="The hashing algorithm" type="string" variable="$hash" line="155">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag name="param" description="The pem key" type="string" variable="$keyPEM" line="155">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+        <argument line="159">
+          <name>$hash</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="159">
+          <name>$keyPEM</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" line="171">
+        <name>finalize</name>
+        <docblock>
+          <description>Not needed for RSA-SHA</description>
+          <long-description>
+</long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" line="179">
+        <name>update</name>
+        <docblock>
+          <description>Set the message to be signed/verified</description>
+          <long-description>
+</long-description>
+          <tag name="param" description="The message" type="string" variable="$data" line="175">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+        <argument line="179">
+          <name>$data</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" line="187">
+        <name>sign</name>
+        <docblock>
+          <description>Generates the signature using the specified algorithm</description>
+          <long-description>
+</long-description>
+          <tag name="return" description="The hashed message" type="string" line="183">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" line="212">
+        <name>verify</name>
+        <docblock>
+          <description>Verifies the signature</description>
+          <long-description>
+</long-description>
+          <tag name="param" description="The signature given" type="string" variable="$sig" line="207">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag name="return" description="Returns true if the signature was valid" type="bool" line="207">
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+        <argument line="212">
+          <name>$sig</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+    </class>
+    <class final="false" abstract="false" line="240" namespace="default">
+      <name>WebToken</name>
+      <extends/>
+      <full_name>\WebToken</full_name>
+      <docblock>
+        <description>JSON Web Token implementation</description>
+        <long-description>&lt;p&gt;Implementation of the JWT protocol based on:
+http://self-issued.info/docs/draft-jones-json-web-token-01.html&lt;/p&gt;
+</long-description>
+        <tag name="package" description="BrowserIDLib" line="233"/>
+      </docblock>
+      <property final="false" static="false" visibility="private" line="246">
+        <name>$objectStr</name>
+        <default/>
+        <docblock>
+          <description>The data to be signed</description>
+          <long-description>
+</long-description>
+          <tag name="var" description="The data" type="string" line="242">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="private" line="254">
+        <name>$pkAlgorithm</name>
+        <default/>
+        <docblock>
+          <description>The algorithm used for hashing. Supported are:
+ES256, ES384, ES512, HS256, HS384, HS512, RS256, RS384, RS512</description>
+          <long-description>
+</long-description>
+          <tag name="var" description="A supported algorithm" type="string" line="248">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="private" line="260">
+        <name>$headerSegment</name>
+        <default/>
+        <docblock>
+          <description>The header segment of the web token on parsing</description>
+          <long-description>
+</long-description>
+          <tag name="var" description="A list of header entries (like the algorithm)" type="array" line="256">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="private" line="266">
+        <name>$payloadSegment</name>
+        <default/>
+        <docblock>
+          <description>The payload that was signed</description>
+          <long-description>
+</long-description>
+          <tag name="var" description="The data" type="string" line="262">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="private" line="273">
+        <name>$cryptoSegment</name>
+        <default/>
+        <docblock>
+          <description>The signature generated from the payload using the algorithm
+given in the header</description>
+          <long-description>
+</long-description>
+          <tag name="var" description="The signature" type="string" line="268">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" line="279">
+        <name>__construct</name>
+        <docblock>
+          <description/>
+          <long-description>
+</long-description>
+          <tag name="param" description="The data to be signed" type="string" variable="$objectStr" line="275">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag name="param" description="The algorithm used for signing (ES256, ES384, ES512, HS256, HS384, HS512, RS256, RS384, RS512)" type="string" variable="$algorithm" line="275">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+        <argument line="279">
+          <name>$objectStr</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="279">
+          <name>$algorithm</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" line="289">
+        <name>__get</name>
+        <docblock>
+          <description>A getter-function for the class variables</description>
+          <long-description>
+</long-description>
+          <tag name="param" description="The name of the class variable" type="string" variable="$name" line="284">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag name="return" description="The value of the variable corresponding" type="mixed" line="284">
+            <type by_reference="false">mixed</type>
+          </tag>
+        </docblock>
+        <argument line="289">
+          <name>$name</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" line="298">
+        <name>parse</name>
+        <docblock>
+          <description>Generate a Webtoken object for parsing JWT data</description>
+          <long-description>
+</long-description>
+          <tag name="param" description="The JSON Web Token" type="string" variable="$input" line="293">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag name="return" description="A Webtoken instance for verification" type="\WebToken" line="293">
+            <type by_reference="false">\WebToken</type>
+          </tag>
+        </docblock>
+        <argument line="298">
+          <name>$input</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="private" line="318">
+        <name>constructAlgorithm</name>
+        <docblock>
+          <description>Create a instance of an hashing algorithm interface depending on the
+chosen algorithm</description>
+          <long-description>
+</long-description>
+          <tag name="param" description="The algorithm used to sign/verify (ES256, ES384, ES512, HS256, HS384, HS512, RS256, RS384, RS512)" type="string" variable="$jwtAlgStr" line="311">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag name="param" description="The key used for signing/verification" type="string" variable="$key" line="311">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag name="return" description="" type="\HMACAlgorithm|\RSASHAAlgorithm" line="311">
+            <type by_reference="false">\HMACAlgorithm</type>
+            <type by_reference="false">\RSASHAAlgorithm</type>
+          </tag>
+        </docblock>
+        <argument line="318">
+          <name>$jwtAlgStr</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="318">
+          <name>$key</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" line="348">
+        <name>serialize</name>
+        <docblock>
+          <description>Serializes data as JWT using the defined algorithm and data and signed
+with the key</description>
+          <long-description>
+</long-description>
+          <tag name="param" description="The key used for hashing" type="string" variable="$key" line="342">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag name="return" description="A JWT-serialized message" type="string" line="342">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+        <argument line="348">
+          <name>$key</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" line="368">
+        <name>verify</name>
+        <docblock>
+          <description>Verifies a Webtoken generated with the parse method</description>
+          <long-description>
+</long-description>
+          <tag name="param" description="The key used to verify the webtoken" type="string" variable="$key" line="363">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag name="return" description="Returns true if the webtoken is valid" type="bool" line="363">
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+        <argument line="368">
+          <name>$key</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+    </class>
+    <class final="false" abstract="false" line="385" namespace="default">
+      <name>NoSuchAlgorithmException</name>
+      <extends>\Exception</extends>
+      <full_name>\NoSuchAlgorithmException</full_name>
+      <docblock>
+        <description>Unsupported algorithm</description>
+        <long-description>&lt;p&gt;The algorithm used is not supported by your PHP installation&lt;/p&gt;
+</long-description>
+        <tag name="package" description="BrowserIDLib" line="379"/>
+      </docblock>
+      <method final="false" abstract="false" static="false" visibility="public" line="391">
+        <name>__construct</name>
+        <docblock>
+          <description/>
+          <long-description>
+</long-description>
+          <tag name="param" description="The error message" type="string" variable="$message" line="387">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag name="param" description="An error code" type="int" variable="$code" line="387">
+            <type by_reference="false">int</type>
+          </tag>
+        </docblock>
+        <argument line="391">
+          <name>$message</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="391">
+          <name>$code</name>
+          <default>0</default>
+          <type/>
+        </argument>
+      </method>
+    </class>
+    <class final="false" abstract="false" line="403" namespace="default">
+      <name>NotImplementedException</name>
+      <extends>\Exception</extends>
+      <full_name>\NotImplementedException</full_name>
+      <docblock>
+        <description>Unimplemented algorithm</description>
+        <long-description>&lt;p&gt;The algorithm used is not implemented yet&lt;/p&gt;
+</long-description>
+        <tag name="package" description="BrowserIDLib" line="397"/>
+      </docblock>
+      <method final="false" abstract="false" static="false" visibility="public" line="409">
+        <name>__construct</name>
+        <docblock>
+          <description/>
+          <long-description>
+</long-description>
+          <tag name="param" description="The error message" type="string" variable="$message" line="405">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag name="param" description="An error code" type="int" variable="$code" line="405">
+            <type by_reference="false">int</type>
+          </tag>
+        </docblock>
+        <argument line="409">
+          <name>$message</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="409">
+          <name>$code</name>
+          <default>0</default>
+          <type/>
+        </argument>
+      </method>
+    </class>
+    <class final="false" abstract="false" line="421" namespace="default">
+      <name>MalformedWebTokenException</name>
+      <extends>\Exception</extends>
+      <full_name>\MalformedWebTokenException</full_name>
+      <docblock>
+        <description>Malformed webtoken</description>
+        <long-description>&lt;p&gt;The webtoken is not well-formed&lt;/p&gt;
+</long-description>
+        <tag name="package" description="BrowserIDLib" line="415"/>
+      </docblock>
+      <method final="false" abstract="false" static="false" visibility="public" line="427">
+        <name>__construct</name>
+        <docblock>
+          <description/>
+          <long-description>
+</long-description>
+          <tag name="param" description="The error message" type="string" variable="$message" line="423">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag name="param" description="An error code" type="int" variable="$code" line="423">
+            <type by_reference="false">int</type>
+          </tag>
+        </docblock>
+        <argument line="427">
+          <name>$message</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="427">
+          <name>$code</name>
+          <default>0</default>
+          <type/>
+        </argument>
+      </method>
+    </class>
+    <class final="false" abstract="false" line="439" namespace="default">
+      <name>MalformedSignatureException</name>
+      <extends>\Exception</extends>
+      <full_name>\MalformedSignatureException</full_name>
+      <docblock>
+        <description>Malformed signature</description>
+        <long-description>&lt;p&gt;The signature supplied is not in the PEM format&lt;/p&gt;
+</long-description>
+        <tag name="package" description="BrowserIDLib" line="433"/>
+      </docblock>
+      <method final="false" abstract="false" static="false" visibility="public" line="445">
+        <name>__construct</name>
+        <docblock>
+          <description/>
+          <long-description>
+</long-description>
+          <tag name="param" description="The error message" type="string" variable="$message" line="441">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag name="param" description="An error code" type="int" variable="$code" line="441">
+            <type by_reference="false">int</type>
+          </tag>
+        </docblock>
+        <argument line="445">
+          <name>$message</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="445">
+          <name>$code</name>
+          <default>0</default>
+          <type/>
+        </argument>
+      </method>
+    </class>
+  </file>
+  <package name=""/>
+  <package name="BrowserIDLib"/>
+  <namespace name="default"/>
+  <marker>todo</marker>
+  <marker>fixme</marker>
+</project>

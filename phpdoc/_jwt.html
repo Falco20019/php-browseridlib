@@ -1,0 +1,1386 @@
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>DocBlox Documentation</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta><link rel="stylesheet" href="css/black-tie/jquery-ui-1.8.2.custom.css" type="text/css"></link><link rel="stylesheet" href="css/jquery.treeview.css" type="text/css"></link><link rel="stylesheet" href="css/theme.css" type="text/css"></link><script type="text/javascript" src="js/jquery-1.4.2.min.js"></script><script type="text/javascript" src="js/jquery-ui-1.8.2.custom.min.js"></script><script type="text/javascript" src="js/jquery.cookie.js"></script><script type="text/javascript" src="js/jquery.treeview.js"></script><script type="text/javascript">
+            $(document).ready(function() {
+                $(".filetree").treeview({
+                    collapsed: true,
+                    persist: "cookie"
+                });
+
+                $("#accordion").accordion({
+                    collapsible: true,
+                    autoHeight:  false,
+                    fillSpace:   true
+                });
+
+                $(".tabs").tabs();
+            });
+        </script></head><body><div xmlns="" id="content">
+<script>
+      $(document).ready(function() {
+        $('dl.function-info, dl.constant-info, dl.property-info').prev().css('cursor', 'pointer');
+        $('dl.function-info, dl.constant-info, dl.property-info').prev().click(function() {
+          if ($(this).next().is(':hidden'))
+          {
+            $(this).children('img')[0].src = 'images/arrow_down.gif';
+          } else
+          {
+            $(this).children('img')[0].src = 'images/arrow_right.gif';
+          }
+          $(this).next().slideToggle();
+        });
+      $('dl.function-info, dl.constant-info, dl.property-info').hide();
+      $('dl.function-info img, dl.constant-info img, dl.property-info img').show();
+      });
+    </script><a name="top"></a><h1 class="file">jwt.php</h1>
+<div class="file_menu">
+<a href="#classes">Classes</a> </div>
+<dl class="file-info">
+<dt>author</dt>
+<dd>Benjamin Krämer &lt;benjamin.kraemer@alien-scripts.de&gt;</dd>
+<dt>package</dt>
+<dd>BrowserIDLib</dd>
+<dt>Classes</dt>
+<dd><a class="class" href="#%5CJWTInternals">JWTInternals</a></dd>
+<dd><a class="class" href="#%5CHMACAlgorithm">HMACAlgorithm</a></dd>
+<dd><a class="class" href="#%5CRSASHAAlgorithm">RSASHAAlgorithm</a></dd>
+<dd><a class="class" href="#%5CWebToken">WebToken</a></dd>
+<dd><a class="class" href="#%5CNoSuchAlgorithmException">NoSuchAlgorithmException</a></dd>
+<dd><a class="class" href="#%5CNotImplementedException">NotImplementedException</a></dd>
+<dd><a class="class" href="#%5CMalformedWebTokenException">MalformedWebTokenException</a></dd>
+<dd><a class="class" href="#%5CMalformedSignatureException">MalformedSignatureException</a></dd>
+</dl>
+<h2>Description</h2>
+<p class="short-description">JSON Web Token implementation</p>
+<div class="long-description"><p>Implementation of the JWT protocol based on:
+http://self-issued.info/docs/draft-jones-json-web-token-01.html</p>
+
+<p>This code is also based on the scripts found at browserid's github repository:
+https://github.com/mozilla/browserid/tree/dev/verifier/lib</p>
+</div>
+<a name="classes"></a><a id="\HMACAlgorithm"></a><h2 class="class">\HMACAlgorithm<div class="to-top"><a href="#top">jump to top</a></div>
+</h2>
+<div class="class">
+<dl class="class-info">
+<dt>package</dt>
+<dd>BrowserIDLib</dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Properties
+              </a></dt>
+<dd><a class="property private" href="#%5CHMACAlgorithm::%24data">$data</a></dd>
+<dd><a class="property private" href="#%5CHMACAlgorithm::%24hash">$hash</a></dd>
+<dd><a class="property private" href="#%5CHMACAlgorithm::%24key">$key</a></dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Methods
+              </a></dt>
+<dd><a class="method public" href="#%5CHMACAlgorithm::__construct()">__construct</a></dd>
+<dd><a class="method public" href="#%5CHMACAlgorithm::finalize()">finalize</a></dd>
+<dd><a class="method public" href="#%5CHMACAlgorithm::sign()">sign</a></dd>
+<dd><a class="method public" href="#%5CHMACAlgorithm::update()">update</a></dd>
+<dd><a class="method public" href="#%5CHMACAlgorithm::verify()">verify</a></dd>
+</dl>
+<h3>Description</h3>
+<p class="short-description">HMAC Hashing Interface</p>
+<div class="long-description"><p>Offers methods for signing and verifiying data using HMAC</p>
+</div>
+<h3>Properties</h3>
+<div>
+<a id="\HMACAlgorithm::$data"></a><h4 class="property private">$data<div class="to-top"><a href="#%5CHMACAlgorithm">jump to class</a></div>
+</h4>
+<div class="property">
+<code>string <span class="highlight">$data</span> = ''</code><p class="short-description">The message to be hashed.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>string<br><em>The message</em>
+</dd>
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\HMACAlgorithm::$hash"></a><h4 class="property private">$hash<div class="to-top"><a href="#%5CHMACAlgorithm">jump to class</a></div>
+</h4>
+<div class="property">
+<code>string <span class="highlight">$hash</span> = ''</code><p class="short-description">The hashing algorithm used to sign or verify data. Has to be supported
+by the PHP Version and is checked against the list of available
+hashing algorithms in hash_algos()</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>string<br><em>The hashing algorithm</em>
+</dd>
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\HMACAlgorithm::$key"></a><h4 class="property private">$key<div class="to-top"><a href="#%5CHMACAlgorithm">jump to class</a></div>
+</h4>
+<div class="property">
+<code>string <span class="highlight">$key</span> = ''</code><p class="short-description">Shared secret key used for generating the HMAC variant of the
+message digest.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>string<br><em>The shared secret key</em>
+</dd>
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+<h3>Methods</h3>
+<div>
+<a id="\HMACAlgorithm::__construct()"></a><h4 class="method public">__construct<div class="to-top"><a href="#HMACAlgorithm">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">__construct</span><span class="nb-faded-text">(
+          string $hash, string $key
+          )
+        </span>
+        :
+        </code><p class="short-description"></p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$hash</dt>
+<dd>string<br><em>The hashing algorithm</em>
+</dd>
+<dt>$key</dt>
+<dd>string<br><em>The shared secret key</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>throws</dt>
+<dd><a href="_jwt.html#%5CNoSuchAlgorithmException">The algorithm is not supported</a></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\HMACAlgorithm::finalize()"></a><h4 class="method public">finalize<div class="to-top"><a href="#HMACAlgorithm">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">finalize</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        </code><p class="short-description">Not needed for HMAC</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\HMACAlgorithm::sign()"></a><h4 class="method public">sign<div class="to-top"><a href="#HMACAlgorithm">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">sign</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        string</code><p class="short-description">Generates the signature using the specified algorithm</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>string</dt>
+<dd><em>The hashed message</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\HMACAlgorithm::update()"></a><h4 class="method public">update<div class="to-top"><a href="#HMACAlgorithm">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">update</span><span class="nb-faded-text">(
+          string $data
+          )
+        </span>
+        :
+        </code><p class="short-description">Set the message to be hashed</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$data</dt>
+<dd>string<br><em>The message</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\HMACAlgorithm::verify()"></a><h4 class="method public">verify<div class="to-top"><a href="#HMACAlgorithm">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">verify</span><span class="nb-faded-text">(
+          string $sig
+          )
+        </span>
+        :
+        bool</code><p class="short-description">Verifies the signature</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$sig</dt>
+<dd>string<br><em>The signature given</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>bool</dt>
+<dd><em>Returns true if the signature was valid</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+</div>
+<a id="\JWTInternals"></a><h2 class="class">\JWTInternals<div class="to-top"><a href="#top">jump to top</a></div>
+</h2>
+<div class="class">
+<dl class="class-info">
+<dt>package</dt>
+<dd>BrowserIDLib</dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Methods
+              </a></dt>
+<dd><a class="method public" href="#%5CJWTInternals::base64url_decode()">base64url_decode</a></dd>
+<dd><a class="method public" href="#%5CJWTInternals::base64url_encode()">base64url_encode</a></dd>
+</dl>
+<h3>Description</h3>
+<p class="short-description">Base64 URL encoding/decoding</p>
+<div class="long-description"><p>Static functions for encoding and decoding strings using Base64 and
+encode/decode it for usage in URLs</p>
+</div>
+<h3>Methods</h3>
+<div>
+<a id="\JWTInternals::base64url_decode()"></a><h4 class="method public">base64url_decode<div class="to-top"><a href="#JWTInternals">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">base64url_decode</span><span class="nb-faded-text">(
+          string $data
+          )
+        </span>
+        :
+        string</code><p class="short-description">Decodes data made URL-safe and encoded with MIME base64</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$data</dt>
+<dd>string<br><em>The message to decode</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>string</dt>
+<dd><em>The decoded message</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\JWTInternals::base64url_encode()"></a><h4 class="method public">base64url_encode<div class="to-top"><a href="#JWTInternals">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">base64url_encode</span><span class="nb-faded-text">(
+          string $data
+          )
+        </span>
+        :
+        string</code><p class="short-description">Encodes data with MIME base64 and make it URL-safe</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$data</dt>
+<dd>string<br><em>The message to encode</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>string</dt>
+<dd><em>The encoded message</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+</div>
+<a id="\MalformedSignatureException"></a><h2 class="class">\MalformedSignatureException<div class="to-top"><a href="#top">jump to top</a></div>
+</h2>
+<div class="class">
+<dl class="class-info">
+<dt>Extends from</dt>
+<dd><a href="http://php.net/manual/en/class.exception.php">\Exception</a></dd>
+<dt>package</dt>
+<dd>BrowserIDLib</dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Methods
+              </a></dt>
+<dd><a class="method public" href="#%5CMalformedSignatureException::__construct()">__construct</a></dd>
+</dl>
+<h3>Description</h3>
+<p class="short-description">Malformed signature</p>
+<div class="long-description"><p>The signature supplied is not in the PEM format</p>
+</div>
+<h3>Methods</h3>
+<div>
+<a id="\MalformedSignatureException::__construct()"></a><h4 class="method public">__construct<div class="to-top"><a href="#MalformedSignatureException">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">__construct</span><span class="nb-faded-text">(
+          string $message, int $code
+              =
+              0
+          )
+        </span>
+        :
+        </code><p class="short-description"></p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$message</dt>
+<dd>string<br><em>The error message</em>
+</dd>
+<dt>$code</dt>
+<dd>int<br><em>An error code</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+</div>
+<a id="\MalformedWebTokenException"></a><h2 class="class">\MalformedWebTokenException<div class="to-top"><a href="#top">jump to top</a></div>
+</h2>
+<div class="class">
+<dl class="class-info">
+<dt>Extends from</dt>
+<dd><a href="http://php.net/manual/en/class.exception.php">\Exception</a></dd>
+<dt>package</dt>
+<dd>BrowserIDLib</dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Methods
+              </a></dt>
+<dd><a class="method public" href="#%5CMalformedWebTokenException::__construct()">__construct</a></dd>
+</dl>
+<h3>Description</h3>
+<p class="short-description">Malformed webtoken</p>
+<div class="long-description"><p>The webtoken is not well-formed</p>
+</div>
+<h3>Methods</h3>
+<div>
+<a id="\MalformedWebTokenException::__construct()"></a><h4 class="method public">__construct<div class="to-top"><a href="#MalformedWebTokenException">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">__construct</span><span class="nb-faded-text">(
+          string $message, int $code
+              =
+              0
+          )
+        </span>
+        :
+        </code><p class="short-description"></p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$message</dt>
+<dd>string<br><em>The error message</em>
+</dd>
+<dt>$code</dt>
+<dd>int<br><em>An error code</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+</div>
+<a id="\NoSuchAlgorithmException"></a><h2 class="class">\NoSuchAlgorithmException<div class="to-top"><a href="#top">jump to top</a></div>
+</h2>
+<div class="class">
+<dl class="class-info">
+<dt>Extends from</dt>
+<dd><a href="http://php.net/manual/en/class.exception.php">\Exception</a></dd>
+<dt>package</dt>
+<dd>BrowserIDLib</dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Methods
+              </a></dt>
+<dd><a class="method public" href="#%5CNoSuchAlgorithmException::__construct()">__construct</a></dd>
+</dl>
+<h3>Description</h3>
+<p class="short-description">Unsupported algorithm</p>
+<div class="long-description"><p>The algorithm used is not supported by your PHP installation</p>
+</div>
+<h3>Methods</h3>
+<div>
+<a id="\NoSuchAlgorithmException::__construct()"></a><h4 class="method public">__construct<div class="to-top"><a href="#NoSuchAlgorithmException">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">__construct</span><span class="nb-faded-text">(
+          string $message, int $code
+              =
+              0
+          )
+        </span>
+        :
+        </code><p class="short-description"></p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$message</dt>
+<dd>string<br><em>The error message</em>
+</dd>
+<dt>$code</dt>
+<dd>int<br><em>An error code</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+</div>
+<a id="\NotImplementedException"></a><h2 class="class">\NotImplementedException<div class="to-top"><a href="#top">jump to top</a></div>
+</h2>
+<div class="class">
+<dl class="class-info">
+<dt>Extends from</dt>
+<dd><a href="http://php.net/manual/en/class.exception.php">\Exception</a></dd>
+<dt>package</dt>
+<dd>BrowserIDLib</dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Methods
+              </a></dt>
+<dd><a class="method public" href="#%5CNotImplementedException::__construct()">__construct</a></dd>
+</dl>
+<h3>Description</h3>
+<p class="short-description">Unimplemented algorithm</p>
+<div class="long-description"><p>The algorithm used is not implemented yet</p>
+</div>
+<h3>Methods</h3>
+<div>
+<a id="\NotImplementedException::__construct()"></a><h4 class="method public">__construct<div class="to-top"><a href="#NotImplementedException">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">__construct</span><span class="nb-faded-text">(
+          string $message, int $code
+              =
+              0
+          )
+        </span>
+        :
+        </code><p class="short-description"></p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$message</dt>
+<dd>string<br><em>The error message</em>
+</dd>
+<dt>$code</dt>
+<dd>int<br><em>An error code</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+</div>
+<a id="\RSASHAAlgorithm"></a><h2 class="class">\RSASHAAlgorithm<div class="to-top"><a href="#top">jump to top</a></div>
+</h2>
+<div class="class">
+<dl class="class-info">
+<dt>package</dt>
+<dd>BrowserIDLib</dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Properties
+              </a></dt>
+<dd><a class="property private" href="#%5CRSASHAAlgorithm::%24data">$data</a></dd>
+<dd><a class="property private" href="#%5CRSASHAAlgorithm::%24hash">$hash</a></dd>
+<dd><a class="property private" href="#%5CRSASHAAlgorithm::%24keyPEM">$keyPEM</a></dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Methods
+              </a></dt>
+<dd><a class="method public" href="#%5CRSASHAAlgorithm::__construct()">__construct</a></dd>
+<dd><a class="method public" href="#%5CRSASHAAlgorithm::finalize()">finalize</a></dd>
+<dd><a class="method public" href="#%5CRSASHAAlgorithm::sign()">sign</a></dd>
+<dd><a class="method public" href="#%5CRSASHAAlgorithm::update()">update</a></dd>
+<dd><a class="method public" href="#%5CRSASHAAlgorithm::verify()">verify</a></dd>
+</dl>
+<h3>Description</h3>
+<p class="short-description">RSA-SHA Hashing Interface</p>
+<div class="long-description"><p>Offers methods for signing and verifiying data using RSA-SHA</p>
+</div>
+<h3>Properties</h3>
+<div>
+<a id="\RSASHAAlgorithm::$data"></a><h4 class="property private">$data<div class="to-top"><a href="#%5CRSASHAAlgorithm">jump to class</a></div>
+</h4>
+<div class="property">
+<code>string <span class="highlight">$data</span> = ''</code><p class="short-description">The message to be hashed.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>string<br><em>The message</em>
+</dd>
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\RSASHAAlgorithm::$hash"></a><h4 class="property private">$hash<div class="to-top"><a href="#%5CRSASHAAlgorithm">jump to class</a></div>
+</h4>
+<div class="property">
+<code>string <span class="highlight">$hash</span> = ''</code><p class="short-description">The hashing algorithm used to sign or verify data. Has to be supported
+by the PHP Version and is checked against the list of available
+hashing algorithms in openssl_get_md_methods()</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>string<br><em>The hashing algorithm</em>
+</dd>
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\RSASHAAlgorithm::$keyPEM"></a><h4 class="property private">$keyPEM<div class="to-top"><a href="#%5CRSASHAAlgorithm">jump to class</a></div>
+</h4>
+<div class="property">
+<code>string <span class="highlight">$keyPEM</span> = ''</code><p class="short-description">A PEM formatted private/public key used for signing or validating</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>string<br><em>The key</em>
+</dd>
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+<h3>Methods</h3>
+<div>
+<a id="\RSASHAAlgorithm::__construct()"></a><h4 class="method public">__construct<div class="to-top"><a href="#RSASHAAlgorithm">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">__construct</span><span class="nb-faded-text">(
+          string $hash, string $keyPEM
+          )
+        </span>
+        :
+        </code><p class="short-description"></p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$hash</dt>
+<dd>string<br><em>The hashing algorithm</em>
+</dd>
+<dt>$keyPEM</dt>
+<dd>string<br><em>The pem key</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\RSASHAAlgorithm::finalize()"></a><h4 class="method public">finalize<div class="to-top"><a href="#RSASHAAlgorithm">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">finalize</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        </code><p class="short-description">Not needed for RSA-SHA</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\RSASHAAlgorithm::sign()"></a><h4 class="method public">sign<div class="to-top"><a href="#RSASHAAlgorithm">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">sign</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        string</code><p class="short-description">Generates the signature using the specified algorithm</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>string</dt>
+<dd><em>The hashed message</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\RSASHAAlgorithm::update()"></a><h4 class="method public">update<div class="to-top"><a href="#RSASHAAlgorithm">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">update</span><span class="nb-faded-text">(
+          string $data
+          )
+        </span>
+        :
+        </code><p class="short-description">Set the message to be signed/verified</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$data</dt>
+<dd>string<br><em>The message</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\RSASHAAlgorithm::verify()"></a><h4 class="method public">verify<div class="to-top"><a href="#RSASHAAlgorithm">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">verify</span><span class="nb-faded-text">(
+          string $sig
+          )
+        </span>
+        :
+        bool</code><p class="short-description">Verifies the signature</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$sig</dt>
+<dd>string<br><em>The signature given</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>bool</dt>
+<dd><em>Returns true if the signature was valid</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+</div>
+<a id="\WebToken"></a><h2 class="class">\WebToken<div class="to-top"><a href="#top">jump to top</a></div>
+</h2>
+<div class="class">
+<dl class="class-info">
+<dt>package</dt>
+<dd>BrowserIDLib</dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Properties
+              </a></dt>
+<dd><a class="property private" href="#%5CWebToken::%24cryptoSegment">$cryptoSegment</a></dd>
+<dd><a class="property private" href="#%5CWebToken::%24headerSegment">$headerSegment</a></dd>
+<dd><a class="property private" href="#%5CWebToken::%24objectStr">$objectStr</a></dd>
+<dd><a class="property private" href="#%5CWebToken::%24payloadSegment">$payloadSegment</a></dd>
+<dd><a class="property private" href="#%5CWebToken::%24pkAlgorithm">$pkAlgorithm</a></dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Methods
+              </a></dt>
+<dd><a class="method public" href="#%5CWebToken::__construct()">__construct</a></dd>
+<dd><a class="method public" href="#%5CWebToken::__get()">__get</a></dd>
+<dd><a class="method private" href="#%5CWebToken::constructAlgorithm()">constructAlgorithm</a></dd>
+<dd><a class="method public" href="#%5CWebToken::parse()">parse</a></dd>
+<dd><a class="method public" href="#%5CWebToken::serialize()">serialize</a></dd>
+<dd><a class="method public" href="#%5CWebToken::verify()">verify</a></dd>
+</dl>
+<h3>Description</h3>
+<p class="short-description">JSON Web Token implementation</p>
+<div class="long-description"><p>Implementation of the JWT protocol based on:
+http://self-issued.info/docs/draft-jones-json-web-token-01.html</p>
+</div>
+<h3>Properties</h3>
+<div>
+<a id="\WebToken::$cryptoSegment"></a><h4 class="property private">$cryptoSegment<div class="to-top"><a href="#%5CWebToken">jump to class</a></div>
+</h4>
+<div class="property">
+<code>string <span class="highlight">$cryptoSegment</span> = ''</code><p class="short-description">The signature generated from the payload using the algorithm
+given in the header</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>string<br><em>The signature</em>
+</dd>
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\WebToken::$headerSegment"></a><h4 class="property private">$headerSegment<div class="to-top"><a href="#%5CWebToken">jump to class</a></div>
+</h4>
+<div class="property">
+<code>array <span class="highlight">$headerSegment</span> = ''</code><p class="short-description">The header segment of the web token on parsing</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>array<br><em>A list of header entries (like the algorithm)</em>
+</dd>
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\WebToken::$objectStr"></a><h4 class="property private">$objectStr<div class="to-top"><a href="#%5CWebToken">jump to class</a></div>
+</h4>
+<div class="property">
+<code>string <span class="highlight">$objectStr</span> = ''</code><p class="short-description">The data to be signed</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>string<br><em>The data</em>
+</dd>
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\WebToken::$payloadSegment"></a><h4 class="property private">$payloadSegment<div class="to-top"><a href="#%5CWebToken">jump to class</a></div>
+</h4>
+<div class="property">
+<code>string <span class="highlight">$payloadSegment</span> = ''</code><p class="short-description">The payload that was signed</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>string<br><em>The data</em>
+</dd>
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\WebToken::$pkAlgorithm"></a><h4 class="property private">$pkAlgorithm<div class="to-top"><a href="#%5CWebToken">jump to class</a></div>
+</h4>
+<div class="property">
+<code>string <span class="highlight">$pkAlgorithm</span> = ''</code><p class="short-description">The algorithm used for hashing. Supported are:
+ES256, ES384, ES512, HS256, HS384, HS512, RS256, RS384, RS512</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>string<br><em>A supported algorithm</em>
+</dd>
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+<h3>Methods</h3>
+<div>
+<a id="\WebToken::__construct()"></a><h4 class="method public">__construct<div class="to-top"><a href="#WebToken">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">__construct</span><span class="nb-faded-text">(
+          string $objectStr, string $algorithm
+          )
+        </span>
+        :
+        </code><p class="short-description"></p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$objectStr</dt>
+<dd>string<br><em>The data to be signed</em>
+</dd>
+<dt>$algorithm</dt>
+<dd>string<br><em>The algorithm used for signing (ES256, ES384, ES512, HS256, HS384, HS512, RS256, RS384, RS512)</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\WebToken::__get()"></a><h4 class="method public">__get<div class="to-top"><a href="#WebToken">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">__get</span><span class="nb-faded-text">(
+          string $name
+          )
+        </span>
+        :
+        mixed</code><p class="short-description">A getter-function for the class variables</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$name</dt>
+<dd>string<br><em>The name of the class variable</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>mixed</dt>
+<dd><em>The value of the variable corresponding</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\WebToken::constructAlgorithm()"></a><h4 class="method private">constructAlgorithm<div class="to-top"><a href="#WebToken">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">constructAlgorithm</span><span class="nb-faded-text">(
+          string $jwtAlgStr, string $key
+          )
+        </span>
+        :
+        <a href="_jwt.html#%5CHMACAlgorithm">\HMACAlgorithm</a>|<a href="_jwt.html#%5CRSASHAAlgorithm">\RSASHAAlgorithm</a></code><p class="short-description">Create a instance of an hashing algorithm interface depending on the
+chosen algorithm</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$jwtAlgStr</dt>
+<dd>string<br><em>The algorithm used to sign/verify (ES256, ES384, ES512, HS256, HS384, HS512, RS256, RS384, RS512)</em>
+</dd>
+<dt>$key</dt>
+<dd>string<br><em>The key used for signing/verification</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>
+<a href="_jwt.html#%5CHMACAlgorithm">\HMACAlgorithm</a>|<a href="_jwt.html#%5CRSASHAAlgorithm">\RSASHAAlgorithm</a>
+</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\WebToken::parse()"></a><h4 class="method public">parse<div class="to-top"><a href="#WebToken">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">parse</span><span class="nb-faded-text">(
+          string $input
+          )
+        </span>
+        :
+        <a href="_jwt.html#%5CWebToken">\WebToken</a></code><p class="short-description">Generate a Webtoken object for parsing JWT data</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$input</dt>
+<dd>string<br><em>The JSON Web Token</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_jwt.html#%5CWebToken">\WebToken</a></dt>
+<dd><em>A Webtoken instance for verification</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\WebToken::serialize()"></a><h4 class="method public">serialize<div class="to-top"><a href="#WebToken">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">serialize</span><span class="nb-faded-text">(
+          string $key
+          )
+        </span>
+        :
+        string</code><p class="short-description">Serializes data as JWT using the defined algorithm and data and signed
+with the key</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$key</dt>
+<dd>string<br><em>The key used for hashing</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>string</dt>
+<dd><em>A JWT-serialized message</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\WebToken::verify()"></a><h4 class="method public">verify<div class="to-top"><a href="#WebToken">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">verify</span><span class="nb-faded-text">(
+          string $key
+          )
+        </span>
+        :
+        bool</code><p class="short-description">Verifies a Webtoken generated with the parse method</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$key</dt>
+<dd>string<br><em>The key used to verify the webtoken</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>bool</dt>
+<dd><em>Returns true if the webtoken is valid</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<small xmlns="" class="footer">Documentation was generated by <a href="http://docblox-project.org">DocBlox 0.12.0</a>.
+    </small></body></html>
