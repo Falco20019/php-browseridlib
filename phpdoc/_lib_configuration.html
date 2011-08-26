@@ -1,0 +1,407 @@
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>DocBlox Documentation</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta><link rel="stylesheet" href="css/black-tie/jquery-ui-1.8.2.custom.css" type="text/css"></link><link rel="stylesheet" href="css/jquery.treeview.css" type="text/css"></link><link rel="stylesheet" href="css/theme.css" type="text/css"></link><script type="text/javascript" src="js/jquery-1.4.2.min.js"></script><script type="text/javascript" src="js/jquery-ui-1.8.2.custom.min.js"></script><script type="text/javascript" src="js/jquery.cookie.js"></script><script type="text/javascript" src="js/jquery.treeview.js"></script><script type="text/javascript">
+            $(document).ready(function() {
+                $(".filetree").treeview({
+                    collapsed: true,
+                    persist: "cookie"
+                });
+
+                $("#accordion").accordion({
+                    collapsible: true,
+                    autoHeight:  false,
+                    fillSpace:   true
+                });
+
+                $(".tabs").tabs();
+            });
+        </script></head><body><div xmlns="" id="content">
+<script>
+      $(document).ready(function() {
+        $('dl.function-info, dl.constant-info, dl.property-info').prev().css('cursor', 'pointer');
+        $('dl.function-info, dl.constant-info, dl.property-info').prev().click(function() {
+          if ($(this).next().is(':hidden'))
+          {
+            $(this).children('img')[0].src = 'images/arrow_down.gif';
+          } else
+          {
+            $(this).children('img')[0].src = 'images/arrow_right.gif';
+          }
+          $(this).next().slideToggle();
+        });
+      $('dl.function-info, dl.constant-info, dl.property-info').hide();
+      $('dl.function-info img, dl.constant-info img, dl.property-info img').show();
+      });
+    </script><a name="top"></a><h1 class="file">lib\configuration.php</h1>
+<div class="file_menu">
+<a href="#classes">Classes</a> </div>
+<dl class="file-info">
+<dt>author</dt>
+<dd>Benjamin Krämer &lt;benjamin.kraemer@alien-scripts.de&gt;</dd>
+<dt>package</dt>
+<dd>php-browseridlib</dd>
+<dt>Classes</dt>
+<dd><a class="class" href="#%5CConfiguration">Configuration</a></dd>
+</dl>
+<h2>Description</h2>
+<p class="short-description">Configuration</p>
+<div class="long-description">
+</div>
+<a name="classes"></a><a id="\Configuration"></a><h2 class="class">\Configuration<div class="to-top"><a href="#top">jump to top</a></div>
+</h2>
+<div class="class">
+<dl class="class-info">
+<dt>package</dt>
+<dd>php-browseridlib</dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Properties
+              </a></dt>
+<dd><a class="property private" href="#%5CConfiguration::%24environment">$environment</a></dd>
+<dd><a class="property private" href="#%5CConfiguration::%24g_config">$g_config</a></dd>
+<dd><a class="property private" href="#%5CConfiguration::%24g_configs">$g_configs</a></dd>
+<dd><a class="property private" href="#%5CConfiguration::%24instance">$instance</a></dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Methods
+              </a></dt>
+<dd><a class="method private" href="#%5CConfiguration::__clone()">__clone</a></dd>
+<dd><a class="method private" href="#%5CConfiguration::__construct()">__construct</a></dd>
+<dd><a class="method private" href="#%5CConfiguration::__initInstance()">__initInstance</a></dd>
+<dd><a class="method public" href="#%5CConfiguration::get()">get</a></dd>
+<dd><a class="method public" href="#%5CConfiguration::getInstance()">getInstance</a></dd>
+<dd><a class="method private" href="#%5CConfiguration::getPortForURL()">getPortForURL</a></dd>
+<dd><a class="method public" href="#%5CConfiguration::setEnvironment()">setEnvironment</a></dd>
+</dl>
+<h3>Description</h3>
+<p class="short-description">Configuration</p>
+<div class="long-description"><p>An abstraction which contains various pre-set deployment
+environments and adjusts runtime configuration appropriate for
+the current environmnet (specified via Configuration::getInstance()->setEnvironment(...))</p>
+
+<p>The class can only be used through the singleton Configuration::getInstance()</p>
+</div>
+<h3>Properties</h3>
+<div>
+<a id="\Configuration::$environment"></a><h4 class="property private">$environment<div class="to-top"><a href="#%5CConfiguration">jump to class</a></div>
+</h4>
+<div class="property">
+<code>string <span class="highlight">$environment</span> = 'production'</code><p class="short-description">The environment that defines what configuration to use</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>string<br><em>The selected environment</em>
+</dd>
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>default</dt>
+<dd>production</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Configuration::$g_config"></a><h4 class="property private">$g_config<div class="to-top"><a href="#%5CConfiguration">jump to class</a></div>
+</h4>
+<div class="property">
+<code>array <span class="highlight">$g_config</span> = 'NULL'</code><p class="short-description">The configuration selected through the environment</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>array<br><em>The current configuration</em>
+</dd>
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>default</dt>
+<dd>NULL</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Configuration::$g_configs"></a><h4 class="property private">$g_configs<div class="to-top"><a href="#%5CConfiguration">jump to class</a></div>
+</h4>
+<div class="property">
+<code>array <span class="highlight">$g_configs</span> = 'array'</code><p class="short-description">The various deployment configurations</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>array<br><em>The array contains configurations for the environments</em>
+</dd>
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>default</dt>
+<dd>array</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Configuration::$instance"></a><h4 class="property private">$instance<div class="to-top"><a href="#%5CConfiguration">jump to class</a></div>
+</h4>
+<div class="property">
+<code><a href="_lib_configuration.html#%5CConfiguration">\Configuration</a> <span class="highlight">$instance</span> = 'NULL'</code><p class="short-description">Singleton</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>
+<a href="_lib_configuration.html#%5CConfiguration">\Configuration</a><br><em>The only instance of this class</em>
+</dd>
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>default</dt>
+<dd>NULL</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+<h3>Methods</h3>
+<div>
+<a id="\Configuration::__clone()"></a><h4 class="method private">__clone<div class="to-top"><a href="#Configuration">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">__clone</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        </code><p class="short-description">Disallow cloning</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Configuration::__construct()"></a><h4 class="method private">__construct<div class="to-top"><a href="#Configuration">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">__construct</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        </code><p class="short-description">Disallow construction</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Configuration::__initInstance()"></a><h4 class="method private">__initInstance<div class="to-top"><a href="#Configuration">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">__initInstance</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        </code><p class="short-description">Initialize the singleton instance</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Configuration::get()"></a><h4 class="method public">get<div class="to-top"><a href="#Configuration">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">get</span><span class="nb-faded-text">(
+          string $val
+          )
+        </span>
+        :
+        string</code><p class="short-description">Fetch a configuration parameter for the current environment</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$val</dt>
+<dd>string<br><em>The configuration param to retrieve</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>string</dt>
+<dd><em>The value corresponding to $val</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Configuration::getInstance()"></a><h4 class="method public">getInstance<div class="to-top"><a href="#Configuration">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">getInstance</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <a href="_lib_configuration.html#%5CConfiguration">\Configuration</a></code><p class="short-description">Returns an instance of the configuration singleton</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_configuration.html#%5CConfiguration">\Configuration</a></dt>
+<dd><em>The singleton</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Configuration::getPortForURL()"></a><h4 class="method private">getPortForURL<div class="to-top"><a href="#Configuration">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">getPortForURL</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        string</code><p class="short-description">Return the port extension if the port is not the standard for the scheme</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>string</dt>
+<dd><em>Portextension for URL</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Configuration::setEnvironment()"></a><h4 class="method public">setEnvironment<div class="to-top"><a href="#Configuration">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">setEnvironment</span><span class="nb-faded-text">(
+          string $env
+          )
+        </span>
+        :
+        </code><p class="short-description">Select a new environment</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$env</dt>
+<dd>string<br><em>The environment to select (production, beta, developement)</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<small xmlns="" class="footer">Documentation was generated by <a href="http://docblox-project.org">DocBlox 0.12.0</a>.
+    </small></body></html>

@@ -1,6 +1,159 @@
 <?xml version="1.0"?>
 <project version="0.12.0" title="">
-  <file path="idassertion.php" hash="57373f8c53fff972d1f8fe97ab92837f">
+  <file path="lib\configuration.php" hash="851280f73afb56a1a0a17262f21e4ab2">
+    <docblock>
+      <description>Configuration</description>
+      <long-description>
+</long-description>
+      <tag name="author" description="Benjamin Kr&#xE4;mer &amp;lt;benjamin.kraemer@alien-scripts.de&amp;gt;"/>
+      <tag name="package" description="php-browseridlib"/>
+    </docblock>
+    <class final="false" abstract="false" line="20" namespace="default">
+      <name>Configuration</name>
+      <extends/>
+      <full_name>\Configuration</full_name>
+      <docblock>
+        <description>Configuration</description>
+        <long-description>&lt;p&gt;An abstraction which contains various pre-set deployment
+environments and adjusts runtime configuration appropriate for
+the current environmnet (specified via Configuration::getInstance()-&gt;setEnvironment(...))&lt;/p&gt;
+
+&lt;p&gt;The class can only be used through the singleton Configuration::getInstance()&lt;/p&gt;
+</long-description>
+        <tag name="package" description="php-browseridlib" line="9"/>
+      </docblock>
+      <property final="false" static="false" visibility="private" line="26">
+        <name>$g_configs</name>
+        <default>array</default>
+        <docblock>
+          <description>The various deployment configurations</description>
+          <long-description>
+</long-description>
+          <tag name="var" description="The array contains configurations for the environments" type="array" line="22">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="private" line="32">
+        <name>$environment</name>
+        <default>production</default>
+        <docblock>
+          <description>The environment that defines what configuration to use</description>
+          <long-description>
+</long-description>
+          <tag name="var" description="The selected environment" type="string" line="28">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="private" line="38">
+        <name>$g_config</name>
+        <default>NULL</default>
+        <docblock>
+          <description>The configuration selected through the environment</description>
+          <long-description>
+</long-description>
+          <tag name="var" description="The current configuration" type="array" line="34">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="true" visibility="private" line="44">
+        <name>$instance</name>
+        <default>NULL</default>
+        <docblock>
+          <description>Singleton</description>
+          <long-description>
+</long-description>
+          <tag name="var" description="The only instance of this class" type="\Configuration" line="40">
+            <type by_reference="false">\Configuration</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="private" line="50">
+        <name>__construct</name>
+        <docblock>
+          <description>Disallow construction</description>
+          <long-description>
+</long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="private" line="55">
+        <name>__clone</name>
+        <docblock>
+          <description>Disallow cloning</description>
+          <long-description>
+</long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="private" line="60">
+        <name>__initInstance</name>
+        <docblock>
+          <description>Initialize the singleton instance</description>
+          <long-description>
+</long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" line="86">
+        <name>getInstance</name>
+        <docblock>
+          <description>Returns an instance of the configuration singleton</description>
+          <long-description>
+</long-description>
+          <tag name="return" description="The singleton" type="\Configuration" line="82">
+            <type by_reference="false">\Configuration</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" line="99">
+        <name>get</name>
+        <docblock>
+          <description>Fetch a configuration parameter for the current environment</description>
+          <long-description>
+</long-description>
+          <tag name="param" description="The configuration param to retrieve" type="string" variable="$val" line="94">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag name="return" description="The value corresponding to $val" type="string" line="94">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+        <argument line="99">
+          <name>$val</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="private" line="108">
+        <name>getPortForURL</name>
+        <docblock>
+          <description>Return the port extension if the port is not the standard for the scheme</description>
+          <long-description>
+</long-description>
+          <tag name="return" description="Portextension for URL" type="string" line="104">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" line="118">
+        <name>setEnvironment</name>
+        <docblock>
+          <description>Select a new environment</description>
+          <long-description>
+</long-description>
+          <tag name="param" description="The environment to select (production, beta, developement)" type="string" variable="$env" line="114">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+        <argument line="118">
+          <name>$env</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+    </class>
+  </file>
+  <file path="lib\idassertion.php" hash="6bf7b268bc01ea8eaa1461701078717c">
     <docblock>
       <description>BrowserID assertion implementation</description>
       <long-description>&lt;p&gt;Implementation of the VerifiedEmailProtocol based on:
@@ -12,10 +165,16 @@ https://github.com/mozilla/browserid/tree/dev/verifier/lib&lt;/p&gt;
       <tag name="author" description="Benjamin Kr&#xE4;mer &amp;lt;benjamin.kraemer@alien-scripts.de&amp;gt;"/>
       <tag name="package" description="php-browseridlib"/>
     </docblock>
+    <markers>
+      <fixme line="273">this will need to change for certs</fixme>
+    </markers>
     <include type="Require Once" line="14">
       <name>jwt.php</name>
     </include>
-    <class final="false" abstract="false" line="28" namespace="default">
+    <include type="Require Once" line="15">
+      <name>configuration.php</name>
+    </include>
+    <class final="false" abstract="false" line="29" namespace="default">
       <name>Webfinger</name>
       <extends/>
       <full_name>\Webfinger</full_name>
@@ -29,9 +188,9 @@ draft-hammer-hostmeta&lt;/p&gt;
 &lt;p&gt;http://tools.ietf.org/html/rfc5785
 http://tools.ietf.org/html/draft-hammer-hostmeta-13&lt;/p&gt;
 </long-description>
-        <tag name="package" description="php-browseridlib" line="16"/>
+        <tag name="package" description="php-browseridlib" line="17"/>
       </docblock>
-      <constant namespace="default" line="39">
+      <constant namespace="default" line="40">
         <name>NO_HOST_META</name>
         <value>NO</value>
         <docblock>
@@ -40,120 +199,120 @@ http://tools.ietf.org/html/draft-hammer-hostmeta-13&lt;/p&gt;
 </long-description>
         </docblock>
       </constant>
-      <property final="false" static="true" visibility="private" line="34">
+      <property final="false" static="true" visibility="private" line="35">
         <name>$hostMetaCache</name>
         <default>array</default>
         <docblock>
           <description>A cache for host-meta templates</description>
           <long-description>
 </long-description>
-          <tag name="var" description="The array contains templates for the domains" type="array" line="30">
+          <tag name="var" description="The array contains templates for the domains" type="array" line="31">
             <type by_reference="false">array</type>
           </tag>
         </docblock>
       </property>
-      <method final="false" abstract="false" static="true" visibility="private" line="47">
+      <method final="false" abstract="false" static="true" visibility="private" line="48">
         <name>extractLRDDTemplateFromHostMeta</name>
         <docblock>
           <description>Extract the LRDD template from the host-meta data</description>
           <long-description>
 </long-description>
-          <tag name="param" description="A xml-string containing the host-meta" type="string" variable="$docBytes" line="41">
+          <tag name="param" description="A xml-string containing the host-meta" type="string" variable="$docBytes" line="42">
             <type by_reference="false">string</type>
           </tag>
-          <tag name="param" description="The name of the domain the host-meta belongs to" type="string" variable="$domain" line="41">
+          <tag name="param" description="The name of the domain the host-meta belongs to" type="string" variable="$domain" line="42">
             <type by_reference="false">string</type>
           </tag>
-          <tag name="return" description="The URL of the LRDD template or null if not found in the host-meta" type="string" line="41">
+          <tag name="return" description="The URL of the LRDD template or null if not found in the host-meta" type="string" line="42">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
-        <argument line="47">
+        <argument line="48">
           <name>$docBytes</name>
           <default/>
           <type/>
         </argument>
-        <argument line="47">
+        <argument line="48">
           <name>$domain</name>
           <default/>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="private" line="81">
+      <method final="false" abstract="false" static="true" visibility="private" line="82">
         <name>retrieveTemplateForDomain</name>
         <docblock>
           <description>Gets the /.well-known/host-meta template for the domain and caches
 the result for the upcoming assertions</description>
           <long-description>
 </long-description>
-          <tag name="param" description="The domain of the issuer" type="string" variable="$domain" line="74">
+          <tag name="param" description="The domain of the issuer" type="string" variable="$domain" line="75">
             <type by_reference="false">string</type>
           </tag>
-          <tag name="param" description="A function to be called on success" type="callback" variable="$continueFn" line="74">
+          <tag name="param" description="A function to be called on success" type="callback" variable="$continueFn" line="75">
             <type by_reference="false">callback</type>
           </tag>
-          <tag name="param" description="A function to be called on error" type="callback" variable="$errorFn" line="74">
+          <tag name="param" description="A function to be called on error" type="callback" variable="$errorFn" line="75">
             <type by_reference="false">callback</type>
           </tag>
         </docblock>
-        <argument line="81">
+        <argument line="82">
           <name>$domain</name>
           <default/>
           <type/>
         </argument>
-        <argument line="81">
+        <argument line="82">
           <name>$continueFn</name>
           <default/>
           <type/>
         </argument>
-        <argument line="81">
+        <argument line="82">
           <name>$errorFn</name>
           <default/>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" line="121">
+      <method final="false" abstract="false" static="true" visibility="public" line="122">
         <name>resolvePublicKeysForAddress</name>
         <docblock>
           <description>Retrieves the list of public keys for all devices of a user by the issuer</description>
           <long-description>
 </long-description>
-          <tag name="param" description="The e-mail address of the user" type="string" variable="$addr" line="114">
+          <tag name="param" description="The e-mail address of the user" type="string" variable="$addr" line="115">
             <type by_reference="false">string</type>
           </tag>
-          <tag name="param" description="The issuer" type="string" variable="$issuer" line="114">
+          <tag name="param" description="The issuer" type="string" variable="$issuer" line="115">
             <type by_reference="false">string</type>
           </tag>
-          <tag name="param" description="A function called on success" type="callback" variable="$successCallback" line="114">
+          <tag name="param" description="A function called on success" type="callback" variable="$successCallback" line="115">
             <type by_reference="false">callback</type>
           </tag>
-          <tag name="param" description="A function called on error" type="callback" variable="$errorCallback" line="114">
+          <tag name="param" description="A function called on error" type="callback" variable="$errorCallback" line="115">
             <type by_reference="false">callback</type>
           </tag>
         </docblock>
-        <argument line="121">
+        <argument line="122">
           <name>$addr</name>
           <default/>
           <type/>
         </argument>
-        <argument line="121">
+        <argument line="122">
           <name>$issuer</name>
           <default>NULL</default>
           <type/>
         </argument>
-        <argument line="121">
+        <argument line="122">
           <name>$successCallback</name>
           <default/>
           <type/>
         </argument>
-        <argument line="121">
+        <argument line="122">
           <name>$errorCallback</name>
           <default/>
           <type/>
         </argument>
       </method>
     </class>
-    <class final="false" abstract="false" line="192" namespace="default">
+    <class final="false" abstract="false" line="193" namespace="default">
       <name>IDAssertion</name>
       <extends/>
       <full_name>\IDAssertion</full_name>
@@ -161,107 +320,107 @@ the result for the upcoming assertions</description>
         <description>BrowserID assertion</description>
         <long-description>&lt;p&gt;A class for creating assertions and verifying them.&lt;/p&gt;
 </long-description>
-        <tag name="package" description="php-browseridlib" line="186"/>
+        <tag name="package" description="php-browseridlib" line="187"/>
       </docblock>
-      <property final="false" static="false" visibility="private" line="198">
+      <property final="false" static="false" visibility="private" line="199">
         <name>$assertion</name>
         <default/>
         <docblock>
           <description>A serialized JSON Web Token</description>
           <long-description>
 </long-description>
-          <tag name="var" description="The webtoken" type="string" line="194">
+          <tag name="var" description="The webtoken" type="string" line="195">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
       </property>
-      <method final="false" abstract="false" static="false" visibility="public" line="204">
+      <method final="false" abstract="false" static="false" visibility="public" line="205">
         <name>__construct</name>
         <docblock>
           <description>Creates an instance to verify this assertion</description>
           <long-description>
 </long-description>
-          <tag name="param" description="The assertion to be verified" type="string" variable="$assertion" line="200">
+          <tag name="param" description="The assertion to be verified" type="string" variable="$assertion" line="201">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
-        <argument line="204">
+        <argument line="205">
           <name>$assertion</name>
           <default/>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" line="217">
+      <method final="false" abstract="false" static="true" visibility="public" line="218">
         <name>create</name>
         <docblock>
           <description>Creates an assertion for the user that can be validated by the
 relaying party</description>
           <long-description>
 </long-description>
-          <tag name="param" description="The email to be used for authentication" type="string" variable="$email" line="208">
+          <tag name="param" description="The email to be used for authentication" type="string" variable="$email" line="209">
             <type by_reference="false">string</type>
           </tag>
-          <tag name="param" description="A Unix timestamp with microseconds defining the lifetime of the assertion" type="int" variable="$validUntil" line="208">
+          <tag name="param" description="A Unix timestamp with microseconds defining the lifetime of the assertion" type="int" variable="$validUntil" line="209">
             <type by_reference="false">int</type>
           </tag>
-          <tag name="param" description="The domain of the relaying party" type="string" variable="$audience" line="208">
+          <tag name="param" description="The domain of the relaying party" type="string" variable="$audience" line="209">
             <type by_reference="false">string</type>
           </tag>
-          <tag name="param" description="The private key used for signing in PEM format" type="string" variable="$privateKeyData" line="208">
+          <tag name="param" description="The private key used for signing in PEM format" type="string" variable="$privateKeyData" line="209">
             <type by_reference="false">string</type>
           </tag>
-          <tag name="return" description="" type="\type" line="208">
+          <tag name="return" description="" type="\type" line="209">
             <type by_reference="false">\type</type>
           </tag>
         </docblock>
-        <argument line="217">
+        <argument line="218">
           <name>$email</name>
           <default/>
           <type/>
         </argument>
-        <argument line="217">
+        <argument line="218">
           <name>$validUntil</name>
           <default/>
           <type/>
         </argument>
-        <argument line="217">
+        <argument line="218">
           <name>$audience</name>
           <default/>
           <type/>
         </argument>
-        <argument line="217">
+        <argument line="218">
           <name>$privateKeyData</name>
           <default/>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="234">
+      <method final="false" abstract="false" static="false" visibility="public" line="238">
         <name>verify</name>
         <docblock>
           <description>Verifies the assigned assertion and calls a callback on success or error</description>
           <long-description>
 </long-description>
-          <tag name="param" description="The domain of the relaying party" type="string" variable="$forAudience" line="228">
+          <tag name="param" description="The domain of the relaying party" type="string" variable="$forAudience" line="232">
             <type by_reference="false">string</type>
           </tag>
-          <tag name="param" description="A function to be called on success" type="callback" variable="$onSuccess" line="228">
+          <tag name="param" description="A function to be called on success" type="callback" variable="$onSuccess" line="232">
             <type by_reference="false">callback</type>
           </tag>
-          <tag name="param" description="A function to be called on error" type="callback" variable="$onError" line="228">
+          <tag name="param" description="A function to be called on error" type="callback" variable="$onError" line="232">
             <type by_reference="false">callback</type>
           </tag>
         </docblock>
-        <argument line="234">
+        <argument line="238">
           <name>$forAudience</name>
           <default/>
           <type/>
         </argument>
-        <argument line="234">
+        <argument line="238">
           <name>$onSuccess</name>
           <default/>
           <type/>
         </argument>
-        <argument line="234">
+        <argument line="238">
           <name>$onError</name>
           <default/>
           <type/>
@@ -269,7 +428,7 @@ relaying party</description>
       </method>
     </class>
   </file>
-  <file path="jwt.php" hash="5d46304e0d195d9098b268a1fb9c5987">
+  <file path="lib\jwt.php" hash="5d46304e0d195d9098b268a1fb9c5987">
     <docblock>
       <description>JSON Web Token implementation</description>
       <long-description>&lt;p&gt;Implementation of the JWT protocol based on:
@@ -934,8 +1093,42 @@ with the key</description>
       </method>
     </class>
   </file>
+  <file path="phpdoc\ajax_search.php" hash="b90b710361713f279b5ed683ea9f4443">
+    <docblock>
+      <description>DocBlox</description>
+      <long-description>&lt;p&gt;PHP Version 5&lt;/p&gt;
+</long-description>
+      <tag name="category" description="DocBlox"/>
+      <tag name="package" description="Search"/>
+      <tag name="author" description="Mike van Riel &amp;lt;mike.vanriel@naenius.com&amp;gt;"/>
+      <tag name="copyright" description="2010-2011 Mike van Riel / Naenius (http://www.naenius.com)"/>
+      <tag name="license" description="http://www.opensource.org/licenses/mit-license.php MIT"/>
+      <tag name="link" description="http://docblox-project.org" link="http://docblox-project.org"/>
+    </docblock>
+  </file>
+  <file path="verify.php" hash="e6bb51754b07895d3ab6aee010e35770">
+    <markers>
+      <fixme line="16">should we really allow this? It might encourage the wrong behavior</fixme>
+    </markers>
+    <include type="Require Once" line="2">
+      <name>lib/jwt.php</name>
+    </include>
+    <include type="Require Once" line="3">
+      <name>lib/idassertion.php</name>
+    </include>
+    <function namespace="default" line="38">
+      <name>Closure</name>
+      <type>closure</type>
+      <argument line="38">
+        <name>$errorObj</name>
+        <default/>
+        <type/>
+      </argument>
+    </function>
+  </file>
   <package name=""/>
   <package name="php-browseridlib"/>
+  <package name="Search"/>
   <namespace name="default"/>
   <marker>todo</marker>
   <marker>fixme</marker>

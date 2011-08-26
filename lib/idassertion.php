@@ -12,6 +12,7 @@
  * @package php-browseridlib
  */
 require_once("jwt.php");
+require_once("configuration.php");
 
 /**
  * Webfinger implementation
@@ -215,10 +216,13 @@ class IDAssertion {
      * @return type 
      */
     public static function create($email, $validUntil, $audience, $privateKeyData) {
+        $config = Configuration::getInstance();
+        
         $payload = array();
         $payload["email"] = $email;
         $payload["valid-until"] = $validUntil;
         $payload["audience"] = $audience;
+        $payload["issuer"] = $config->get('hostname') . ':' . $config->get('port');
 
         $token = new WebToken(json_encode($payload), json_encode(array("alg"=>"RS256")));
         $signed = $token->serialize($privateKeyData);
@@ -262,6 +266,15 @@ class IDAssertion {
         $validUntil = $payload->{"valid-until"} / 1000;
         if ($validUntil < time()) {
             $onError("Payload has expired.");
+            return;
+        }
+        
+        // check that the issuer is just US for now, no other issuer
+        // FIXME: this will need to change for certs
+        $config = Configuration::getInstance();
+        $expected_issuer = $config->get('hostname') . ':' . $config->get('port');
+        if ($payload->issuer != $expected_issuer) {
+            $onError("Issuer can only be ourselves for now, it should be: " . $expected_issuer);
             return;
         }
 
