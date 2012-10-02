@@ -1,0 +1,1132 @@
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>DocBlox Documentation</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta><link rel="stylesheet" href="css/black-tie/jquery-ui-1.8.2.custom.css" type="text/css"></link><link rel="stylesheet" href="css/jquery.treeview.css" type="text/css"></link><link rel="stylesheet" href="css/theme.css" type="text/css"></link><script type="text/javascript" src="js/jquery-1.4.2.min.js"></script><script type="text/javascript" src="js/jquery-ui-1.8.2.custom.min.js"></script><script type="text/javascript" src="js/jquery.cookie.js"></script><script type="text/javascript" src="js/jquery.treeview.js"></script><script type="text/javascript">
+            $(document).ready(function() {
+                $(".filetree").treeview({
+                    collapsed: true,
+                    persist: "cookie"
+                });
+
+                $("#accordion").accordion({
+                    collapsible: true,
+                    autoHeight:  false,
+                    fillSpace:   true
+                });
+
+                $(".tabs").tabs();
+            });
+        </script></head><body><div xmlns="" id="content">
+<script>
+      $(document).ready(function() {
+        $('dl.function-info, dl.constant-info, dl.property-info').prev().css('cursor', 'pointer');
+        $('dl.function-info, dl.constant-info, dl.property-info').prev().click(function() {
+          if ($(this).next().is(':hidden'))
+          {
+            $(this).children('img')[0].src = 'images/arrow_down.gif';
+          } else
+          {
+            $(this).children('img')[0].src = 'images/arrow_right.gif';
+          }
+          $(this).next().slideToggle();
+        });
+      $('dl.function-info, dl.constant-info, dl.property-info').hide();
+      $('dl.function-info img, dl.constant-info img, dl.property-info img').show();
+      });
+    </script><a name="top"></a><h1 class="file">lib\BrowserID\algs.php</h1>
+<div class="file_menu">
+<a href="#includes">Includes</a> <a href="#classes">Classes</a> </div>
+<dl class="file-info">
+<dt>author</dt>
+<dd>Benjamin Krämer &lt;benjamin.kraemer@alien-scripts.de&gt;</dd>
+<dt>copyright</dt>
+<dd>Alien-Scripts.de Benjamin Krämer</dd>
+<dt>license</dt>
+<dd>http://www.opensource.org/licenses/mit-license.html  MIT License</dd>
+<dt>package</dt>
+<dd>BrowserID</dd>
+<dt>subpackage</dt>
+<dd>Algs</dd>
+<dt>Classes</dt>
+<dd><a class="class" href="#%5CAbstractKey">AbstractKey</a></dd>
+<dd><a class="class" href="#%5CAbstractKeyPair">AbstractKeyPair</a></dd>
+<dd><a class="class" href="#%5CAbstractKeyInstance">AbstractKeyInstance</a></dd>
+<dd><a class="class" href="#%5CAbstractPublicKey">AbstractPublicKey</a></dd>
+<dd><a class="class" href="#%5CAbstractSecretKey">AbstractSecretKey</a></dd>
+<dd><a class="class" href="#%5CAlgorithmException">AlgorithmException</a></dd>
+</dl>
+<h2>Description</h2>
+<p class="short-description">Algorithms</p>
+<div class="long-description"><p>LICENSE: Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.</p>
+</div>
+<a name="classes"></a><a id="\AbstractKey"></a><h2 class="class">\AbstractKey<div class="to-top"><a href="#top">jump to top</a></div>
+</h2>
+<div class="class">
+<dl class="class-info">
+<dt>abstract</dt>
+<dd></dd>
+<dt>author</dt>
+<dd>Benjamin Krämer &lt;benjamin.kraemer@alien-scripts.de&gt;</dd>
+<dt>package</dt>
+<dd>BrowserID</dd>
+<dt>subpackage</dt>
+<dd>Algs</dd>
+<dt>version</dt>
+<dd>1.0.0</dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Properties
+              </a></dt>
+<dd><a class="property protected" href="#%5CAbstractKey::%24algorithm">$algorithm</a></dd>
+<dd><a class="property protected" href="#%5CAbstractKey::%24keysize">$keysize</a></dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Methods
+              </a></dt>
+<dd><a class="method public" href="#%5CAbstractKey::getAlgorithm()">getAlgorithm</a></dd>
+</dl>
+<h3>Description</h3>
+<p class="short-description">Abstract key</p>
+<div class="long-description"><p>A base class for all keys.</p>
+</div>
+<h3>Properties</h3>
+<div>
+<a id="\AbstractKey::$algorithm"></a><h4 class="property protected">$algorithm<div class="to-top"><a href="#%5CAbstractKey">jump to class</a></div>
+</h4>
+<div class="property">
+<code>string <span class="highlight">$algorithm</span> = ''</code><p class="short-description">Algorithm</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>string<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>protected</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>protected</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\AbstractKey::$keysize"></a><h4 class="property protected">$keysize<div class="to-top"><a href="#%5CAbstractKey">jump to class</a></div>
+</h4>
+<div class="property">
+<code>int <span class="highlight">$keysize</span> = ''</code><p class="short-description">Keysize</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>int<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>protected</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>protected</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+<h3>Methods</h3>
+<div>
+<a id="\AbstractKey::getAlgorithm()"></a><h4 class="method public">getAlgorithm<div class="to-top"><a href="#AbstractKey">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">getAlgorithm</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        string</code><p class="short-description">Algorithm</p>
+<div class="long-description"><p>Gets the algorithm identifier as used in the web tokens header.</p>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>string</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+</div>
+<a id="\AbstractKeyInstance"></a><h2 class="class">\AbstractKeyInstance<div class="to-top"><a href="#top">jump to top</a></div>
+</h2>
+<div class="class">
+<dl class="class-info">
+<dt>Extends from</dt>
+<dd><a href="_lib_BrowserID_algs.html#%5CAbstractKey">\AbstractKey</a></dd>
+<dt>abstract</dt>
+<dd></dd>
+<dt>author</dt>
+<dd>Benjamin Krämer &lt;benjamin.kraemer@alien-scripts.de&gt;</dd>
+<dt>package</dt>
+<dd>BrowserID</dd>
+<dt>subpackage</dt>
+<dd>Algs</dd>
+<dt>version</dt>
+<dd>1.0.0</dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Methods
+              </a></dt>
+<dd><a class="method public" href="#%5CAbstractKeyInstance::deserialize()">deserialize</a></dd>
+<dd><a class="method protected" href="#%5CAbstractKeyInstance::deserializeFromObject()">deserializeFromObject</a></dd>
+<dd><a class="method public" href="#%5CAbstractKeyInstance::fromSimpleObject()">fromSimpleObject</a></dd>
+<dd><a class="method public" href="#%5CAbstractKeyInstance::serialize()">serialize</a></dd>
+<dd><a class="method protected" href="#%5CAbstractKeyInstance::serializeToObject()">serializeToObject</a></dd>
+<dd><a class="method public" href="#%5CAbstractKeyInstance::toSimpleObject()">toSimpleObject</a></dd>
+</dl>
+<h3>Description</h3>
+<p class="short-description">Abstract key instance</p>
+<div class="long-description"><p>A base class for all instanciated keys.</p>
+</div>
+<h3>Methods</h3>
+<div>
+<a id="\AbstractKeyInstance::deserialize()"></a><h4 class="method public">deserialize<div class="to-top"><a href="#AbstractKeyInstance">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">deserialize</span><span class="nb-faded-text">(
+          string $str
+          )
+        </span>
+        :
+        <a href="_lib_BrowserID_algs.html#%5CAbstractKeyInstance">\AbstractKeyInstance</a></code><p class="short-description">Deserialize key</p>
+<div class="long-description"><p>Deserializes the key.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$str</dt>
+<dd>string<br><em>Serialized parmeters of the key</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_BrowserID_algs.html#%5CAbstractKeyInstance">\AbstractKeyInstance</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+<dt>abstract</dt>
+<dd></dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>static</dt>
+<dd></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\AbstractKeyInstance::deserializeFromObject()"></a><h4 class="method protected">deserializeFromObject<div class="to-top"><a href="#AbstractKeyInstance">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">deserializeFromObject</span><span class="nb-faded-text">(
+           $obj
+          )
+        </span>
+        :
+        <a href="_lib_BrowserID_algs.html#%5CAbstractKeyInstance">\AbstractKeyInstance</a></code><p class="short-description">Deserialize from object</p>
+<div class="long-description"><p>Deserialize parameters from the parameter object depending on the algorithmic specific implementation.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$obj</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_BrowserID_algs.html#%5CAbstractKeyInstance">\AbstractKeyInstance</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>protected</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>abstract</dt>
+<dd></dd>
+<dt>access</dt>
+<dd>protected</dd>
+<dt>params</dt>
+<dd>array $obj Array of algorithmic specific parameters</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\AbstractKeyInstance::fromSimpleObject()"></a><h4 class="method public">fromSimpleObject<div class="to-top"><a href="#AbstractKeyInstance">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">fromSimpleObject</span><span class="nb-faded-text">(
+          array $obj
+          )
+        </span>
+        :
+        <a href="_lib_BrowserID_algs.html#%5CAbstractKeyInstance">\AbstractKeyInstance</a></code><p class="short-description">Unflatten key</p>
+<div class="long-description"><p>Creates an key instance from the parameters.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$obj</dt>
+<dd>array<br><em>Parameters of the key</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_BrowserID_algs.html#%5CAbstractKeyInstance">\AbstractKeyInstance</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+<dt>abstract</dt>
+<dd></dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>static</dt>
+<dd></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\AbstractKeyInstance::serialize()"></a><h4 class="method public">serialize<div class="to-top"><a href="#AbstractKeyInstance">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">serialize</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        string</code><p class="short-description">Serialize key</p>
+<div class="long-description"><p>Serializes the key.</p>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>string</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\AbstractKeyInstance::serializeToObject()"></a><h4 class="method protected">serializeToObject<div class="to-top"><a href="#AbstractKeyInstance">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">serializeToObject</span><span class="nb-faded-text">(
+           $obj
+          )
+        </span>
+        :
+        </code><p class="short-description">Serialize to object</p>
+<div class="long-description"><p>Serializes parameters of the instance depending on the algorithmic specific
+implementation into the parameter object.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$obj</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>protected</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>abstract</dt>
+<dd></dd>
+<dt>access</dt>
+<dd>protected</dd>
+<dt>params</dt>
+<dd>array $obj Array of algorithmic specific parameters</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\AbstractKeyInstance::toSimpleObject()"></a><h4 class="method public">toSimpleObject<div class="to-top"><a href="#AbstractKeyInstance">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">toSimpleObject</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        array</code><p class="short-description">Flatten key</p>
+<div class="long-description"><p>Extracts the parameters of the key.</p>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>array</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+</div>
+<a id="\AbstractKeyPair"></a><h2 class="class">\AbstractKeyPair<div class="to-top"><a href="#top">jump to top</a></div>
+</h2>
+<div class="class">
+<dl class="class-info">
+<dt>Extends from</dt>
+<dd><a href="_lib_BrowserID_algs.html#%5CAbstractKey">\AbstractKey</a></dd>
+<dt>abstract</dt>
+<dd></dd>
+<dt>author</dt>
+<dd>Benjamin Krämer &lt;benjamin.kraemer@alien-scripts.de&gt;</dd>
+<dt>package</dt>
+<dd>BrowserID</dd>
+<dt>subpackage</dt>
+<dd>Algs</dd>
+<dt>version</dt>
+<dd>1.0.0</dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Properties
+              </a></dt>
+<dd><a class="property protected" href="#%5CAbstractKeyPair::%24publicKey">$publicKey</a></dd>
+<dd><a class="property protected" href="#%5CAbstractKeyPair::%24secretKey">$secretKey</a></dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Methods
+              </a></dt>
+<dd><a class="method public" href="#%5CAbstractKeyPair::createPublicKey()">createPublicKey</a></dd>
+<dd><a class="method public" href="#%5CAbstractKeyPair::createSecretKey()">createSecretKey</a></dd>
+<dd><a class="method public" href="#%5CAbstractKeyPair::generate()">generate</a></dd>
+<dd><a class="method public" href="#%5CAbstractKeyPair::getPublicKey()">getPublicKey</a></dd>
+<dd><a class="method public" href="#%5CAbstractKeyPair::getSecretKey()">getSecretKey</a></dd>
+</dl>
+<h3>Description</h3>
+<p class="short-description">Abstract key pair</p>
+<div class="long-description"><p>A base class for all key pairs.</p>
+</div>
+<h3>Properties</h3>
+<div>
+<a id="\AbstractKeyPair::$publicKey"></a><h4 class="property protected">$publicKey<div class="to-top"><a href="#%5CAbstractKeyPair">jump to class</a></div>
+</h4>
+<div class="property">
+<code><a href="_lib_BrowserID_algs.html#%5CAbstractPublicKey">\AbstractPublicKey</a> <span class="highlight">$publicKey</span> = ''</code><p class="short-description">Public key</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>
+<a href="_lib_BrowserID_algs.html#%5CAbstractPublicKey">\AbstractPublicKey</a><br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>protected</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>protected</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\AbstractKeyPair::$secretKey"></a><h4 class="property protected">$secretKey<div class="to-top"><a href="#%5CAbstractKeyPair">jump to class</a></div>
+</h4>
+<div class="property">
+<code><a href="_lib_BrowserID_algs.html#%5CAbstractSecretKey">\AbstractSecretKey</a> <span class="highlight">$secretKey</span> = ''</code><p class="short-description">Secret key</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>
+<a href="_lib_BrowserID_algs.html#%5CAbstractSecretKey">\AbstractSecretKey</a><br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>protected</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>protected</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+<h3>Methods</h3>
+<div>
+<a id="\AbstractKeyPair::createPublicKey()"></a><h4 class="method public">createPublicKey<div class="to-top"><a href="#AbstractKeyPair">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">createPublicKey</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <a href="_lib_BrowserID_algs.html#%5CAbstractPublicKey">\AbstractPublicKey</a></code><p class="short-description">Creates public key</p>
+<div class="long-description"><p>Creates a public key using the algorithm of the extended class.</p>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_BrowserID_algs.html#%5CAbstractPublicKey">\AbstractPublicKey</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>abstract</dt>
+<dd></dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\AbstractKeyPair::createSecretKey()"></a><h4 class="method public">createSecretKey<div class="to-top"><a href="#AbstractKeyPair">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">createSecretKey</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <a href="_lib_BrowserID_algs.html#%5CAbstractSecretKey">\AbstractSecretKey</a></code><p class="short-description">Creates secret key</p>
+<div class="long-description"><p>Creates a secret key using the algorithm of the extended class.</p>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_BrowserID_algs.html#%5CAbstractSecretKey">\AbstractSecretKey</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>abstract</dt>
+<dd></dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\AbstractKeyPair::generate()"></a><h4 class="method public">generate<div class="to-top"><a href="#AbstractKeyPair">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">generate</span><span class="nb-faded-text">(
+          int $keysize
+          )
+        </span>
+        :
+        <a href="_lib_BrowserID_algs.html#%5CAbstractKeyPair">\AbstractKeyPair</a></code><p class="short-description">Generate keypair</p>
+<div class="long-description"><p>Generates a keypair for a given keysize in bits</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$keysize</dt>
+<dd>int<br><em>Keysize in bits</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_BrowserID_algs.html#%5CAbstractKeyPair">\AbstractKeyPair</a></dt>
+<dd><em>Returning an instance of the key pair</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+<dt>abstract</dt>
+<dd></dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>static</dt>
+<dd></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\AbstractKeyPair::getPublicKey()"></a><h4 class="method public">getPublicKey<div class="to-top"><a href="#AbstractKeyPair">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">getPublicKey</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <a href="_lib_BrowserID_algs.html#%5CAbstractPublicKey">\AbstractPublicKey</a></code><p class="short-description">Get public key</p>
+<div class="long-description"><p>Gets the public key of this key pair.</p>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_BrowserID_algs.html#%5CAbstractPublicKey">\AbstractPublicKey</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\AbstractKeyPair::getSecretKey()"></a><h4 class="method public">getSecretKey<div class="to-top"><a href="#AbstractKeyPair">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">getSecretKey</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <a href="_lib_BrowserID_algs.html#%5CAbstractSecretKey">\AbstractSecretKey</a></code><p class="short-description">Get secret key</p>
+<div class="long-description"><p>Gets the secret key of this key pair.</p>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_BrowserID_algs.html#%5CAbstractSecretKey">\AbstractSecretKey</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+</div>
+<a id="\AbstractPublicKey"></a><h2 class="class">\AbstractPublicKey<div class="to-top"><a href="#top">jump to top</a></div>
+</h2>
+<div class="class">
+<dl class="class-info">
+<dt>Extends from</dt>
+<dd><a href="_lib_BrowserID_algs.html#%5CAbstractKeyInstance">\AbstractKeyInstance</a></dd>
+<dt>abstract</dt>
+<dd></dd>
+<dt>author</dt>
+<dd>Benjamin Krämer &lt;benjamin.kraemer@alien-scripts.de&gt;</dd>
+<dt>package</dt>
+<dd>BrowserID</dd>
+<dt>subpackage</dt>
+<dd>Algs</dd>
+<dt>version</dt>
+<dd>1.0.0</dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Methods
+              </a></dt>
+<dd><a class="method public" href="#%5CAbstractPublicKey::deserialize()">deserialize</a></dd>
+<dd><a class="method public" href="#%5CAbstractPublicKey::fromSimpleObject()">fromSimpleObject</a></dd>
+<dd><a class="method public" href="#%5CAbstractPublicKey::verify()">verify</a></dd>
+</dl>
+<h3>Description</h3>
+<p class="short-description">Abstract public key</p>
+<div class="long-description"><p>A base class for all public keys.</p>
+</div>
+<h3>Methods</h3>
+<div>
+<a id="\AbstractPublicKey::deserialize()"></a><h4 class="method public">deserialize<div class="to-top"><a href="#AbstractPublicKey">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">deserialize</span><span class="nb-faded-text">(
+          string $str
+          )
+        </span>
+        :
+        <a href="_lib_BrowserID_algs.html#%5CAbstractKeyInstance">\AbstractKeyInstance</a></code><p class="short-description">Deserialize key</p>
+<div class="long-description"><p>Deserializes the key.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$str</dt>
+<dd>string<br><em>Serialized parmeters of the key</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_BrowserID_algs.html#%5CAbstractKeyInstance">\AbstractKeyInstance</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+<dt>see</dt>
+<dd>AbstractKeyInstance::deserialize($str)</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\AbstractPublicKey::fromSimpleObject()"></a><h4 class="method public">fromSimpleObject<div class="to-top"><a href="#AbstractPublicKey">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">fromSimpleObject</span><span class="nb-faded-text">(
+          array $obj
+          )
+        </span>
+        :
+        <a href="_lib_BrowserID_algs.html#%5CAbstractKeyInstance">\AbstractKeyInstance</a></code><p class="short-description">Unflatten key</p>
+<div class="long-description"><p>Creates an key instance from the parameters.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$obj</dt>
+<dd>array<br><em>Parameters of the key</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_BrowserID_algs.html#%5CAbstractKeyInstance">\AbstractKeyInstance</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+<dt>see</dt>
+<dd>AbstractKeyInstance::fromSimpleObject($obj)</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\AbstractPublicKey::verify()"></a><h4 class="method public">verify<div class="to-top"><a href="#AbstractPublicKey">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">verify</span><span class="nb-faded-text">(
+          string $message, string $signature
+          )
+        </span>
+        :
+        boolean</code><p class="short-description">Verify message</p>
+<div class="long-description"><p>Verifies a message using a signature.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$message</dt>
+<dd>string<br><em>The message to be verified</em>
+</dd>
+<dt>$signature</dt>
+<dd>string<br><em>The signature to be validated</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>boolean</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>abstract</dt>
+<dd></dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+</div>
+<a id="\AbstractSecretKey"></a><h2 class="class">\AbstractSecretKey<div class="to-top"><a href="#top">jump to top</a></div>
+</h2>
+<div class="class">
+<dl class="class-info">
+<dt>Extends from</dt>
+<dd><a href="_lib_BrowserID_algs.html#%5CAbstractKeyInstance">\AbstractKeyInstance</a></dd>
+<dt>abstract</dt>
+<dd></dd>
+<dt>author</dt>
+<dd>Benjamin Krämer &lt;benjamin.kraemer@alien-scripts.de&gt;</dd>
+<dt>package</dt>
+<dd>BrowserID</dd>
+<dt>subpackage</dt>
+<dd>Algs</dd>
+<dt>version</dt>
+<dd>1.0.0</dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Methods
+              </a></dt>
+<dd><a class="method public" href="#%5CAbstractSecretKey::deserialize()">deserialize</a></dd>
+<dd><a class="method public" href="#%5CAbstractSecretKey::fromSimpleObject()">fromSimpleObject</a></dd>
+<dd><a class="method public" href="#%5CAbstractSecretKey::sign()">sign</a></dd>
+</dl>
+<h3>Description</h3>
+<p class="short-description">Abstract secret key</p>
+<div class="long-description"><p>A base class for all secret keys.</p>
+</div>
+<h3>Methods</h3>
+<div>
+<a id="\AbstractSecretKey::deserialize()"></a><h4 class="method public">deserialize<div class="to-top"><a href="#AbstractSecretKey">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">deserialize</span><span class="nb-faded-text">(
+          string $str
+          )
+        </span>
+        :
+        <a href="_lib_BrowserID_algs.html#%5CAbstractKeyInstance">\AbstractKeyInstance</a></code><p class="short-description">Deserialize key</p>
+<div class="long-description"><p>Deserializes the key.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$str</dt>
+<dd>string<br><em>Serialized parmeters of the key</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_BrowserID_algs.html#%5CAbstractKeyInstance">\AbstractKeyInstance</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+<dt>see</dt>
+<dd>AbstractKeyInstance::deserialize($str)</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\AbstractSecretKey::fromSimpleObject()"></a><h4 class="method public">fromSimpleObject<div class="to-top"><a href="#AbstractSecretKey">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">fromSimpleObject</span><span class="nb-faded-text">(
+          array $obj
+          )
+        </span>
+        :
+        <a href="_lib_BrowserID_algs.html#%5CAbstractKeyInstance">\AbstractKeyInstance</a></code><p class="short-description">Unflatten key</p>
+<div class="long-description"><p>Creates an key instance from the parameters.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$obj</dt>
+<dd>array<br><em>Parameters of the key</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_BrowserID_algs.html#%5CAbstractKeyInstance">\AbstractKeyInstance</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+<dt>see</dt>
+<dd>AbstractKeyInstance::fromSimpleObject($obj)</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\AbstractSecretKey::sign()"></a><h4 class="method public">sign<div class="to-top"><a href="#AbstractSecretKey">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">sign</span><span class="nb-faded-text">(
+          string $message
+          )
+        </span>
+        :
+        string</code><p class="short-description">Sign message</p>
+<div class="long-description"><p>Generate a signature for the message.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$message</dt>
+<dd>string<br><em>The message</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>string</dt>
+<dd><em>The signature</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>abstract</dt>
+<dd></dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+</div>
+<a id="\AlgorithmException"></a><h2 class="class">\AlgorithmException<div class="to-top"><a href="#top">jump to top</a></div>
+</h2>
+<div class="class">
+<dl class="class-info">
+<dt>Extends from</dt>
+<dd><a href="http://php.net/manual/en/class.exception.php">\Exception</a></dd>
+<dt>abstract</dt>
+<dd></dd>
+<dt>author</dt>
+<dd>Benjamin Krämer &lt;benjamin.kraemer@alien-scripts.de&gt;</dd>
+<dt>package</dt>
+<dd>BrowserID</dd>
+<dt>subpackage</dt>
+<dd>Algs</dd>
+<dt>version</dt>
+<dd>1.0.0</dd>
+</dl>
+<h3>Description</h3>
+<p class="short-description">Algorithmic exception</p>
+<div class="long-description"><p>The algorithm was not executable</p>
+</div>
+</div>
+</div>
+<small xmlns="" class="footer">Documentation was generated by <a href="http://docblox-project.org">DocBlox 0.12.0</a>.
+    </small></body></html>

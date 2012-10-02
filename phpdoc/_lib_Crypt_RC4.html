@@ -1,0 +1,918 @@
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>DocBlox Documentation</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta><link rel="stylesheet" href="css/black-tie/jquery-ui-1.8.2.custom.css" type="text/css"></link><link rel="stylesheet" href="css/jquery.treeview.css" type="text/css"></link><link rel="stylesheet" href="css/theme.css" type="text/css"></link><script type="text/javascript" src="js/jquery-1.4.2.min.js"></script><script type="text/javascript" src="js/jquery-ui-1.8.2.custom.min.js"></script><script type="text/javascript" src="js/jquery.cookie.js"></script><script type="text/javascript" src="js/jquery.treeview.js"></script><script type="text/javascript">
+            $(document).ready(function() {
+                $(".filetree").treeview({
+                    collapsed: true,
+                    persist: "cookie"
+                });
+
+                $("#accordion").accordion({
+                    collapsible: true,
+                    autoHeight:  false,
+                    fillSpace:   true
+                });
+
+                $(".tabs").tabs();
+            });
+        </script></head><body><div xmlns="" id="content">
+<script>
+      $(document).ready(function() {
+        $('dl.function-info, dl.constant-info, dl.property-info').prev().css('cursor', 'pointer');
+        $('dl.function-info, dl.constant-info, dl.property-info').prev().click(function() {
+          if ($(this).next().is(':hidden'))
+          {
+            $(this).children('img')[0].src = 'images/arrow_down.gif';
+          } else
+          {
+            $(this).children('img')[0].src = 'images/arrow_right.gif';
+          }
+          $(this).next().slideToggle();
+        });
+      $('dl.function-info, dl.constant-info, dl.property-info').hide();
+      $('dl.function-info img, dl.constant-info img, dl.property-info img').show();
+      });
+    </script><a name="top"></a><h1 class="file">lib\Crypt\RC4.php</h1>
+<div class="file_menu">
+<a href="#constants">Constants</a> <a href="#classes">Classes</a> </div>
+<dl class="file-info">
+<dt>author</dt>
+<dd>Jim Wigginton &lt;terrafrost@php.net&gt;</dd>
+<dt>copyright</dt>
+<dd>MMVII Jim Wigginton</dd>
+<dt>license</dt>
+<dd>http://www.opensource.org/licenses/mit-license.html  MIT License</dd>
+<dt>link</dt>
+<dd><a href="http://phpseclib.sourceforge.net">http://phpseclib.sourceforge.net</a></dd>
+<dt>package</dt>
+<dd>Crypt</dd>
+<dt>subpackage</dt>
+<dd>Crypt_RC4</dd>
+<dt>version</dt>
+<dd>$Id: RC4.php,v 1.8 2009/06/09 04:00:38 terrafrost Exp $</dd>
+<dt>Constants</dt>
+<dd><a class="constant" href="#::CRYPT_RC4_MODE_INTERNAL">CRYPT_RC4_MODE_INTERNAL</a></dd>
+<dd><a class="constant" href="#::CRYPT_RC4_MODE_MCRYPT">CRYPT_RC4_MODE_MCRYPT</a></dd>
+<dd><a class="constant" href="#::CRYPT_RC4_ENCRYPT">CRYPT_RC4_ENCRYPT</a></dd>
+<dd><a class="constant" href="#::CRYPT_RC4_DECRYPT">CRYPT_RC4_DECRYPT</a></dd>
+<dt>Classes</dt>
+<dd><a class="class" href="#%5CCrypt_RC4">Crypt_RC4</a></dd>
+</dl>
+<h2>Description</h2>
+<p class="short-description">Pure-PHP implementation of RC4.</p>
+<div class="long-description"><p>Uses mcrypt, if available, and an internal implementation, otherwise.</p>
+
+<p>PHP versions 4 and 5</p>
+
+<p>Useful resources are as follows:</p>
+
+<ul>
+<li>{@link http://www.mozilla.org/projects/security/pki/nss/draft-kaukonen-cipher-arcfour-03.txt ARCFOUR Algorithm}</li>
+<li>{@link http://en.wikipedia.org/wiki/RC4 - Wikipedia: RC4}</li>
+</ul>
+
+<p>RC4 is also known as ARCFOUR or ARC4.  The reason is elaborated upon at Wikipedia.  This class is named RC4 and not
+ARCFOUR or ARC4 because RC4 is how it is refered to in the SSH1 specification.</p>
+
+<p>Here's a short example of how to use this library:
+<code>
+<?php
+   include('Crypt/RC4.php');
+
+   $rc4 = new Crypt_RC4();
+
+   $rc4->setKey('abcdefgh');
+
+   $size = 10 * 1024;
+   $plaintext = '';
+   for ($i = 0; $i < $size; $i++) {
+       $plaintext.= 'a';
+   }
+
+   echo $rc4->decrypt($rc4->encrypt($plaintext));
+?>
+</code></p>
+
+<p>LICENSE: Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.</p>
+</div>
+<a name="constants"></a><h2>Constants</h2>
+<div>
+<a id="::CRYPT_RC4_MODE_INTERNAL"></a><h3 class="constant">CRYPT_RC4_MODE_INTERNAL<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_RC4_MODE_INTERNAL</span> = '1'
+      </code><p class="short-description">Toggles the internal implementation</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>1</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_RC4_MODE_MCRYPT"></a><h3 class="constant">CRYPT_RC4_MODE_MCRYPT<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_RC4_MODE_MCRYPT</span> = '2'
+      </code><p class="short-description">Toggles the mcrypt implementation</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>2</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_RC4_ENCRYPT"></a><h3 class="constant">CRYPT_RC4_ENCRYPT<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_RC4_ENCRYPT</span> = '0'
+      </code><div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>0</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_RC4_DECRYPT"></a><h3 class="constant">CRYPT_RC4_DECRYPT<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_RC4_DECRYPT</span> = '1'
+      </code><div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>1</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+<a name="classes"></a><a id="\Crypt_RC4"></a><h2 class="class">\Crypt_RC4<div class="to-top"><a href="#top">jump to top</a></div>
+</h2>
+<div class="class">
+<dl class="class-info">
+<dt>access</dt>
+<dd>public</dd>
+<dt>author</dt>
+<dd>Jim Wigginton &lt;terrafrost@php.net&gt;</dd>
+<dt>package</dt>
+<dd>Crypt</dd>
+<dt>subpackage</dt>
+<dd>Crypt_RC4</dd>
+<dt>version</dt>
+<dd>0.1.0</dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Properties
+              </a></dt>
+<dd><a class="property public" href="#%5CCrypt_RC4::%24continuousBuffer">$continuousBuffer</a></dd>
+<dd><a class="property public" href="#%5CCrypt_RC4::%24decryptIndex">$decryptIndex</a></dd>
+<dd><a class="property public" href="#%5CCrypt_RC4::%24decryptStream">$decryptStream</a></dd>
+<dd><a class="property public" href="#%5CCrypt_RC4::%24encryptIndex">$encryptIndex</a></dd>
+<dd><a class="property public" href="#%5CCrypt_RC4::%24encryptStream">$encryptStream</a></dd>
+<dd><a class="property public" href="#%5CCrypt_RC4::%24key">$key</a></dd>
+<dd><a class="property public" href="#%5CCrypt_RC4::%24mcrypt">$mcrypt</a></dd>
+<dd><a class="property public" href="#%5CCrypt_RC4::%24mode">$mode</a></dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Methods
+              </a></dt>
+<dd><a class="method public" href="#%5CCrypt_RC4::Crypt_RC4()">Crypt_RC4</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RC4::__destruct()">__destruct</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RC4::_crypt()">_crypt</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RC4::decrypt()">decrypt</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RC4::disableContinuousBuffer()">disableContinuousBuffer</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RC4::disablePadding()">disablePadding</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RC4::enableContinuousBuffer()">enableContinuousBuffer</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RC4::enablePadding()">enablePadding</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RC4::encrypt()">encrypt</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RC4::setIV()">setIV</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RC4::setKey()">setKey</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RC4::setMCrypt()">setMCrypt</a></dd>
+</dl>
+<h3>Description</h3>
+<p class="short-description">Pure-PHP implementation of RC4.</p>
+<div class="long-description">
+</div>
+<h3>Properties</h3>
+<div>
+<a id="\Crypt_RC4::$continuousBuffer"></a><h4 class="property public">$continuousBuffer<div class="to-top"><a href="#%5CCrypt_RC4">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Boolean <span class="highlight">$continuousBuffer</span> = 'false'</code><p class="short-description">Continuous Buffer status</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Boolean<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd>false</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_RC4::enableContinuousBuffer()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RC4::$decryptIndex"></a><h4 class="property public">$decryptIndex<div class="to-top"><a href="#%5CCrypt_RC4">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Integer <span class="highlight">$decryptIndex</span> = '0'</code><p class="short-description">The $i and $j indexes for decryption</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Integer<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd>0</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_RC4::_crypt()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RC4::$decryptStream"></a><h4 class="property public">$decryptStream<div class="to-top"><a href="#%5CCrypt_RC4">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Array <span class="highlight">$decryptStream</span> = 'false'</code><p class="short-description">The Key Stream for decryption</p>
+<div class="long-description"><p>If CRYPT_RC4_MODE == CRYPT_RC4_MODE_MCRYPT, this will be equal to the mcrypt object</p>
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd>false</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_RC4::setKey()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RC4::$encryptIndex"></a><h4 class="property public">$encryptIndex<div class="to-top"><a href="#%5CCrypt_RC4">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Integer <span class="highlight">$encryptIndex</span> = '0'</code><p class="short-description">The $i and $j indexes for encryption</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Integer<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd>0</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_RC4::_crypt()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RC4::$encryptStream"></a><h4 class="property public">$encryptStream<div class="to-top"><a href="#%5CCrypt_RC4">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Array <span class="highlight">$encryptStream</span> = 'false'</code><p class="short-description">The Key Stream for encryption</p>
+<div class="long-description"><p>If CRYPT_RC4_MODE == CRYPT_RC4_MODE_MCRYPT, this will be equal to the mcrypt object</p>
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd>false</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_RC4::setKey()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RC4::$key"></a><h4 class="property public">$key<div class="to-top"><a href="#%5CCrypt_RC4">jump to class</a></div>
+</h4>
+<div class="property">
+<code>String <span class="highlight">$key</span> = '\0'</code><p class="short-description">The Key</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>String<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd>\0</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_RC4::setKey()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RC4::$mcrypt"></a><h4 class="property public">$mcrypt<div class="to-top"><a href="#%5CCrypt_RC4">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Array <span class="highlight">$mcrypt</span> = 'array'</code><p class="short-description">MCrypt parameters</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd>array</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_RC4::setMCrypt()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RC4::$mode"></a><h4 class="property public">$mode<div class="to-top"><a href="#%5CCrypt_RC4">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Integer <span class="highlight">$mode</span> = ''</code><p class="short-description">The Encryption Algorithm</p>
+<div class="long-description"><p>Only used if CRYPT_RC4_MODE == CRYPT_RC4_MODE_MCRYPT.  Only possible values are MCRYPT_RC4 or MCRYPT_ARCFOUR.</p>
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Integer<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_RC4::Crypt_RC4()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+<h3>Methods</h3>
+<div>
+<a id="\Crypt_RC4::Crypt_RC4()"></a><h4 class="method public">Crypt_RC4<div class="to-top"><a href="#Crypt_RC4">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">Crypt_RC4</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <a href="_lib_Crypt_RC4.html#%5CCrypt_RC4">\Crypt_RC4</a></code><p class="short-description">Default Constructor.</p>
+<div class="long-description"><p>Determines whether or not the mcrypt extension should be used.</p>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_Crypt_RC4.html#%5CCrypt_RC4">\Crypt_RC4</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RC4::__destruct()"></a><h4 class="method public">__destruct<div class="to-top"><a href="#Crypt_RC4">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">__destruct</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        </code><p class="short-description">Class destructor.</p>
+<div class="long-description"><p>Will be called, automatically, if you're using PHP5.  If you're using PHP4, call it yourself.  Only really
+needs to be called if mcrypt is being used.</p>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RC4::_crypt()"></a><h4 class="method public">_crypt<div class="to-top"><a href="#Crypt_RC4">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_crypt</span><span class="nb-faded-text">(
+          String $text, Integer $mode
+          )
+        </span>
+        :
+        </code><p class="short-description">Encrypts or decrypts a message.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$text</dt>
+<dd>String<br><em></em>
+</dd>
+<dt>$mode</dt>
+<dd>Integer<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_RC4::encrypt()</dd>
+<dt>see</dt>
+<dd>Crypt_RC4::decrypt()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RC4::decrypt()"></a><h4 class="method public">decrypt<div class="to-top"><a href="#Crypt_RC4">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">decrypt</span><span class="nb-faded-text">(
+          String $ciphertext
+          )
+        </span>
+        :
+        </code><p class="short-description">Decrypts a message.</p>
+<div class="long-description"><p>$this->decrypt($this->encrypt($plaintext)) == $this->encrypt($this->encrypt($plaintext)).
+Atleast if the continuous buffer is disabled.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$ciphertext</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>Crypt_RC4::_crypt()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RC4::disableContinuousBuffer()"></a><h4 class="method public">disableContinuousBuffer<div class="to-top"><a href="#Crypt_RC4">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">disableContinuousBuffer</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        </code><p class="short-description">Treat consecutive packets as if they are a discontinuous buffer.</p>
+<div class="long-description"><p>The default behavior.</p>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>Crypt_RC4::enableContinuousBuffer()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RC4::disablePadding()"></a><h4 class="method public">disablePadding<div class="to-top"><a href="#Crypt_RC4">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">disablePadding</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        </code><p class="short-description">Dummy function.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>Crypt_RC4::enablePadding()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RC4::enableContinuousBuffer()"></a><h4 class="method public">enableContinuousBuffer<div class="to-top"><a href="#Crypt_RC4">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">enableContinuousBuffer</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        </code><p class="short-description">Treat consecutive "packets" as if they are a continuous buffer.</p>
+<div class="long-description"><p>Say you have a 16-byte plaintext $plaintext.  Using the default behavior, the two following code snippets
+will yield different outputs:</p>
+
+<p><code>
+   echo $rc4->encrypt(substr($plaintext, 0, 8));
+   echo $rc4->encrypt(substr($plaintext, 8, 8));
+</code>
+<code>
+   echo $rc4->encrypt($plaintext);
+</code></p>
+
+<p>The solution is to enable the continuous buffer.  Although this will resolve the above discrepancy, it creates
+another, as demonstrated with the following:</p>
+
+<p><code>
+   $rc4->encrypt(substr($plaintext, 0, 8));
+   echo $rc4->decrypt($des->encrypt(substr($plaintext, 8, 8)));
+</code>
+<code>
+   echo $rc4->decrypt($des->encrypt(substr($plaintext, 8, 8)));
+</code></p>
+
+<p>With the continuous buffer disabled, these would yield the same output.  With it enabled, they yield different
+outputs.  The reason is due to the fact that the initialization vector's change after every encryption /
+decryption round when the continuous buffer is enabled.  When it's disabled, they remain constant.</p>
+
+<p>Put another way, when the continuous buffer is enabled, the state of the Crypt_DES() object changes after each
+encryption / decryption round, whereas otherwise, it'd remain constant.  For this reason, it's recommended that
+continuous buffers not be used.  They do offer better security and are, in fact, sometimes required (SSH uses them),
+however, they are also less intuitive and more likely to cause you problems.</p>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>Crypt_RC4::disableContinuousBuffer()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RC4::enablePadding()"></a><h4 class="method public">enablePadding<div class="to-top"><a href="#Crypt_RC4">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">enablePadding</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        </code><p class="short-description">Dummy function.</p>
+<div class="long-description"><p>Since RC4 is a stream cipher and not a block cipher, no padding is necessary.  The only reason this function is
+included is so that you can switch between a block cipher and a stream cipher transparently.</p>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>Crypt_RC4::disablePadding()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RC4::encrypt()"></a><h4 class="method public">encrypt<div class="to-top"><a href="#Crypt_RC4">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">encrypt</span><span class="nb-faded-text">(
+          String $plaintext
+          )
+        </span>
+        :
+        </code><p class="short-description">Encrypts a message.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$plaintext</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>Crypt_RC4::_crypt()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RC4::setIV()"></a><h4 class="method public">setIV<div class="to-top"><a href="#Crypt_RC4">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">setIV</span><span class="nb-faded-text">(
+          String $iv
+          )
+        </span>
+        :
+        </code><p class="short-description">Dummy function.</p>
+<div class="long-description"><p>Some protocols, such as WEP, prepend an "initialization vector" to the key, effectively creating a new key [1].
+If you need to use an initialization vector in this manner, feel free to prepend it to the key, yourself, before
+calling setKey().</p>
+
+<p>[1] WEP's initialization vectors (IV's) are used in a somewhat insecure way.  Since, in that protocol,
+the IV's are relatively easy to predict, an attack described by
+{@link http://www.drizzle.com/~aboba/IEEE/rc4_ksaproc.pdf Scott Fluhrer, Itsik Mantin, and Adi Shamir}
+can be used to quickly guess at the rest of the key.  The following links elaborate:</p>
+
+<p>{@link http://www.rsa.com/rsalabs/node.asp?id=2009 http://www.rsa.com/rsalabs/node.asp?id=2009}
+{@link http://en.wikipedia.org/wiki/Related_key_attack http://en.wikipedia.org/wiki/Related_key_attack}</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$iv</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>Crypt_RC4::setKey()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RC4::setKey()"></a><h4 class="method public">setKey<div class="to-top"><a href="#Crypt_RC4">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">setKey</span><span class="nb-faded-text">(
+          String $key
+          )
+        </span>
+        :
+        </code><p class="short-description">Sets the key.</p>
+<div class="long-description"><p>Keys can be between 1 and 256 bytes long.  If they are longer then 256 bytes, the first 256 bytes will
+be used.  If no key is explicitly set, it'll be assumed to be a single null byte.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$key</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RC4::setMCrypt()"></a><h4 class="method public">setMCrypt<div class="to-top"><a href="#Crypt_RC4">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">setMCrypt</span><span class="nb-faded-text">(
+          \optional $algorithm_directory, \optional $mode_directory
+          )
+        </span>
+        :
+        </code><p class="short-description">Sets MCrypt parameters. (optional)</p>
+<div class="long-description"><p>If MCrypt is being used, empty strings will be used, unless otherwise specified.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$algorithm_directory</dt>
+<dd>\optional<br><em>Integer $algorithm_directory</em>
+</dd>
+<dt>$mode_directory</dt>
+<dd>\optional<br><em>Integer $mode_directory</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>link</dt>
+<dd><a href="http://php.net/function.mcrypt-module-open#function.mcrypt-module-open">http://php.net/function.mcrypt-module-open#function.mcrypt-module-open</a></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<small xmlns="" class="footer">Documentation was generated by <a href="http://docblox-project.org">DocBlox 0.12.0</a>.
+    </small></body></html>

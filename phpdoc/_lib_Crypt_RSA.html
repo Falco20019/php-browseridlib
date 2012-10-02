@@ -1,0 +1,3357 @@
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>DocBlox Documentation</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta><link rel="stylesheet" href="css/black-tie/jquery-ui-1.8.2.custom.css" type="text/css"></link><link rel="stylesheet" href="css/jquery.treeview.css" type="text/css"></link><link rel="stylesheet" href="css/theme.css" type="text/css"></link><script type="text/javascript" src="js/jquery-1.4.2.min.js"></script><script type="text/javascript" src="js/jquery-ui-1.8.2.custom.min.js"></script><script type="text/javascript" src="js/jquery.cookie.js"></script><script type="text/javascript" src="js/jquery.treeview.js"></script><script type="text/javascript">
+            $(document).ready(function() {
+                $(".filetree").treeview({
+                    collapsed: true,
+                    persist: "cookie"
+                });
+
+                $("#accordion").accordion({
+                    collapsible: true,
+                    autoHeight:  false,
+                    fillSpace:   true
+                });
+
+                $(".tabs").tabs();
+            });
+        </script></head><body><div xmlns="" id="content">
+<script>
+      $(document).ready(function() {
+        $('dl.function-info, dl.constant-info, dl.property-info').prev().css('cursor', 'pointer');
+        $('dl.function-info, dl.constant-info, dl.property-info').prev().click(function() {
+          if ($(this).next().is(':hidden'))
+          {
+            $(this).children('img')[0].src = 'images/arrow_down.gif';
+          } else
+          {
+            $(this).children('img')[0].src = 'images/arrow_right.gif';
+          }
+          $(this).next().slideToggle();
+        });
+      $('dl.function-info, dl.constant-info, dl.property-info').hide();
+      $('dl.function-info img, dl.constant-info img, dl.property-info img').show();
+      });
+    </script><a name="top"></a><h1 class="file">lib\Crypt\RSA.php</h1>
+<div class="file_menu">
+<a href="#includes">Includes</a> <a href="#constants">Constants</a> <a href="#classes">Classes</a> </div>
+<dl class="file-info">
+<dt>author</dt>
+<dd>Jim Wigginton &lt;terrafrost@php.net&gt;</dd>
+<dt>copyright</dt>
+<dd>MMIX Jim Wigginton</dd>
+<dt>license</dt>
+<dd>http://www.opensource.org/licenses/mit-license.html  MIT License</dd>
+<dt>link</dt>
+<dd><a href="http://phpseclib.sourceforge.net">http://phpseclib.sourceforge.net</a></dd>
+<dt>package</dt>
+<dd>Crypt</dd>
+<dt>subpackage</dt>
+<dd>Crypt_RSA</dd>
+<dt>version</dt>
+<dd>$Id: RSA.php,v 1.19 2010/09/12 21:58:54 terrafrost Exp $</dd>
+<dt>Constants</dt>
+<dd><a class="constant" href="#::CRYPT_RSA_ENCRYPTION_OAEP">CRYPT_RSA_ENCRYPTION_OAEP</a></dd>
+<dd><a class="constant" href="#::CRYPT_RSA_ENCRYPTION_PKCS1">CRYPT_RSA_ENCRYPTION_PKCS1</a></dd>
+<dd><a class="constant" href="#::CRYPT_RSA_SIGNATURE_PSS">CRYPT_RSA_SIGNATURE_PSS</a></dd>
+<dd><a class="constant" href="#::CRYPT_RSA_SIGNATURE_PKCS1">CRYPT_RSA_SIGNATURE_PKCS1</a></dd>
+<dd><a class="constant" href="#::CRYPT_RSA_ASN1_INTEGER">CRYPT_RSA_ASN1_INTEGER</a></dd>
+<dd><a class="constant" href="#::CRYPT_RSA_ASN1_SEQUENCE">CRYPT_RSA_ASN1_SEQUENCE</a></dd>
+<dd><a class="constant" href="#::CRYPT_RSA_MODE_INTERNAL">CRYPT_RSA_MODE_INTERNAL</a></dd>
+<dd><a class="constant" href="#::CRYPT_RSA_MODE_OPENSSL">CRYPT_RSA_MODE_OPENSSL</a></dd>
+<dd><a class="constant" href="#::CRYPT_RSA_PRIVATE_FORMAT_PKCS1">CRYPT_RSA_PRIVATE_FORMAT_PKCS1</a></dd>
+<dd><a class="constant" href="#::CRYPT_RSA_PRIVATE_FORMAT_PUTTY">CRYPT_RSA_PRIVATE_FORMAT_PUTTY</a></dd>
+<dd><a class="constant" href="#::CRYPT_RSA_PRIVATE_FORMAT_XML">CRYPT_RSA_PRIVATE_FORMAT_XML</a></dd>
+<dd><a class="constant" href="#::CRYPT_RSA_PUBLIC_FORMAT_RAW">CRYPT_RSA_PUBLIC_FORMAT_RAW</a></dd>
+<dd><a class="constant" href="#::CRYPT_RSA_PUBLIC_FORMAT_PKCS1">CRYPT_RSA_PUBLIC_FORMAT_PKCS1</a></dd>
+<dd><a class="constant" href="#::CRYPT_RSA_PUBLIC_FORMAT_XML">CRYPT_RSA_PUBLIC_FORMAT_XML</a></dd>
+<dd><a class="constant" href="#::CRYPT_RSA_PUBLIC_FORMAT_OPENSSH">CRYPT_RSA_PUBLIC_FORMAT_OPENSSH</a></dd>
+<dt>Classes</dt>
+<dd><a class="class" href="#%5CCrypt_RSA">Crypt_RSA</a></dd>
+</dl>
+<h2>Description</h2>
+<p class="short-description">Pure-PHP PKCS#1 (v2.1) compliant implementation of RSA.</p>
+<div class="long-description"><p>PHP versions 4 and 5</p>
+
+<p>Here's an example of how to encrypt and decrypt text with this library:
+<code>
+<?php
+   include('Crypt/RSA.php');
+
+   $rsa = new Crypt_RSA();
+   extract($rsa->createKey());
+
+   $plaintext = 'terrafrost';
+
+   $rsa->loadKey($privatekey);
+   $ciphertext = $rsa->encrypt($plaintext);
+
+   $rsa->loadKey($publickey);
+   echo $rsa->decrypt($ciphertext);
+?>
+</code></p>
+
+<p>Here's an example of how to create signatures and verify signatures with this library:
+<code>
+<?php
+   include('Crypt/RSA.php');
+
+   $rsa = new Crypt_RSA();
+   extract($rsa->createKey());
+
+   $plaintext = 'terrafrost';
+
+   $rsa->loadKey($privatekey);
+   $signature = $rsa->sign($plaintext);
+
+   $rsa->loadKey($publickey);
+   echo $rsa->verify($plaintext, $signature) ? 'verified' : 'unverified';
+?>
+</code></p>
+
+<p>LICENSE: Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.</p>
+</div>
+<a name="constants"></a><h2>Constants</h2>
+<div>
+<a id="::CRYPT_RSA_ENCRYPTION_OAEP"></a><h3 class="constant">CRYPT_RSA_ENCRYPTION_OAEP<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_RSA_ENCRYPTION_OAEP</span> = '1'
+      </code><p class="short-description">Use {@link http://en.wikipedia.org/wiki/Optimal_Asymmetric_Encryption_Padding Optimal Asymmetric Encryption Padding}
+(OAEP) for encryption / decryption.</p>
+<div class="long-description"><p>Uses sha1 by default.</p>
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>1</dd>
+<dt>see</dt>
+<dd>Crypt_RSA::setHash()</dd>
+<dt>see</dt>
+<dd>Crypt_RSA::setMGFHash()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_RSA_ENCRYPTION_PKCS1"></a><h3 class="constant">CRYPT_RSA_ENCRYPTION_PKCS1<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_RSA_ENCRYPTION_PKCS1</span> = '2'
+      </code><p class="short-description">Use PKCS#1 padding.</p>
+<div class="long-description"><p>Although CRYPT_RSA_ENCRYPTION_OAEP offers more security, including PKCS#1 padding is necessary for purposes of backwards
+compatability with protocols (like SSH-1) written before OAEP's introduction.</p>
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>2</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_RSA_SIGNATURE_PSS"></a><h3 class="constant">CRYPT_RSA_SIGNATURE_PSS<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_RSA_SIGNATURE_PSS</span> = '1'
+      </code><p class="short-description">Use the Probabilistic Signature Scheme for signing</p>
+<div class="long-description"><p>Uses sha1 by default.</p>
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>1</dd>
+<dt>see</dt>
+<dd>Crypt_RSA::setSaltLength()</dd>
+<dt>see</dt>
+<dd>Crypt_RSA::setMGFHash()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_RSA_SIGNATURE_PKCS1"></a><h3 class="constant">CRYPT_RSA_SIGNATURE_PKCS1<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_RSA_SIGNATURE_PKCS1</span> = '2'
+      </code><p class="short-description">Use the PKCS#1 scheme by default.</p>
+<div class="long-description"><p>Although CRYPT_RSA_SIGNATURE_PSS offers more security, including PKCS#1 signing is necessary for purposes of backwards
+compatability with protocols (like SSH-2) written before PSS's introduction.</p>
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>2</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_RSA_ASN1_INTEGER"></a><h3 class="constant">CRYPT_RSA_ASN1_INTEGER<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_RSA_ASN1_INTEGER</span> = '2'
+      </code><p class="short-description">ASN1 Integer</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>2</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_RSA_ASN1_SEQUENCE"></a><h3 class="constant">CRYPT_RSA_ASN1_SEQUENCE<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_RSA_ASN1_SEQUENCE</span> = '48'
+      </code><p class="short-description">ASN1 Sequence (with the constucted bit set)</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>48</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_RSA_MODE_INTERNAL"></a><h3 class="constant">CRYPT_RSA_MODE_INTERNAL<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_RSA_MODE_INTERNAL</span> = '1'
+      </code><p class="short-description">To use the pure-PHP implementation</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>1</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_RSA_MODE_OPENSSL"></a><h3 class="constant">CRYPT_RSA_MODE_OPENSSL<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_RSA_MODE_OPENSSL</span> = '2'
+      </code><p class="short-description">To use the OpenSSL library</p>
+<div class="long-description"><p>(if enabled; otherwise, the internal implementation will be used)</p>
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>2</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_RSA_PRIVATE_FORMAT_PKCS1"></a><h3 class="constant">CRYPT_RSA_PRIVATE_FORMAT_PKCS1<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_RSA_PRIVATE_FORMAT_PKCS1</span> = '0'
+      </code><p class="short-description">PKCS#1 formatted private key</p>
+<div class="long-description"><p>Used by OpenSSH</p>
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>0</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_RSA_PRIVATE_FORMAT_PUTTY"></a><h3 class="constant">CRYPT_RSA_PRIVATE_FORMAT_PUTTY<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_RSA_PRIVATE_FORMAT_PUTTY</span> = '1'
+      </code><p class="short-description">PuTTY formatted private key</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>1</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_RSA_PRIVATE_FORMAT_XML"></a><h3 class="constant">CRYPT_RSA_PRIVATE_FORMAT_XML<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_RSA_PRIVATE_FORMAT_XML</span> = '2'
+      </code><p class="short-description">XML formatted private key</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>2</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_RSA_PUBLIC_FORMAT_RAW"></a><h3 class="constant">CRYPT_RSA_PUBLIC_FORMAT_RAW<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_RSA_PUBLIC_FORMAT_RAW</span> = '3'
+      </code><p class="short-description">Raw public key</p>
+<div class="long-description"><p>An array containing two Math_BigInteger objects.</p>
+
+<p>The exponent can be indexed with any of the following:</p>
+
+<p>0, e, exponent, publicExponent</p>
+
+<p>The modulus can be indexed with any of the following:</p>
+
+<p>1, n, modulo, modulus</p>
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>3</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_RSA_PUBLIC_FORMAT_PKCS1"></a><h3 class="constant">CRYPT_RSA_PUBLIC_FORMAT_PKCS1<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_RSA_PUBLIC_FORMAT_PKCS1</span> = '4'
+      </code><p class="short-description">PKCS#1 formatted public key</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>4</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_RSA_PUBLIC_FORMAT_XML"></a><h3 class="constant">CRYPT_RSA_PUBLIC_FORMAT_XML<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_RSA_PUBLIC_FORMAT_XML</span> = '5'
+      </code><p class="short-description">XML formatted public key</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>5</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_RSA_PUBLIC_FORMAT_OPENSSH"></a><h3 class="constant">CRYPT_RSA_PUBLIC_FORMAT_OPENSSH<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_RSA_PUBLIC_FORMAT_OPENSSH</span> = '6'
+      </code><p class="short-description">OpenSSH formatted public key</p>
+<div class="long-description"><p>Place in $HOME/.ssh/authorized_keys</p>
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>6</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+<a name="classes"></a><a id="\Crypt_RSA"></a><h2 class="class">\Crypt_RSA<div class="to-top"><a href="#top">jump to top</a></div>
+</h2>
+<div class="class">
+<dl class="class-info">
+<dt>access</dt>
+<dd>public</dd>
+<dt>author</dt>
+<dd>Jim Wigginton &lt;terrafrost@php.net&gt;</dd>
+<dt>package</dt>
+<dd>Crypt</dd>
+<dt>subpackage</dt>
+<dd>Crypt_RSA</dd>
+<dt>version</dt>
+<dd>0.1.0</dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Properties
+              </a></dt>
+<dd><a class="property public" href="#%5CCrypt_RSA::%24coefficients">$coefficients</a></dd>
+<dd><a class="property public" href="#%5CCrypt_RSA::%24components">$components</a></dd>
+<dd><a class="property public" href="#%5CCrypt_RSA::%24current">$current</a></dd>
+<dd><a class="property public" href="#%5CCrypt_RSA::%24encryptionMode">$encryptionMode</a></dd>
+<dd><a class="property public" href="#%5CCrypt_RSA::%24exponent">$exponent</a></dd>
+<dd><a class="property public" href="#%5CCrypt_RSA::%24exponents">$exponents</a></dd>
+<dd><a class="property public" href="#%5CCrypt_RSA::%24hLen">$hLen</a></dd>
+<dd><a class="property public" href="#%5CCrypt_RSA::%24hash">$hash</a></dd>
+<dd><a class="property public" href="#%5CCrypt_RSA::%24hashName">$hashName</a></dd>
+<dd><a class="property public" href="#%5CCrypt_RSA::%24k">$k</a></dd>
+<dd><a class="property public" href="#%5CCrypt_RSA::%24mgfHLen">$mgfHLen</a></dd>
+<dd><a class="property public" href="#%5CCrypt_RSA::%24mgfHash">$mgfHash</a></dd>
+<dd><a class="property public" href="#%5CCrypt_RSA::%24modulus">$modulus</a></dd>
+<dd><a class="property public" href="#%5CCrypt_RSA::%24one">$one</a></dd>
+<dd><a class="property public" href="#%5CCrypt_RSA::%24password">$password</a></dd>
+<dd><a class="property public" href="#%5CCrypt_RSA::%24primes">$primes</a></dd>
+<dd><a class="property public" href="#%5CCrypt_RSA::%24privateKeyFormat">$privateKeyFormat</a></dd>
+<dd><a class="property public" href="#%5CCrypt_RSA::%24publicExponent">$publicExponent</a></dd>
+<dd><a class="property public" href="#%5CCrypt_RSA::%24publicKeyFormat">$publicKeyFormat</a></dd>
+<dd><a class="property public" href="#%5CCrypt_RSA::%24sLen">$sLen</a></dd>
+<dd><a class="property public" href="#%5CCrypt_RSA::%24signatureMode">$signatureMode</a></dd>
+<dd><a class="property public" href="#%5CCrypt_RSA::%24zero">$zero</a></dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Methods
+              </a></dt>
+<dd><a class="method public" href="#%5CCrypt_RSA::Crypt_RSA()">Crypt_RSA</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::_blind()">_blind</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::_convertPrivateKey()">_convertPrivateKey</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::_convertPublicKey()">_convertPublicKey</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::_data_handler()">_data_handler</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::_decodeLength()">_decodeLength</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::_emsa_pkcs1_v1_5_encode()">_emsa_pkcs1_v1_5_encode</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::_emsa_pss_encode()">_emsa_pss_encode</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::_emsa_pss_verify()">_emsa_pss_verify</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::_encodeLength()">_encodeLength</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::_exponentiate()">_exponentiate</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::_generateMinMax()">_generateMinMax</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::_i2osp()">_i2osp</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::_mgf1()">_mgf1</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::_os2ip()">_os2ip</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::_parseKey()">_parseKey</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::_random()">_random</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::_rsadp()">_rsadp</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::_rsaep()">_rsaep</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::_rsaes_oaep_decrypt()">_rsaes_oaep_decrypt</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::_rsaes_oaep_encrypt()">_rsaes_oaep_encrypt</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::_rsaes_pkcs1_v1_5_decrypt()">_rsaes_pkcs1_v1_5_decrypt</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::_rsaes_pkcs1_v1_5_encrypt()">_rsaes_pkcs1_v1_5_encrypt</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::_rsasp1()">_rsasp1</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::_rsassa_pkcs1_v1_5_sign()">_rsassa_pkcs1_v1_5_sign</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::_rsassa_pkcs1_v1_5_verify()">_rsassa_pkcs1_v1_5_verify</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::_rsassa_pss_sign()">_rsassa_pss_sign</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::_rsassa_pss_verify()">_rsassa_pss_verify</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::_rsavp1()">_rsavp1</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::_start_element_handler()">_start_element_handler</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::_stop_element_handler()">_stop_element_handler</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::_string_shift()">_string_shift</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::createKey()">createKey</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::decrypt()">decrypt</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::encrypt()">encrypt</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::getPrivateKey()">getPrivateKey</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::getPublicKey()">getPublicKey</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::loadKey()">loadKey</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::setEncryptionMode()">setEncryptionMode</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::setHash()">setHash</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::setMGFHash()">setMGFHash</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::setPassword()">setPassword</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::setPrivateKey()">setPrivateKey</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::setPrivateKeyFormat()">setPrivateKeyFormat</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::setPublicKey()">setPublicKey</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::setPublicKeyFormat()">setPublicKeyFormat</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::setSaltLength()">setSaltLength</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::setSignatureMode()">setSignatureMode</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::sign()">sign</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::verify()">verify</a></dd>
+</dl>
+<h3>Description</h3>
+<p class="short-description">Pure-PHP PKCS#1 compliant implementation of RSA.</p>
+<div class="long-description">
+</div>
+<h3>Properties</h3>
+<div>
+<a id="\Crypt_RSA::$coefficients"></a><h4 class="property public">$coefficients<div class="to-top"><a href="#%5CCrypt_RSA">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Array <span class="highlight">$coefficients</span> = ''</code><p class="short-description">Coefficients for Chinese Remainder Theorem (ie. qInv)</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::$components"></a><h4 class="property public">$components<div class="to-top"><a href="#%5CCrypt_RSA">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Array <span class="highlight">$components</span> = 'array'</code><p class="short-description">Components</p>
+<div class="long-description"><p>For use with parsing XML formatted keys.  PHP's XML Parser functions use utilized - instead of PHP's DOM functions -
+because PHP's XML Parser functions work on PHP4 whereas PHP's DOM functions - although surperior - don't.</p>
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd>array</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_RSA::_start_element_handler()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::$current"></a><h4 class="property public">$current<div class="to-top"><a href="#%5CCrypt_RSA">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Mixed <span class="highlight">$current</span> = ''</code><p class="short-description">Current String</p>
+<div class="long-description"><p>For use with parsing XML formatted keys.</p>
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Mixed<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_RSA::_character_handler()</dd>
+<dt>see</dt>
+<dd>Crypt_RSA::_stop_element_handler()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::$encryptionMode"></a><h4 class="property public">$encryptionMode<div class="to-top"><a href="#%5CCrypt_RSA">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Integer <span class="highlight">$encryptionMode</span> = 'CRYPT_RSA_ENCRYPTION_OAEP'</code><p class="short-description">Encryption mode</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Integer<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd>CRYPT_RSA_ENCRYPTION_OAEP</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::$exponent"></a><h4 class="property public">$exponent<div class="to-top"><a href="#%5CCrypt_RSA">jump to class</a></div>
+</h4>
+<div class="property">
+<code><a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a> <span class="highlight">$exponent</span> = ''</code><p class="short-description">Exponent (ie. e or d)</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>
+<a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a><br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::$exponents"></a><h4 class="property public">$exponents<div class="to-top"><a href="#%5CCrypt_RSA">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Array <span class="highlight">$exponents</span> = ''</code><p class="short-description">Exponents for Chinese Remainder Theorem (ie. dP and dQ)</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::$hLen"></a><h4 class="property public">$hLen<div class="to-top"><a href="#%5CCrypt_RSA">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Integer <span class="highlight">$hLen</span> = ''</code><p class="short-description">Length of hash function output</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Integer<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::$hash"></a><h4 class="property public">$hash<div class="to-top"><a href="#%5CCrypt_RSA">jump to class</a></div>
+</h4>
+<div class="property">
+<code><a href="_lib_Crypt_Hash.html#%5CCrypt_Hash">\Crypt_Hash</a> <span class="highlight">$hash</span> = ''</code><p class="short-description">Hash function</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>
+<a href="_lib_Crypt_Hash.html#%5CCrypt_Hash">\Crypt_Hash</a><br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::$hashName"></a><h4 class="property public">$hashName<div class="to-top"><a href="#%5CCrypt_RSA">jump to class</a></div>
+</h4>
+<div class="property">
+<code>String <span class="highlight">$hashName</span> = ''</code><p class="short-description">Hash name</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>String<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::$k"></a><h4 class="property public">$k<div class="to-top"><a href="#%5CCrypt_RSA">jump to class</a></div>
+</h4>
+<div class="property">
+<code><a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a> <span class="highlight">$k</span> = ''</code><p class="short-description">Modulus length</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>
+<a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a><br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::$mgfHLen"></a><h4 class="property public">$mgfHLen<div class="to-top"><a href="#%5CCrypt_RSA">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Integer <span class="highlight">$mgfHLen</span> = ''</code><p class="short-description">Length of MGF hash function output</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Integer<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::$mgfHash"></a><h4 class="property public">$mgfHash<div class="to-top"><a href="#%5CCrypt_RSA">jump to class</a></div>
+</h4>
+<div class="property">
+<code><a href="_lib_Crypt_Hash.html#%5CCrypt_Hash">\Crypt_Hash</a> <span class="highlight">$mgfHash</span> = ''</code><p class="short-description">Hash function for the Mask Generation Function</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>
+<a href="_lib_Crypt_Hash.html#%5CCrypt_Hash">\Crypt_Hash</a><br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::$modulus"></a><h4 class="property public">$modulus<div class="to-top"><a href="#%5CCrypt_RSA">jump to class</a></div>
+</h4>
+<div class="property">
+<code><a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a> <span class="highlight">$modulus</span> = ''</code><p class="short-description">Modulus (ie. n)</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>
+<a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a><br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::$one"></a><h4 class="property public">$one<div class="to-top"><a href="#%5CCrypt_RSA">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Array <span class="highlight">$one</span> = ''</code><p class="short-description">Precomputed One</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::$password"></a><h4 class="property public">$password<div class="to-top"><a href="#%5CCrypt_RSA">jump to class</a></div>
+</h4>
+<div class="property">
+<code>String <span class="highlight">$password</span> = ''</code><p class="short-description">Password</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>String<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::$primes"></a><h4 class="property public">$primes<div class="to-top"><a href="#%5CCrypt_RSA">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Array <span class="highlight">$primes</span> = ''</code><p class="short-description">Primes for Chinese Remainder Theorem (ie. p and q)</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::$privateKeyFormat"></a><h4 class="property public">$privateKeyFormat<div class="to-top"><a href="#%5CCrypt_RSA">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Integer <span class="highlight">$privateKeyFormat</span> = 'CRYPT_RSA_PRIVATE_FORMAT_PKCS1'</code><p class="short-description">Private Key Format</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Integer<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd>CRYPT_RSA_PRIVATE_FORMAT_PKCS1</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::$publicExponent"></a><h4 class="property public">$publicExponent<div class="to-top"><a href="#%5CCrypt_RSA">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Mixed <span class="highlight">$publicExponent</span> = 'false'</code><p class="short-description">Public Exponent</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Mixed<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd>false</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::$publicKeyFormat"></a><h4 class="property public">$publicKeyFormat<div class="to-top"><a href="#%5CCrypt_RSA">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Integer <span class="highlight">$publicKeyFormat</span> = 'CRYPT_RSA_PUBLIC_FORMAT_PKCS1'</code><p class="short-description">Public Key Format</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Integer<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd>CRYPT_RSA_PUBLIC_FORMAT_PKCS1</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::$sLen"></a><h4 class="property public">$sLen<div class="to-top"><a href="#%5CCrypt_RSA">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Integer <span class="highlight">$sLen</span> = ''</code><p class="short-description">Length of salt</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Integer<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::$signatureMode"></a><h4 class="property public">$signatureMode<div class="to-top"><a href="#%5CCrypt_RSA">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Integer <span class="highlight">$signatureMode</span> = 'CRYPT_RSA_SIGNATURE_PSS'</code><p class="short-description">Signature mode</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Integer<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd>CRYPT_RSA_SIGNATURE_PSS</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::$zero"></a><h4 class="property public">$zero<div class="to-top"><a href="#%5CCrypt_RSA">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Array <span class="highlight">$zero</span> = ''</code><p class="short-description">Precomputed Zero</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+<h3>Methods</h3>
+<div>
+<a id="\Crypt_RSA::Crypt_RSA()"></a><h4 class="method public">Crypt_RSA<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">Crypt_RSA</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <a href="_lib_Crypt_RSA.html#%5CCrypt_RSA">\Crypt_RSA</a></code><p class="short-description">The constructor</p>
+<div class="long-description"><p>If you want to make use of the openssl extension, you'll need to set the mode manually, yourself.  The reason
+Crypt_RSA doesn't do it is because OpenSSL doesn't fail gracefully.  openssl_pkey_new(), in particular, requires
+openssl.cnf be present somewhere and, unfortunately, the only real way to find out is too late.</p>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_Crypt_RSA.html#%5CCrypt_RSA">\Crypt_RSA</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::_blind()"></a><h4 class="method public">_blind<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_blind</span><span class="nb-faded-text">(
+          <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a> $x, <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a> $r, Integer $i
+          )
+        </span>
+        :
+        <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></code><p class="short-description">Performs RSA Blinding</p>
+<div class="long-description"><p>Protects against timing attacks by employing RSA Blinding.
+Returns $x->modPow($this->exponents[$i], $this->primes[$i])</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$x</dt>
+<dd>\Math_BigInteger<br><em></em>
+</dd>
+<dt>$r</dt>
+<dd>\Math_BigInteger<br><em></em>
+</dd>
+<dt>$i</dt>
+<dd>Integer<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::_convertPrivateKey()"></a><h4 class="method public">_convertPrivateKey<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_convertPrivateKey</span><span class="nb-faded-text">(
+           $n,  $e,  $d,  $primes,  $exponents,  $coefficients
+          )
+        </span>
+        :
+        String</code><p class="short-description">Convert a private key to the appropriate format.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$n</dt>
+<dd><em></em></dd>
+<dt>$e</dt>
+<dd><em></em></dd>
+<dt>$d</dt>
+<dd><em></em></dd>
+<dt>$primes</dt>
+<dd><em></em></dd>
+<dt>$exponents</dt>
+<dd><em></em></dd>
+<dt>$coefficients</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>String</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>setPrivateKeyFormat()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::_convertPublicKey()"></a><h4 class="method public">_convertPublicKey<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_convertPublicKey</span><span class="nb-faded-text">(
+           $n,  $e
+          )
+        </span>
+        :
+        String</code><p class="short-description">Convert a public key to the appropriate format</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$n</dt>
+<dd><em></em></dd>
+<dt>$e</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>String</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>setPublicKeyFormat()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::_data_handler()"></a><h4 class="method public">_data_handler<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_data_handler</span><span class="nb-faded-text">(
+          Resource $parser, String $data
+          )
+        </span>
+        :
+        </code><p class="short-description">Data Handler</p>
+<div class="long-description"><p>Called by xml_set_character_data_handler()</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$parser</dt>
+<dd>Resource<br><em></em>
+</dd>
+<dt>$data</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::_decodeLength()"></a><h4 class="method public">_decodeLength<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_decodeLength</span><span class="nb-faded-text">(
+          String $string
+          )
+        </span>
+        :
+        Integer</code><p class="short-description">DER-decode the length</p>
+<div class="long-description"><p>DER supports lengths up to (2<strong>8)</strong>127, however, we'll only support lengths up to (2<strong>8)</strong>4.  See
+{@link http://itu.int/ITU-T/studygroups/com17/languages/X.690-0207.pdf#p=13 X.690 � 8.1.3} for more information.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$string</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Integer</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::_emsa_pkcs1_v1_5_encode()"></a><h4 class="method public">_emsa_pkcs1_v1_5_encode<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_emsa_pkcs1_v1_5_encode</span><span class="nb-faded-text">(
+          String $m, Integer $emLen
+          )
+        </span>
+        :
+        String</code><p class="short-description">EMSA-PKCS1-V1_5-ENCODE</p>
+<div class="long-description"><p>See {@link http://tools.ietf.org/html/rfc3447#section-9.2 RFC3447#section-9.2}.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$m</dt>
+<dd>String<br><em></em>
+</dd>
+<dt>$emLen</dt>
+<dd>Integer<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>String</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::_emsa_pss_encode()"></a><h4 class="method public">_emsa_pss_encode<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_emsa_pss_encode</span><span class="nb-faded-text">(
+          String $m, Integer $emBits
+          )
+        </span>
+        :
+        </code><p class="short-description">EMSA-PSS-ENCODE</p>
+<div class="long-description"><p>See {@link http://tools.ietf.org/html/rfc3447#section-9.1.1 RFC3447#section-9.1.1}.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$m</dt>
+<dd>String<br><em></em>
+</dd>
+<dt>$emBits</dt>
+<dd>Integer<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::_emsa_pss_verify()"></a><h4 class="method public">_emsa_pss_verify<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_emsa_pss_verify</span><span class="nb-faded-text">(
+          String $m, String $em, Integer $emBits
+          )
+        </span>
+        :
+        String</code><p class="short-description">EMSA-PSS-VERIFY</p>
+<div class="long-description"><p>See {@link http://tools.ietf.org/html/rfc3447#section-9.1.2 RFC3447#section-9.1.2}.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$m</dt>
+<dd>String<br><em></em>
+</dd>
+<dt>$em</dt>
+<dd>String<br><em></em>
+</dd>
+<dt>$emBits</dt>
+<dd>Integer<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>String</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::_encodeLength()"></a><h4 class="method public">_encodeLength<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_encodeLength</span><span class="nb-faded-text">(
+          Integer $length
+          )
+        </span>
+        :
+        String</code><p class="short-description">DER-encode the length</p>
+<div class="long-description"><p>DER supports lengths up to (2<strong>8)</strong>127, however, we'll only support lengths up to (2<strong>8)</strong>4.  See
+{@link http://itu.int/ITU-T/studygroups/com17/languages/X.690-0207.pdf#p=13 X.690 � 8.1.3} for more information.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$length</dt>
+<dd>Integer<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>String</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::_exponentiate()"></a><h4 class="method public">_exponentiate<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_exponentiate</span><span class="nb-faded-text">(
+          <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a> $x
+          )
+        </span>
+        :
+        <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></code><p class="short-description">Exponentiate with or without Chinese Remainder Theorem</p>
+<div class="long-description"><p>See {@link http://tools.ietf.org/html/rfc3447#section-5.1.1 RFC3447#section-5.1.2}.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$x</dt>
+<dd>\Math_BigInteger<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::_generateMinMax()"></a><h4 class="method public">_generateMinMax<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_generateMinMax</span><span class="nb-faded-text">(
+          Integer $bits
+          )
+        </span>
+        :
+        Array</code><p class="short-description">Generates the smallest and largest numbers requiring $bits bits</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$bits</dt>
+<dd>Integer<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Array</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::_i2osp()"></a><h4 class="method public">_i2osp<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_i2osp</span><span class="nb-faded-text">(
+          <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a> $x, Integer $xLen
+          )
+        </span>
+        :
+        String</code><p class="short-description">Integer-to-Octet-String primitive</p>
+<div class="long-description"><p>See {@link http://tools.ietf.org/html/rfc3447#section-4.1 RFC3447#section-4.1}.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$x</dt>
+<dd>\Math_BigInteger<br><em></em>
+</dd>
+<dt>$xLen</dt>
+<dd>Integer<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>String</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::_mgf1()"></a><h4 class="method public">_mgf1<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_mgf1</span><span class="nb-faded-text">(
+          String $mgfSeed,  $maskLen
+          )
+        </span>
+        :
+        String</code><p class="short-description">MGF1</p>
+<div class="long-description"><p>See {@link http://tools.ietf.org/html/rfc3447#appendix-B.2.1 RFC3447#appendix-B.2.1}.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$mgfSeed</dt>
+<dd>String<br><em></em>
+</dd>
+<dt>$maskLen</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>String</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::_os2ip()"></a><h4 class="method public">_os2ip<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_os2ip</span><span class="nb-faded-text">(
+          String $x
+          )
+        </span>
+        :
+        <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></code><p class="short-description">Octet-String-to-Integer primitive</p>
+<div class="long-description"><p>See {@link http://tools.ietf.org/html/rfc3447#section-4.2 RFC3447#section-4.2}.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$x</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::_parseKey()"></a><h4 class="method public">_parseKey<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_parseKey</span><span class="nb-faded-text">(
+          String $key, Integer $type
+          )
+        </span>
+        :
+        Array</code><p class="short-description">Break a public or private key down into its constituant components</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$key</dt>
+<dd>String<br><em></em>
+</dd>
+<dt>$type</dt>
+<dd>Integer<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Array</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>_convertPublicKey()</dd>
+<dt>see</dt>
+<dd>_convertPrivateKey()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::_random()"></a><h4 class="method public">_random<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_random</span><span class="nb-faded-text">(
+          Integer $bytes, \optional $nonzero
+              =
+              false
+          )
+        </span>
+        :
+        String</code><p class="short-description">Generates a random string x bytes long</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$bytes</dt>
+<dd>Integer<br><em></em>
+</dd>
+<dt>$nonzero</dt>
+<dd>\optional<br><em>Integer $nonzero</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>String</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::_rsadp()"></a><h4 class="method public">_rsadp<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_rsadp</span><span class="nb-faded-text">(
+          <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a> $c
+          )
+        </span>
+        :
+        <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></code><p class="short-description">RSADP</p>
+<div class="long-description"><p>See {@link http://tools.ietf.org/html/rfc3447#section-5.1.2 RFC3447#section-5.1.2}.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$c</dt>
+<dd>\Math_BigInteger<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::_rsaep()"></a><h4 class="method public">_rsaep<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_rsaep</span><span class="nb-faded-text">(
+          <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a> $m
+          )
+        </span>
+        :
+        <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></code><p class="short-description">RSAEP</p>
+<div class="long-description"><p>See {@link http://tools.ietf.org/html/rfc3447#section-5.1.1 RFC3447#section-5.1.1}.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$m</dt>
+<dd>\Math_BigInteger<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::_rsaes_oaep_decrypt()"></a><h4 class="method public">_rsaes_oaep_decrypt<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_rsaes_oaep_decrypt</span><span class="nb-faded-text">(
+          String $c, String $l
+          )
+        </span>
+        :
+        String</code><p class="short-description">RSAES-OAEP-DECRYPT</p>
+<div class="long-description"><p>See {@link http://tools.ietf.org/html/rfc3447#section-7.1.2 RFC3447#section-7.1.2}.  The fact that the error
+messages aren't distinguishable from one another hinders debugging, but, to quote from RFC3447#section-7.1.2:</p>
+
+<p>Note.  Care must be taken to ensure that an opponent cannot
+   distinguish the different error conditions in Step 3.g, whether by
+   error message or timing, or, more generally, learn partial
+   information about the encoded message EM.  Otherwise an opponent may
+   be able to obtain useful information about the decryption of the
+   ciphertext C, leading to a chosen-ciphertext attack such as the one
+   observed by Manger [36].</p>
+
+<p>As for $l...  to quote from {@link http://tools.ietf.org/html/rfc3447#page-17 RFC3447#page-17}:</p>
+
+<p>Both the encryption and the decryption operations of RSAES-OAEP take
+   the value of a label L as input.  In this version of PKCS #1, L is
+   the empty string; other uses of the label are outside the scope of
+   this document.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$c</dt>
+<dd>String<br><em></em>
+</dd>
+<dt>$l</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>String</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::_rsaes_oaep_encrypt()"></a><h4 class="method public">_rsaes_oaep_encrypt<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_rsaes_oaep_encrypt</span><span class="nb-faded-text">(
+          String $m, String $l
+          )
+        </span>
+        :
+        String</code><p class="short-description">RSAES-OAEP-ENCRYPT</p>
+<div class="long-description"><p>See {@link http://tools.ietf.org/html/rfc3447#section-7.1.1 RFC3447#section-7.1.1} and
+{http://en.wikipedia.org/wiki/Optimal_Asymmetric_Encryption_Padding OAES}.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$m</dt>
+<dd>String<br><em></em>
+</dd>
+<dt>$l</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>String</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::_rsaes_pkcs1_v1_5_decrypt()"></a><h4 class="method public">_rsaes_pkcs1_v1_5_decrypt<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_rsaes_pkcs1_v1_5_decrypt</span><span class="nb-faded-text">(
+          String $c
+          )
+        </span>
+        :
+        String</code><p class="short-description">RSAES-PKCS1-V1_5-DECRYPT</p>
+<div class="long-description"><p>See {@link http://tools.ietf.org/html/rfc3447#section-7.2.2 RFC3447#section-7.2.2}.</p>
+
+<p>For compatability purposes, this function departs slightly from the description given in RFC3447.
+The reason being that RFC2313#section-8.1 (PKCS#1 v1.5) states that ciphertext's encrypted by the
+private key should have the second byte set to either 0 or 1 and that ciphertext's encrypted by the
+public key should have the second byte set to 2.  In RFC3447 (PKCS#1 v2.1), the second byte is supposed
+to be 2 regardless of which key is used.  for compatability purposes, we'll just check to make sure the
+second byte is 2 or less.  If it is, we'll accept the decrypted string as valid.</p>
+
+<p>As a consequence of this, a private key encrypted ciphertext produced with Crypt_RSA may not decrypt
+with a strictly PKCS#1 v1.5 compliant RSA implementation.  Public key encrypted ciphertext's should but
+not private key encrypted ciphertext's.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$c</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>String</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::_rsaes_pkcs1_v1_5_encrypt()"></a><h4 class="method public">_rsaes_pkcs1_v1_5_encrypt<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_rsaes_pkcs1_v1_5_encrypt</span><span class="nb-faded-text">(
+          String $m
+          )
+        </span>
+        :
+        String</code><p class="short-description">RSAES-PKCS1-V1_5-ENCRYPT</p>
+<div class="long-description"><p>See {@link http://tools.ietf.org/html/rfc3447#section-7.2.1 RFC3447#section-7.2.1}.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$m</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>String</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::_rsasp1()"></a><h4 class="method public">_rsasp1<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_rsasp1</span><span class="nb-faded-text">(
+          <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a> $m
+          )
+        </span>
+        :
+        <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></code><p class="short-description">RSASP1</p>
+<div class="long-description"><p>See {@link http://tools.ietf.org/html/rfc3447#section-5.2.1 RFC3447#section-5.2.1}.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$m</dt>
+<dd>\Math_BigInteger<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::_rsassa_pkcs1_v1_5_sign()"></a><h4 class="method public">_rsassa_pkcs1_v1_5_sign<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_rsassa_pkcs1_v1_5_sign</span><span class="nb-faded-text">(
+          String $m
+          )
+        </span>
+        :
+        String</code><p class="short-description">RSASSA-PKCS1-V1_5-SIGN</p>
+<div class="long-description"><p>See {@link http://tools.ietf.org/html/rfc3447#section-8.2.1 RFC3447#section-8.2.1}.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$m</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>String</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::_rsassa_pkcs1_v1_5_verify()"></a><h4 class="method public">_rsassa_pkcs1_v1_5_verify<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_rsassa_pkcs1_v1_5_verify</span><span class="nb-faded-text">(
+          String $m,  $s
+          )
+        </span>
+        :
+        String</code><p class="short-description">RSASSA-PKCS1-V1_5-VERIFY</p>
+<div class="long-description"><p>See {@link http://tools.ietf.org/html/rfc3447#section-8.2.2 RFC3447#section-8.2.2}.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$m</dt>
+<dd>String<br><em></em>
+</dd>
+<dt>$s</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>String</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::_rsassa_pss_sign()"></a><h4 class="method public">_rsassa_pss_sign<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_rsassa_pss_sign</span><span class="nb-faded-text">(
+          String $m
+          )
+        </span>
+        :
+        String</code><p class="short-description">RSASSA-PSS-SIGN</p>
+<div class="long-description"><p>See {@link http://tools.ietf.org/html/rfc3447#section-8.1.1 RFC3447#section-8.1.1}.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$m</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>String</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::_rsassa_pss_verify()"></a><h4 class="method public">_rsassa_pss_verify<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_rsassa_pss_verify</span><span class="nb-faded-text">(
+          String $m, String $s
+          )
+        </span>
+        :
+        String</code><p class="short-description">RSASSA-PSS-VERIFY</p>
+<div class="long-description"><p>See {@link http://tools.ietf.org/html/rfc3447#section-8.1.2 RFC3447#section-8.1.2}.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$m</dt>
+<dd>String<br><em></em>
+</dd>
+<dt>$s</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>String</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::_rsavp1()"></a><h4 class="method public">_rsavp1<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_rsavp1</span><span class="nb-faded-text">(
+          <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a> $s
+          )
+        </span>
+        :
+        <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></code><p class="short-description">RSAVP1</p>
+<div class="long-description"><p>See {@link http://tools.ietf.org/html/rfc3447#section-5.2.2 RFC3447#section-5.2.2}.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$s</dt>
+<dd>\Math_BigInteger<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::_start_element_handler()"></a><h4 class="method public">_start_element_handler<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_start_element_handler</span><span class="nb-faded-text">(
+          Resource $parser, String $name, Array $attribs
+          )
+        </span>
+        :
+        </code><p class="short-description">Start Element Handler</p>
+<div class="long-description"><p>Called by xml_set_element_handler()</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$parser</dt>
+<dd>Resource<br><em></em>
+</dd>
+<dt>$name</dt>
+<dd>String<br><em></em>
+</dd>
+<dt>$attribs</dt>
+<dd>Array<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::_stop_element_handler()"></a><h4 class="method public">_stop_element_handler<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_stop_element_handler</span><span class="nb-faded-text">(
+          Resource $parser, String $name
+          )
+        </span>
+        :
+        </code><p class="short-description">Stop Element Handler</p>
+<div class="long-description"><p>Called by xml_set_element_handler()</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$parser</dt>
+<dd>Resource<br><em></em>
+</dd>
+<dt>$name</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::_string_shift()"></a><h4 class="method public">_string_shift<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_string_shift</span><span class="nb-faded-text">(
+          String $string, \optional $index
+              =
+              1
+          )
+        </span>
+        :
+        String</code><p class="short-description">String Shift</p>
+<div class="long-description"><p>Inspired by array_shift</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$string</dt>
+<dd>String<br><em></em>
+</dd>
+<dt>$index</dt>
+<dd>\optional<br><em>Integer $index</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>String</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::createKey()"></a><h4 class="method public">createKey<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">createKey</span><span class="nb-faded-text">(
+          \optional $bits
+              =
+              1024, \optional $timeout
+              =
+              false, \optional $partial
+              =
+              array
+          )
+        </span>
+        :
+        </code><p class="short-description">Create public / private key pair</p>
+<div class="long-description"><p>Returns an array with the following three elements:
+ - 'privatekey': The private key.
+ - 'publickey':  The public key.
+ - 'partialkey': A partially computed key (if the execution time exceeded $timeout).
+                 Will need to be passed back to Crypt_RSA::createKey() as the third parameter for further processing.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$bits</dt>
+<dd>\optional<br><em>Integer $bits</em>
+</dd>
+<dt>$timeout</dt>
+<dd>\optional<br><em>Integer $timeout</em>
+</dd>
+<dt>$partial</dt>
+<dd>\optional<br><em>Math_BigInteger $p</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::decrypt()"></a><h4 class="method public">decrypt<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">decrypt</span><span class="nb-faded-text">(
+           $ciphertext
+          )
+        </span>
+        :
+        String</code><p class="short-description">Decryption</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$ciphertext</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>String</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>encrypt()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::encrypt()"></a><h4 class="method public">encrypt<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">encrypt</span><span class="nb-faded-text">(
+          String $plaintext
+          )
+        </span>
+        :
+        String</code><p class="short-description">Encryption</p>
+<div class="long-description"><p>Both CRYPT_RSA_ENCRYPTION_OAEP and CRYPT_RSA_ENCRYPTION_PKCS1 both place limits on how long $plaintext can be.
+If $plaintext exceeds those limits it will be broken up so that it does and the resultant ciphertext's will
+be concatenated together.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$plaintext</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>String</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>decrypt()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::getPrivateKey()"></a><h4 class="method public">getPrivateKey<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">getPrivateKey</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        </code><p class="short-description">Returns the private key</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>getPrivateKey()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::getPublicKey()"></a><h4 class="method public">getPublicKey<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">getPublicKey</span><span class="nb-faded-text">(
+          Integer $type
+              =
+              CRYPT_RSA_PUBLIC_FORMAT_PKCS1
+          )
+        </span>
+        :
+        </code><p class="short-description">Returns the public key</p>
+<div class="long-description"><p>The public key is only returned under two circumstances - if the private key had the public key embedded within it
+or if the public key was set via setPublicKey().  If the currently loaded key is supposed to be the public key this
+function won't return it since this library, for the most part, doesn't distinguish between public and private keys.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$type</dt>
+<dd>Integer<br><em>optional</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>getPublicKey()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::loadKey()"></a><h4 class="method public">loadKey<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">loadKey</span><span class="nb-faded-text">(
+          String $key, Integer $type
+              =
+              false
+          )
+        </span>
+        :
+        </code><p class="short-description">Loads a public or private key</p>
+<div class="long-description"><p>Returns true on success and false on failure (ie. an incorrect password was provided or the key was malformed)</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$key</dt>
+<dd>String<br><em></em>
+</dd>
+<dt>$type</dt>
+<dd>Integer<br><em>optional</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::setEncryptionMode()"></a><h4 class="method public">setEncryptionMode<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">setEncryptionMode</span><span class="nb-faded-text">(
+          Integer $mode
+          )
+        </span>
+        :
+        </code><p class="short-description">Set Encryption Mode</p>
+<div class="long-description"><p>Valid values include CRYPT_RSA_ENCRYPTION_OAEP and CRYPT_RSA_ENCRYPTION_PKCS1.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$mode</dt>
+<dd>Integer<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::setHash()"></a><h4 class="method public">setHash<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">setHash</span><span class="nb-faded-text">(
+          String $hash
+          )
+        </span>
+        :
+        </code><p class="short-description">Determines which hashing function should be used</p>
+<div class="long-description"><p>Used with signature production / verification and (if the encryption mode is CRYPT_RSA_ENCRYPTION_OAEP) encryption and
+decryption.  If $hash isn't supported, sha1 is used.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$hash</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::setMGFHash()"></a><h4 class="method public">setMGFHash<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">setMGFHash</span><span class="nb-faded-text">(
+          String $hash
+          )
+        </span>
+        :
+        </code><p class="short-description">Determines which hashing function should be used for the mask generation function</p>
+<div class="long-description"><p>The mask generation function is used by CRYPT_RSA_ENCRYPTION_OAEP and CRYPT_RSA_SIGNATURE_PSS and although it's
+best if Hash and MGFHash are set to the same thing this is not a requirement.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$hash</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::setPassword()"></a><h4 class="method public">setPassword<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">setPassword</span><span class="nb-faded-text">(
+          String $password
+          )
+        </span>
+        :
+        </code><p class="short-description">Sets the password</p>
+<div class="long-description"><p>Private keys can be encrypted with a password.  To unset the password, pass in the empty string or false.
+Or rather, pass in $password such that empty($password) is true.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$password</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>createKey()</dd>
+<dt>see</dt>
+<dd>loadKey()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::setPrivateKey()"></a><h4 class="method public">setPrivateKey<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">setPrivateKey</span><span class="nb-faded-text">(
+          String $key, Integer $type
+              =
+              CRYPT_RSA_PUBLIC_FORMAT_PKCS1
+          )
+        </span>
+        :
+        Boolean</code><p class="short-description">Defines the private key</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$key</dt>
+<dd>String<br><em></em>
+</dd>
+<dt>$type</dt>
+<dd>Integer<br><em>optional</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Boolean</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>setPrivateKey()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::setPrivateKeyFormat()"></a><h4 class="method public">setPrivateKeyFormat<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">setPrivateKeyFormat</span><span class="nb-faded-text">(
+          Integer $format
+          )
+        </span>
+        :
+        </code><p class="short-description">Determines the private key format</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$format</dt>
+<dd>Integer<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>createKey()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::setPublicKey()"></a><h4 class="method public">setPublicKey<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">setPublicKey</span><span class="nb-faded-text">(
+          String $key, Integer $type
+              =
+              CRYPT_RSA_PUBLIC_FORMAT_PKCS1
+          )
+        </span>
+        :
+        Boolean</code><p class="short-description">Defines the public key</p>
+<div class="long-description"><p>Some private key formats define the public exponent and some don't.  Those that don't define it are problematic when
+used in certain contexts.  For example, in SSH-2, RSA authentication works by sending the public key along with a
+message signed by the private key to the server.  The SSH-2 server looks the public key up in an index of public keys
+and if it's present then proceeds to verify the signature.  Problem is, if your private key doesn't include the public
+exponent this won't work unless you manually add the public exponent.</p>
+
+<p>Do note that when a new key is loaded the index will be cleared.</p>
+
+<p>Returns true on success, false on failure</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$key</dt>
+<dd>String<br><em></em>
+</dd>
+<dt>$type</dt>
+<dd>Integer<br><em>optional</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Boolean</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>getPublicKey()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::setPublicKeyFormat()"></a><h4 class="method public">setPublicKeyFormat<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">setPublicKeyFormat</span><span class="nb-faded-text">(
+          Integer $format
+          )
+        </span>
+        :
+        </code><p class="short-description">Determines the public key format</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$format</dt>
+<dd>Integer<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>createKey()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::setSaltLength()"></a><h4 class="method public">setSaltLength<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">setSaltLength</span><span class="nb-faded-text">(
+           $sLen
+          )
+        </span>
+        :
+        </code><p class="short-description">Determines the salt length</p>
+<div class="long-description"><p>To quote from {@link http://tools.ietf.org/html/rfc3447#page-38 RFC3447#page-38}:</p>
+
+<p>Typical salt lengths in octets are hLen (the length of the output
+   of the hash function Hash) and 0.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$sLen</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::setSignatureMode()"></a><h4 class="method public">setSignatureMode<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">setSignatureMode</span><span class="nb-faded-text">(
+          Integer $mode
+          )
+        </span>
+        :
+        </code><p class="short-description">Set Signature Mode</p>
+<div class="long-description"><p>Valid values include CRYPT_RSA_SIGNATURE_PSS and CRYPT_RSA_SIGNATURE_PKCS1</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$mode</dt>
+<dd>Integer<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::sign()"></a><h4 class="method public">sign<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">sign</span><span class="nb-faded-text">(
+          String $message
+          )
+        </span>
+        :
+        String</code><p class="short-description">Create a signature</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$message</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>String</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>verify()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::verify()"></a><h4 class="method public">verify<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">verify</span><span class="nb-faded-text">(
+          String $message, String $signature
+          )
+        </span>
+        :
+        Boolean</code><p class="short-description">Verifies a signature</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$message</dt>
+<dd>String<br><em></em>
+</dd>
+<dt>$signature</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Boolean</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>sign()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<small xmlns="" class="footer">Documentation was generated by <a href="http://docblox-project.org">DocBlox 0.12.0</a>.
+    </small></body></html>

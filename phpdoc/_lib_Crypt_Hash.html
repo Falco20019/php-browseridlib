@@ -1,0 +1,989 @@
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>DocBlox Documentation</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta><link rel="stylesheet" href="css/black-tie/jquery-ui-1.8.2.custom.css" type="text/css"></link><link rel="stylesheet" href="css/jquery.treeview.css" type="text/css"></link><link rel="stylesheet" href="css/theme.css" type="text/css"></link><script type="text/javascript" src="js/jquery-1.4.2.min.js"></script><script type="text/javascript" src="js/jquery-ui-1.8.2.custom.min.js"></script><script type="text/javascript" src="js/jquery.cookie.js"></script><script type="text/javascript" src="js/jquery.treeview.js"></script><script type="text/javascript">
+            $(document).ready(function() {
+                $(".filetree").treeview({
+                    collapsed: true,
+                    persist: "cookie"
+                });
+
+                $("#accordion").accordion({
+                    collapsible: true,
+                    autoHeight:  false,
+                    fillSpace:   true
+                });
+
+                $(".tabs").tabs();
+            });
+        </script></head><body><div xmlns="" id="content">
+<script>
+      $(document).ready(function() {
+        $('dl.function-info, dl.constant-info, dl.property-info').prev().css('cursor', 'pointer');
+        $('dl.function-info, dl.constant-info, dl.property-info').prev().click(function() {
+          if ($(this).next().is(':hidden'))
+          {
+            $(this).children('img')[0].src = 'images/arrow_down.gif';
+          } else
+          {
+            $(this).children('img')[0].src = 'images/arrow_right.gif';
+          }
+          $(this).next().slideToggle();
+        });
+      $('dl.function-info, dl.constant-info, dl.property-info').hide();
+      $('dl.function-info img, dl.constant-info img, dl.property-info img').show();
+      });
+    </script><a name="top"></a><h1 class="file">lib\Crypt\Hash.php</h1>
+<div class="file_menu">
+<a href="#constants">Constants</a> <a href="#classes">Classes</a> </div>
+<dl class="file-info">
+<dt>author</dt>
+<dd>Jim Wigginton &lt;terrafrost@php.net&gt;</dd>
+<dt>copyright</dt>
+<dd>MMVII Jim Wigginton</dd>
+<dt>license</dt>
+<dd>http://www.opensource.org/licenses/mit-license.html  MIT License</dd>
+<dt>link</dt>
+<dd><a href="http://phpseclib.sourceforge.net">http://phpseclib.sourceforge.net</a></dd>
+<dt>package</dt>
+<dd>Crypt</dd>
+<dt>subpackage</dt>
+<dd>Crypt_Hash</dd>
+<dt>version</dt>
+<dd>$Id: Hash.php,v 1.6 2009/11/23 23:37:07 terrafrost Exp $</dd>
+<dt>Constants</dt>
+<dd><a class="constant" href="#::CRYPT_HASH_MODE_INTERNAL">CRYPT_HASH_MODE_INTERNAL</a></dd>
+<dd><a class="constant" href="#::CRYPT_HASH_MODE_MHASH">CRYPT_HASH_MODE_MHASH</a></dd>
+<dd><a class="constant" href="#::CRYPT_HASH_MODE_HASH">CRYPT_HASH_MODE_HASH</a></dd>
+<dt>Classes</dt>
+<dd><a class="class" href="#%5CCrypt_Hash">Crypt_Hash</a></dd>
+</dl>
+<h2>Description</h2>
+<p class="short-description">Pure-PHP implementations of keyed-hash message authentication codes (HMACs) and various cryptographic hashing functions.</p>
+<div class="long-description"><p>Uses hash() or mhash() if available and an internal implementation, otherwise.  Currently supports the following:</p>
+
+<p>md2, md5, md5-96, sha1, sha1-96, sha256, sha384, and sha512</p>
+
+<p>If {@link Crypt_Hash::setKey() setKey()} is called, {@link Crypt_Hash::hash() hash()} will return the HMAC as opposed to
+the hash.  If no valid algorithm is provided, sha1 will be used.</p>
+
+<p>PHP versions 4 and 5</p>
+
+<p>{@internal The variable names are the same as those in
+{@link http://tools.ietf.org/html/rfc2104#section-2 RFC2104}.}}</p>
+
+<p>Here's a short example of how to use this library:
+<code>
+<?php
+   include('Crypt/Hash.php');
+
+   $hash = new Crypt_Hash('sha1');
+
+   $hash->setKey('abcdefg');
+
+   echo base64_encode($hash->hash('abcdefg'));
+?>
+</code></p>
+
+<p>LICENSE: Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.</p>
+</div>
+<a name="constants"></a><h2>Constants</h2>
+<div>
+<a id="::CRYPT_HASH_MODE_INTERNAL"></a><h3 class="constant">CRYPT_HASH_MODE_INTERNAL<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_HASH_MODE_INTERNAL</span> = '1'
+      </code><p class="short-description">Toggles the internal implementation</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>1</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_HASH_MODE_MHASH"></a><h3 class="constant">CRYPT_HASH_MODE_MHASH<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_HASH_MODE_MHASH</span> = '2'
+      </code><p class="short-description">Toggles the mhash() implementation, which has been deprecated on PHP 5.3.0+.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>2</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_HASH_MODE_HASH"></a><h3 class="constant">CRYPT_HASH_MODE_HASH<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_HASH_MODE_HASH</span> = '3'
+      </code><p class="short-description">Toggles the hash() implementation, which works on PHP 5.1.2+.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>3</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+<a name="classes"></a><a id="\Crypt_Hash"></a><h2 class="class">\Crypt_Hash<div class="to-top"><a href="#top">jump to top</a></div>
+</h2>
+<div class="class">
+<dl class="class-info">
+<dt>access</dt>
+<dd>public</dd>
+<dt>author</dt>
+<dd>Jim Wigginton &lt;terrafrost@php.net&gt;</dd>
+<dt>package</dt>
+<dd>Crypt</dd>
+<dt>subpackage</dt>
+<dd>Crypt_Hash</dd>
+<dt>version</dt>
+<dd>0.1.0</dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Properties
+              </a></dt>
+<dd><a class="property public" href="#%5CCrypt_Hash::%24b">$b</a></dd>
+<dd><a class="property public" href="#%5CCrypt_Hash::%24hash">$hash</a></dd>
+<dd><a class="property public" href="#%5CCrypt_Hash::%24ipad">$ipad</a></dd>
+<dd><a class="property public" href="#%5CCrypt_Hash::%24key">$key</a></dd>
+<dd><a class="property public" href="#%5CCrypt_Hash::%24l">$l</a></dd>
+<dd><a class="property public" href="#%5CCrypt_Hash::%24opad">$opad</a></dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Methods
+              </a></dt>
+<dd><a class="method public" href="#%5CCrypt_Hash::Crypt_Hash()">Crypt_Hash</a></dd>
+<dd><a class="method public" href="#%5CCrypt_Hash::_add()">_add</a></dd>
+<dd><a class="method public" href="#%5CCrypt_Hash::_md2()">_md2</a></dd>
+<dd><a class="method public" href="#%5CCrypt_Hash::_md5()">_md5</a></dd>
+<dd><a class="method public" href="#%5CCrypt_Hash::_not()">_not</a></dd>
+<dd><a class="method public" href="#%5CCrypt_Hash::_rightRotate()">_rightRotate</a></dd>
+<dd><a class="method public" href="#%5CCrypt_Hash::_rightShift()">_rightShift</a></dd>
+<dd><a class="method public" href="#%5CCrypt_Hash::_sha1()">_sha1</a></dd>
+<dd><a class="method public" href="#%5CCrypt_Hash::_sha256()">_sha256</a></dd>
+<dd><a class="method public" href="#%5CCrypt_Hash::_sha512()">_sha512</a></dd>
+<dd><a class="method public" href="#%5CCrypt_Hash::_string_shift()">_string_shift</a></dd>
+<dd><a class="method public" href="#%5CCrypt_Hash::getLength()">getLength</a></dd>
+<dd><a class="method public" href="#%5CCrypt_Hash::hash()">hash</a></dd>
+<dd><a class="method public" href="#%5CCrypt_Hash::setHash()">setHash</a></dd>
+<dd><a class="method public" href="#%5CCrypt_Hash::setKey()">setKey</a></dd>
+</dl>
+<h3>Description</h3>
+<p class="short-description">Pure-PHP implementations of keyed-hash message authentication codes (HMACs) and various cryptographic hashing functions.</p>
+<div class="long-description">
+</div>
+<h3>Properties</h3>
+<div>
+<a id="\Crypt_Hash::$b"></a><h4 class="property public">$b<div class="to-top"><a href="#%5CCrypt_Hash">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Integer <span class="highlight">$b</span> = ''</code><p class="short-description">Byte-length of compression blocks / key (Internal HMAC)</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Integer<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_Hash::setAlgorithm()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Hash::$hash"></a><h4 class="property public">$hash<div class="to-top"><a href="#%5CCrypt_Hash">jump to class</a></div>
+</h4>
+<div class="property">
+<code>String <span class="highlight">$hash</span> = ''</code><p class="short-description">Hash Algorithm</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>String<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_Hash::setHash()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Hash::$ipad"></a><h4 class="property public">$ipad<div class="to-top"><a href="#%5CCrypt_Hash">jump to class</a></div>
+</h4>
+<div class="property">
+<code>String <span class="highlight">$ipad</span> = ''</code><p class="short-description">Inner XOR (Internal HMAC)</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>String<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_Hash::setKey()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Hash::$key"></a><h4 class="property public">$key<div class="to-top"><a href="#%5CCrypt_Hash">jump to class</a></div>
+</h4>
+<div class="property">
+<code>String <span class="highlight">$key</span> = ''</code><p class="short-description">Key</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>String<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_Hash::setKey()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Hash::$l"></a><h4 class="property public">$l<div class="to-top"><a href="#%5CCrypt_Hash">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Integer <span class="highlight">$l</span> = 'false'</code><p class="short-description">Byte-length of hash output (Internal HMAC)</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Integer<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd>false</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_Hash::setHash()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Hash::$opad"></a><h4 class="property public">$opad<div class="to-top"><a href="#%5CCrypt_Hash">jump to class</a></div>
+</h4>
+<div class="property">
+<code>String <span class="highlight">$opad</span> = ''</code><p class="short-description">Outer XOR (Internal HMAC)</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>String<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_Hash::setKey()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+<h3>Methods</h3>
+<div>
+<a id="\Crypt_Hash::Crypt_Hash()"></a><h4 class="method public">Crypt_Hash<div class="to-top"><a href="#Crypt_Hash">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">Crypt_Hash</span><span class="nb-faded-text">(
+          \optional $hash
+              =
+              sha1
+          )
+        </span>
+        :
+        <a href="_lib_Crypt_Hash.html#%5CCrypt_Hash">\Crypt_Hash</a></code><p class="short-description">Default Constructor.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$hash</dt>
+<dd>\optional<br><em>String $hash</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_Crypt_Hash.html#%5CCrypt_Hash">\Crypt_Hash</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Hash::_add()"></a><h4 class="method public">_add<div class="to-top"><a href="#Crypt_Hash">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_add</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        String</code><p class="short-description">Add</p>
+<div class="long-description"><p>_sha256() adds multiple unsigned 32-bit integers.  Since PHP doesn't support unsigned integers and since the
+possibility of overflow exists, care has to be taken.  Math_BigInteger() could be used but this should be faster.</p>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>String</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>_sha256()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Hash::_md2()"></a><h4 class="method public">_md2<div class="to-top"><a href="#Crypt_Hash">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_md2</span><span class="nb-faded-text">(
+           $m
+          )
+        </span>
+        :
+        </code><p class="short-description">Pure-PHP implementation of MD2</p>
+<div class="long-description"><p>See {@link http://tools.ietf.org/html/rfc1319 RFC1319}.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$m</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Hash::_md5()"></a><h4 class="method public">_md5<div class="to-top"><a href="#Crypt_Hash">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_md5</span><span class="nb-faded-text">(
+           $m
+          )
+        </span>
+        :
+        </code><p class="short-description">Wrapper for MD5</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$m</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Hash::_not()"></a><h4 class="method public">_not<div class="to-top"><a href="#Crypt_Hash">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_not</span><span class="nb-faded-text">(
+          Integer $int
+          )
+        </span>
+        :
+        Integer</code><p class="short-description">Not</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$int</dt>
+<dd>Integer<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Integer</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>_sha256()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Hash::_rightRotate()"></a><h4 class="method public">_rightRotate<div class="to-top"><a href="#Crypt_Hash">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_rightRotate</span><span class="nb-faded-text">(
+          Integer $int, Integer $amt
+          )
+        </span>
+        :
+        Integer</code><p class="short-description">Right Rotate</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$int</dt>
+<dd>Integer<br><em></em>
+</dd>
+<dt>$amt</dt>
+<dd>Integer<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Integer</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>_sha256()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Hash::_rightShift()"></a><h4 class="method public">_rightShift<div class="to-top"><a href="#Crypt_Hash">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_rightShift</span><span class="nb-faded-text">(
+          Integer $int, Integer $amt
+          )
+        </span>
+        :
+        Integer</code><p class="short-description">Right Shift</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$int</dt>
+<dd>Integer<br><em></em>
+</dd>
+<dt>$amt</dt>
+<dd>Integer<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Integer</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>_sha256()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Hash::_sha1()"></a><h4 class="method public">_sha1<div class="to-top"><a href="#Crypt_Hash">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_sha1</span><span class="nb-faded-text">(
+           $m
+          )
+        </span>
+        :
+        </code><p class="short-description">Wrapper for SHA1</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$m</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Hash::_sha256()"></a><h4 class="method public">_sha256<div class="to-top"><a href="#Crypt_Hash">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_sha256</span><span class="nb-faded-text">(
+           $m
+          )
+        </span>
+        :
+        </code><p class="short-description">Pure-PHP implementation of SHA256</p>
+<div class="long-description"><p>See {@link http://en.wikipedia.org/wiki/SHA_hash_functions#SHA-256_.28a_SHA-2_variant.29_pseudocode SHA-256 (a SHA-2 variant) pseudocode - Wikipedia}.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$m</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Hash::_sha512()"></a><h4 class="method public">_sha512<div class="to-top"><a href="#Crypt_Hash">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_sha512</span><span class="nb-faded-text">(
+           $m
+          )
+        </span>
+        :
+        </code><p class="short-description">Pure-PHP implementation of SHA384 and SHA512</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$m</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Hash::_string_shift()"></a><h4 class="method public">_string_shift<div class="to-top"><a href="#Crypt_Hash">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_string_shift</span><span class="nb-faded-text">(
+          String $string, \optional $index
+              =
+              1
+          )
+        </span>
+        :
+        String</code><p class="short-description">String Shift</p>
+<div class="long-description"><p>Inspired by array_shift</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$string</dt>
+<dd>String<br><em></em>
+</dd>
+<dt>$index</dt>
+<dd>\optional<br><em>Integer $index</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>String</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Hash::getLength()"></a><h4 class="method public">getLength<div class="to-top"><a href="#Crypt_Hash">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">getLength</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        Integer</code><p class="short-description">Returns the hash length (in bytes)</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Integer</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Hash::hash()"></a><h4 class="method public">hash<div class="to-top"><a href="#Crypt_Hash">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">hash</span><span class="nb-faded-text">(
+          String $text
+          )
+        </span>
+        :
+        String</code><p class="short-description">Compute the HMAC.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$text</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>String</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Hash::setHash()"></a><h4 class="method public">setHash<div class="to-top"><a href="#Crypt_Hash">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">setHash</span><span class="nb-faded-text">(
+          String $hash
+          )
+        </span>
+        :
+        </code><p class="short-description">Sets the hash function.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$hash</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Hash::setKey()"></a><h4 class="method public">setKey<div class="to-top"><a href="#Crypt_Hash">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">setKey</span><span class="nb-faded-text">(
+          String $key
+          )
+        </span>
+        :
+        </code><p class="short-description">Sets the key for HMACs</p>
+<div class="long-description"><p>Keys can be of any length.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$key</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<small xmlns="" class="footer">Documentation was generated by <a href="http://docblox-project.org">DocBlox 0.12.0</a>.
+    </small></body></html>

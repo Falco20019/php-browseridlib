@@ -1,0 +1,573 @@
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>DocBlox Documentation</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta><link rel="stylesheet" href="css/black-tie/jquery-ui-1.8.2.custom.css" type="text/css"></link><link rel="stylesheet" href="css/jquery.treeview.css" type="text/css"></link><link rel="stylesheet" href="css/theme.css" type="text/css"></link><script type="text/javascript" src="js/jquery-1.4.2.min.js"></script><script type="text/javascript" src="js/jquery-ui-1.8.2.custom.min.js"></script><script type="text/javascript" src="js/jquery.cookie.js"></script><script type="text/javascript" src="js/jquery.treeview.js"></script><script type="text/javascript">
+            $(document).ready(function() {
+                $(".filetree").treeview({
+                    collapsed: true,
+                    persist: "cookie"
+                });
+
+                $("#accordion").accordion({
+                    collapsible: true,
+                    autoHeight:  false,
+                    fillSpace:   true
+                });
+
+                $(".tabs").tabs();
+            });
+        </script></head><body><div xmlns="" id="content">
+<script>
+      $(document).ready(function() {
+        $('dl.function-info, dl.constant-info, dl.property-info').prev().css('cursor', 'pointer');
+        $('dl.function-info, dl.constant-info, dl.property-info').prev().click(function() {
+          if ($(this).next().is(':hidden'))
+          {
+            $(this).children('img')[0].src = 'images/arrow_down.gif';
+          } else
+          {
+            $(this).children('img')[0].src = 'images/arrow_right.gif';
+          }
+          $(this).next().slideToggle();
+        });
+      $('dl.function-info, dl.constant-info, dl.property-info').hide();
+      $('dl.function-info img, dl.constant-info img, dl.property-info img').show();
+      });
+    </script><a name="top"></a><h1 class="file">lib\BrowserID\cert.php</h1>
+<div class="file_menu">
+<a href="#includes">Includes</a> <a href="#classes">Classes</a> </div>
+<dl class="file-info">
+<dt>author</dt>
+<dd>Benjamin Krämer &lt;benjamin.kraemer@alien-scripts.de&gt;</dd>
+<dt>copyright</dt>
+<dd>Alien-Scripts.de Benjamin Krämer</dd>
+<dt>license</dt>
+<dd>http://www.opensource.org/licenses/mit-license.html  MIT License</dd>
+<dt>package</dt>
+<dd>BrowserID</dd>
+<dt>subpackage</dt>
+<dd>Cert</dd>
+<dt>Classes</dt>
+<dd><a class="class" href="#%5CCert">Cert</a></dd>
+</dl>
+<h2>Description</h2>
+<p class="short-description">Certificate</p>
+<div class="long-description"><p>LICENSE: Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.</p>
+</div>
+<a name="classes"></a><a id="\Cert"></a><h2 class="class">\Cert<div class="to-top"><a href="#top">jump to top</a></div>
+</h2>
+<div class="class">
+<dl class="class-info">
+<dt>author</dt>
+<dd>Benjamin Krämer &lt;benjamin.kraemer@alien-scripts.de&gt;</dd>
+<dt>package</dt>
+<dd>BrowserID</dd>
+<dt>subpackage</dt>
+<dd>Cert</dd>
+<dt>version</dt>
+<dd>1.0.0</dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Properties
+              </a></dt>
+<dd><a class="property private" href="#%5CCert::%24assertion">$assertion</a></dd>
+<dd><a class="property private" href="#%5CCert::%24certParams">$certParams</a></dd>
+<dd><a class="property private" href="#%5CCert::%24payload">$payload</a></dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Methods
+              </a></dt>
+<dd><a class="method public" href="#%5CCert::__construct()">__construct</a></dd>
+<dd><a class="method public" href="#%5CCert::deserialize()">deserialize</a></dd>
+<dd><a class="method public" href="#%5CCert::getAssertion()">getAssertion</a></dd>
+<dd><a class="method public" href="#%5CCert::getCertParams()">getCertParams</a></dd>
+<dd><a class="method public" href="#%5CCert::getPayload()">getPayload</a></dd>
+<dd><a class="method public" href="#%5CCert::parse()">parse</a></dd>
+<dd><a class="method public" href="#%5CCert::serialize()">serialize</a></dd>
+<dd><a class="method public" href="#%5CCert::sign()">sign</a></dd>
+<dd><a class="method public" href="#%5CCert::verify()">verify</a></dd>
+</dl>
+<h3>Description</h3>
+<p class="short-description">Certificate</p>
+<div class="long-description"><p>Represents an identity certificate.</p>
+</div>
+<h3>Properties</h3>
+<div>
+<a id="\Cert::$assertion"></a><h4 class="property private">$assertion<div class="to-top"><a href="#%5CCert">jump to class</a></div>
+</h4>
+<div class="property">
+<code><a href="_lib_BrowserID_assertion.html#%5CAssertion">\Assertion</a> <span class="highlight">$assertion</span> = ''</code><p class="short-description">Assertion parameters</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>
+<a href="_lib_BrowserID_assertion.html#%5CAssertion">\Assertion</a><br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Cert::$certParams"></a><h4 class="property private">$certParams<div class="to-top"><a href="#%5CCert">jump to class</a></div>
+</h4>
+<div class="property">
+<code><a href="_lib_BrowserID_cert_params.html#%5CCertParams">\CertParams</a> <span class="highlight">$certParams</span> = ''</code><p class="short-description">Certificate parameters</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>
+<a href="_lib_BrowserID_cert_params.html#%5CCertParams">\CertParams</a><br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Cert::$payload"></a><h4 class="property private">$payload<div class="to-top"><a href="#%5CCert">jump to class</a></div>
+</h4>
+<div class="property">
+<code>array <span class="highlight">$payload</span> = ''</code><p class="short-description">Additional payload</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>array<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+<h3>Methods</h3>
+<div>
+<a id="\Cert::__construct()"></a><h4 class="method public">__construct<div class="to-top"><a href="#Cert">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">__construct</span><span class="nb-faded-text">(
+          <a href="_lib_BrowserID_assertion.html#%5CAssertion">\Assertion</a> $assertion, <a href="_lib_BrowserID_cert_params.html#%5CCertParams">\CertParams</a> $certParams, \type $payload
+          )
+        </span>
+        :
+        </code><p class="short-description">Constructor</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$assertion</dt>
+<dd>\Assertion<br><em>The assertion parameters</em>
+</dd>
+<dt>$certParams</dt>
+<dd>\CertParams<br><em>The certificate parameters</em>
+</dd>
+<dt>$payload</dt>
+<dd>\type<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Cert::deserialize()"></a><h4 class="method public">deserialize<div class="to-top"><a href="#Cert">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">deserialize</span><span class="nb-faded-text">(
+          array $params
+          )
+        </span>
+        :
+        <a href="_lib_BrowserID_cert.html#%5CCert">\Cert</a></code><p class="short-description">Deserialize parameters</p>
+<div class="long-description"><p>Creates an instance based on the parameter object. The used parameters will be removed from params.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$params</dt>
+<dd>array<br><em>An array of parameters, used ones will be removed</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_BrowserID_cert.html#%5CCert">\Cert</a></dt>
+<dd><em>An instance of a certificate</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Cert::getAssertion()"></a><h4 class="method public">getAssertion<div class="to-top"><a href="#Cert">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">getAssertion</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <a href="_lib_BrowserID_assertion.html#%5CAssertion">\Assertion</a></code><p class="short-description">Assertion parameters</p>
+<div class="long-description"><p>Gets the assertion parameters.</p>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_BrowserID_assertion.html#%5CAssertion">\Assertion</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Cert::getCertParams()"></a><h4 class="method public">getCertParams<div class="to-top"><a href="#Cert">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">getCertParams</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <a href="_lib_BrowserID_cert_params.html#%5CCertParams">\CertParams</a></code><p class="short-description">Certificate parameters</p>
+<div class="long-description"><p>Gets the certificate parameters.</p>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_BrowserID_cert_params.html#%5CCertParams">\CertParams</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Cert::getPayload()"></a><h4 class="method public">getPayload<div class="to-top"><a href="#Cert">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">getPayload</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        array</code><p class="short-description">Additional payload</p>
+<div class="long-description"><p>Gets the additional payload.</p>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>array</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Cert::parse()"></a><h4 class="method public">parse<div class="to-top"><a href="#Cert">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">parse</span><span class="nb-faded-text">(
+          string $signedObject, <a href="_lib_BrowserID_algs.html#%5CAbstractPublicKey">\AbstractPublicKey</a> $publicKey
+          )
+        </span>
+        :
+        <a href="_lib_BrowserID_cert.html#%5CCert">\Cert</a></code><p class="short-description">Parse serialized identity certificate</p>
+<div class="long-description"><p>Parses a serialized, signed identity certificate and check if it's valid by
+checking the signature against the public key of the issuer.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$signedObject</dt>
+<dd>string<br><em>Signed identity certificate</em>
+</dd>
+<dt>$publicKey</dt>
+<dd>\AbstractPublicKey<br><em>Public key of the issuer</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_BrowserID_cert.html#%5CCert">\Cert</a></dt>
+<dd><em>Instance of the identity certificate</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>static</dt>
+<dd></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Cert::serialize()"></a><h4 class="method public">serialize<div class="to-top"><a href="#Cert">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">serialize</span><span class="nb-faded-text">(
+          array $params
+              =
+              null
+          )
+        </span>
+        :
+        array</code><p class="short-description">Serialize parameters</p>
+<div class="long-description"><p>Serializes the objects parameters into an array.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$params</dt>
+<dd>array<br><em>An array of parameters, existing ones will be overwritten</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>array</dt>
+<dd><em>The combined params array</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Cert::sign()"></a><h4 class="method public">sign<div class="to-top"><a href="#Cert">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">sign</span><span class="nb-faded-text">(
+          <a href="_lib_BrowserID_algs.html#%5CAbstractSecretKey">\AbstractSecretKey</a> $secretKey, array $additionalPayload
+              =
+              null
+          )
+        </span>
+        :
+        string</code><p class="short-description">Sign identity certificate</p>
+<div class="long-description"><p>Sign and serialize this instance using the secret key of the issuer.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$secretKey</dt>
+<dd>\AbstractSecretKey<br><em>Secret key of the issuer</em>
+</dd>
+<dt>$additionalPayload</dt>
+<dd>array<br><em>Additional payload or null if none to add</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>string</dt>
+<dd><em>Serialized identity certificate</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Cert::verify()"></a><h4 class="method public">verify<div class="to-top"><a href="#Cert">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">verify</span><span class="nb-faded-text">(
+          int $now
+          )
+        </span>
+        :
+        boolean</code><p class="short-description">Verify</p>
+<div class="long-description"><p>Checks if the parameters are valid.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$now</dt>
+<dd>int<br><em>Unix timestamp in milliseconds</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>boolean</dt>
+<dd><em>true, if the instance is valid</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<small xmlns="" class="footer">Documentation was generated by <a href="http://docblox-project.org">DocBlox 0.12.0</a>.
+    </small></body></html>

@@ -30,27 +30,55 @@
       $('dl.function-info, dl.constant-info, dl.property-info').hide();
       $('dl.function-info img, dl.constant-info img, dl.property-info img').show();
       });
-    </script><a name="top"></a><h1 class="file">lib\configuration.php</h1>
+    </script><a name="top"></a><h1 class="file">lib\BrowserID\configuration.php</h1>
 <div class="file_menu">
 <a href="#classes">Classes</a> </div>
 <dl class="file-info">
 <dt>author</dt>
 <dd>Benjamin Krämer &lt;benjamin.kraemer@alien-scripts.de&gt;</dd>
+<dt>copyright</dt>
+<dd>Alien-Scripts.de Benjamin Krämer</dd>
+<dt>license</dt>
+<dd>http://www.opensource.org/licenses/mit-license.html  MIT License</dd>
 <dt>package</dt>
-<dd>php-browseridlib</dd>
+<dd>BrowserID</dd>
+<dt>subpackage</dt>
+<dd>Configuration</dd>
 <dt>Classes</dt>
 <dd><a class="class" href="#%5CConfiguration">Configuration</a></dd>
 </dl>
 <h2>Description</h2>
 <p class="short-description">Configuration</p>
-<div class="long-description">
+<div class="long-description"><p>LICENSE: Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.</p>
 </div>
 <a name="classes"></a><a id="\Configuration"></a><h2 class="class">\Configuration<div class="to-top"><a href="#top">jump to top</a></div>
 </h2>
 <div class="class">
 <dl class="class-info">
+<dt>author</dt>
+<dd>Benjamin Krämer &lt;benjamin.kraemer@alien-scripts.de&gt;</dd>
 <dt>package</dt>
-<dd>php-browseridlib</dd>
+<dd>BrowserID</dd>
+<dt>subpackage</dt>
+<dd>Configuration</dd>
+<dt>version</dt>
+<dd>1.0.0</dd>
 <dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
                 Properties
               </a></dt>
@@ -100,6 +128,8 @@ the current environmnet (specified via Configuration::getInstance()->setEnvironm
 <dd>false</dd>
 <dt>static</dt>
 <dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
 </dl>
 <div class="clear"></div>
 </div>
@@ -125,6 +155,8 @@ the current environmnet (specified via Configuration::getInstance()->setEnvironm
 <dd>false</dd>
 <dt>static</dt>
 <dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
 </dl>
 <div class="clear"></div>
 </div>
@@ -150,6 +182,8 @@ the current environmnet (specified via Configuration::getInstance()->setEnvironm
 <dd>false</dd>
 <dt>static</dt>
 <dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
 </dl>
 <div class="clear"></div>
 </div>
@@ -157,7 +191,7 @@ the current environmnet (specified via Configuration::getInstance()->setEnvironm
 <a id="\Configuration::$instance"></a><h4 class="property private">$instance<div class="to-top"><a href="#%5CConfiguration">jump to class</a></div>
 </h4>
 <div class="property">
-<code><a href="_lib_configuration.html#%5CConfiguration">\Configuration</a> <span class="highlight">$instance</span> = 'NULL'</code><p class="short-description">Singleton</p>
+<code><a href="_lib_BrowserID_configuration.html#%5CConfiguration">\Configuration</a> <span class="highlight">$instance</span> = 'NULL'</code><p class="short-description">Singleton</p>
 <div class="long-description">
 </div>
 <div class="api-section">
@@ -166,7 +200,7 @@ the current environmnet (specified via Configuration::getInstance()->setEnvironm
 <dl class="property-info">
 <dt></dt>
 <dd>
-<a href="_lib_configuration.html#%5CConfiguration">\Configuration</a><br><em>The only instance of this class</em>
+<a href="_lib_BrowserID_configuration.html#%5CConfiguration">\Configuration</a><br><em>The only instance of this class</em>
 </dd>
 <dt>visibility</dt>
 <dd>private</dd>
@@ -176,6 +210,10 @@ the current environmnet (specified via Configuration::getInstance()->setEnvironm
 <dd>false</dd>
 <dt>static</dt>
 <dd>true</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>static</dt>
+<dd></dd>
 </dl>
 <div class="clear"></div>
 </div>
@@ -204,6 +242,8 @@ the current environmnet (specified via Configuration::getInstance()->setEnvironm
 <dd>false</dd>
 <dt>static</dt>
 <dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
 </dl>
 <div class="clear"></div>
 </div>
@@ -229,6 +269,8 @@ the current environmnet (specified via Configuration::getInstance()->setEnvironm
 <dd>false</dd>
 <dt>static</dt>
 <dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
 </dl>
 <div class="clear"></div>
 </div>
@@ -254,6 +296,8 @@ the current environmnet (specified via Configuration::getInstance()->setEnvironm
 <dd>false</dd>
 <dt>static</dt>
 <dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
 </dl>
 <div class="clear"></div>
 </div>
@@ -266,8 +310,8 @@ the current environmnet (specified via Configuration::getInstance()->setEnvironm
           )
         </span>
         :
-        string</code><p class="short-description">Fetch a configuration parameter for the current environment</p>
-<div class="long-description">
+        string</code><p class="short-description">Getter</p>
+<div class="long-description"><p>Fetch a configuration parameter for the current environment</p>
 </div>
 <div class="api-section">
 <h5 class="arguments">Arguments</h5>
@@ -296,6 +340,8 @@ the current environmnet (specified via Configuration::getInstance()->setEnvironm
 <dd>false</dd>
 <dt>static</dt>
 <dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
 </dl>
 <div class="clear"></div>
 </div>
@@ -308,13 +354,13 @@ the current environmnet (specified via Configuration::getInstance()->setEnvironm
           )
         </span>
         :
-        <a href="_lib_configuration.html#%5CConfiguration">\Configuration</a></code><p class="short-description">Returns an instance of the configuration singleton</p>
-<div class="long-description">
+        <a href="_lib_BrowserID_configuration.html#%5CConfiguration">\Configuration</a></code><p class="short-description">Get singleton</p>
+<div class="long-description"><p>Returns an instance of the configuration singleton</p>
 </div>
 <div class="api-section">
 <h5 class="output">Output</h5>
 <dl class="return-info">
-<dt><a href="_lib_configuration.html#%5CConfiguration">\Configuration</a></dt>
+<dt><a href="_lib_BrowserID_configuration.html#%5CConfiguration">\Configuration</a></dt>
 <dd><em>The singleton</em></dd>
 </dl>
 <div class="clear"></div>
@@ -329,6 +375,10 @@ the current environmnet (specified via Configuration::getInstance()->setEnvironm
 <dd>false</dd>
 <dt>static</dt>
 <dd>true</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>static</dt>
+<dd></dd>
 </dl>
 <div class="clear"></div>
 </div>
@@ -341,14 +391,14 @@ the current environmnet (specified via Configuration::getInstance()->setEnvironm
           )
         </span>
         :
-        string</code><p class="short-description">Return the port extension if the port is not the standard for the scheme</p>
-<div class="long-description">
+        string</code><p class="short-description">Extract port from URL</p>
+<div class="long-description"><p>Return the port extension if the port is not the standard for the scheme</p>
 </div>
 <div class="api-section">
 <h5 class="output">Output</h5>
 <dl class="return-info">
 <dt>string</dt>
-<dd><em>Portextension for URL</em></dd>
+<dd><em>Port extension for URL</em></dd>
 </dl>
 <div class="clear"></div>
 </div>
@@ -362,6 +412,8 @@ the current environmnet (specified via Configuration::getInstance()->setEnvironm
 <dd>false</dd>
 <dt>static</dt>
 <dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
 </dl>
 <div class="clear"></div>
 </div>
@@ -374,14 +426,14 @@ the current environmnet (specified via Configuration::getInstance()->setEnvironm
           )
         </span>
         :
-        </code><p class="short-description">Select a new environment</p>
-<div class="long-description">
+        </code><p class="short-description">Select environment</p>
+<div class="long-description"><p>Select a new environment to use in the instance</p>
 </div>
 <div class="api-section">
 <h5 class="arguments">Arguments</h5>
 <dl class="argument-info">
 <dt>$env</dt>
-<dd>string<br><em>The environment to select (production, beta, developement)</em>
+<dd>string<br><em>The environment to select (production, developement)</em>
 </dd>
 </dl>
 <div class="clear"></div>
@@ -396,6 +448,8 @@ the current environmnet (specified via Configuration::getInstance()->setEnvironm
 <dd>false</dd>
 <dt>static</dt>
 <dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
 </dl>
 <div class="clear"></div>
 </div>

@@ -1,0 +1,796 @@
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>DocBlox Documentation</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta><link rel="stylesheet" href="css/black-tie/jquery-ui-1.8.2.custom.css" type="text/css"></link><link rel="stylesheet" href="css/jquery.treeview.css" type="text/css"></link><link rel="stylesheet" href="css/theme.css" type="text/css"></link><script type="text/javascript" src="js/jquery-1.4.2.min.js"></script><script type="text/javascript" src="js/jquery-ui-1.8.2.custom.min.js"></script><script type="text/javascript" src="js/jquery.cookie.js"></script><script type="text/javascript" src="js/jquery.treeview.js"></script><script type="text/javascript">
+            $(document).ready(function() {
+                $(".filetree").treeview({
+                    collapsed: true,
+                    persist: "cookie"
+                });
+
+                $("#accordion").accordion({
+                    collapsible: true,
+                    autoHeight:  false,
+                    fillSpace:   true
+                });
+
+                $(".tabs").tabs();
+            });
+        </script></head><body><div xmlns="" id="content">
+<script>
+      $(document).ready(function() {
+        $('dl.function-info, dl.constant-info, dl.property-info').prev().css('cursor', 'pointer');
+        $('dl.function-info, dl.constant-info, dl.property-info').prev().click(function() {
+          if ($(this).next().is(':hidden'))
+          {
+            $(this).children('img')[0].src = 'images/arrow_down.gif';
+          } else
+          {
+            $(this).children('img')[0].src = 'images/arrow_right.gif';
+          }
+          $(this).next().slideToggle();
+        });
+      $('dl.function-info, dl.constant-info, dl.property-info').hide();
+      $('dl.function-info img, dl.constant-info img, dl.property-info img').show();
+      });
+    </script><a name="top"></a><h1 class="file">lib\Algs\RS.php</h1>
+<div class="file_menu">
+<a href="#includes">Includes</a> <a href="#classes">Classes</a> </div>
+<dl class="file-info">
+<dt>author</dt>
+<dd>Benjamin Krämer &lt;benjamin.kraemer@alien-scripts.de&gt;</dd>
+<dt>copyright</dt>
+<dd>Alien-Scripts.de Benjamin Krämer</dd>
+<dt>license</dt>
+<dd>http://www.opensource.org/licenses/mit-license.html  MIT License</dd>
+<dt>package</dt>
+<dd>Algs</dd>
+<dt>subpackage</dt>
+<dd>RS</dd>
+<dt>Classes</dt>
+<dd><a class="class" href="#%5CRSAKeyPair">RSAKeyPair</a></dd>
+<dd><a class="class" href="#%5CRSAPublicKey">RSAPublicKey</a></dd>
+<dd><a class="class" href="#%5CRSASecretKey">RSASecretKey</a></dd>
+</dl>
+<h2>Description</h2>
+<p class="short-description">RSA-SHA Hashing Interface</p>
+<div class="long-description"><p>Offers methods for signing and verifiying data using RSA-SHA</p>
+
+<p>LICENSE: Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.</p>
+</div>
+<a name="classes"></a><a id="\RSAKeyPair"></a><h2 class="class">\RSAKeyPair<div class="to-top"><a href="#top">jump to top</a></div>
+</h2>
+<div class="class">
+<dl class="class-info">
+<dt>Extends from</dt>
+<dd><a href="_lib_BrowserID_algs.html#%5CAbstractKeyPair">\AbstractKeyPair</a></dd>
+<dt>author</dt>
+<dd>Benjamin Krämer &lt;benjamin.kraemer@alien-scripts.de&gt;</dd>
+<dt>package</dt>
+<dd>Algs</dd>
+<dt>subpackage</dt>
+<dd>RS</dd>
+<dt>version</dt>
+<dd>1.0.0</dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Properties
+              </a></dt>
+<dd><a class="property public" href="#%5CRSAKeyPair::%24KEYSIZES">$KEYSIZES</a></dd>
+<dd><a class="property private" href="#%5CRSAKeyPair::%24rsa">$rsa</a></dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Methods
+              </a></dt>
+<dd><a class="method public" href="#%5CRSAKeyPair::_getKeySizeFromRSAKeySize()">_getKeySizeFromRSAKeySize</a></dd>
+<dd><a class="method public" href="#%5CRSAKeyPair::createPublicKey()">createPublicKey</a></dd>
+<dd><a class="method public" href="#%5CRSAKeyPair::createSecretKey()">createSecretKey</a></dd>
+<dd><a class="method public" href="#%5CRSAKeyPair::generate()">generate</a></dd>
+</dl>
+<h3>Description</h3>
+<p class="short-description">RSA key pair</p>
+<div class="long-description"><p>A pair of RSA keys.</p>
+</div>
+<h3>Properties</h3>
+<div>
+<a id="\RSAKeyPair::$KEYSIZES"></a><h4 class="property public">$KEYSIZES<div class="to-top"><a href="#%5CRSAKeyPair">jump to class</a></div>
+</h4>
+<div class="property">
+<code>array <span class="highlight">$KEYSIZES</span> = 'array'</code><p class="short-description">Allowed keysizes</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>array<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd>array</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>static</dt>
+<dd></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\RSAKeyPair::$rsa"></a><h4 class="property private">$rsa<div class="to-top"><a href="#%5CRSAKeyPair">jump to class</a></div>
+</h4>
+<div class="property">
+<code><a href="_lib_Crypt_RSA.html#%5CCrypt_RSA">\Crypt_RSA</a> <span class="highlight">$rsa</span> = ''</code><p class="short-description">RSA instance</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>
+<a href="_lib_Crypt_RSA.html#%5CCrypt_RSA">\Crypt_RSA</a><br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+<h3>Methods</h3>
+<div>
+<a id="\RSAKeyPair::_getKeySizeFromRSAKeySize()"></a><h4 class="method public">_getKeySizeFromRSAKeySize<div class="to-top"><a href="#RSAKeyPair">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_getKeySizeFromRSAKeySize</span><span class="nb-faded-text">(
+          int $bits
+          )
+        </span>
+        :
+        int</code><p class="short-description">Get keysize</p>
+<div class="long-description"><p>Gets the keysize depending on the bit count of the rsa key.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$bits</dt>
+<dd>int<br><em>Amount of bits</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>int</dt>
+<dd><em>Keysize</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>statis</dt>
+<dd></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\RSAKeyPair::createPublicKey()"></a><h4 class="method public">createPublicKey<div class="to-top"><a href="#RSAKeyPair">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">createPublicKey</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <a href="_lib_BrowserID_algs.html#%5CAbstractPublicKey">\AbstractPublicKey</a></code><p class="short-description">Creates public key</p>
+<div class="long-description"><p>Creates a public key using the algorithm of the extended class.</p>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_BrowserID_algs.html#%5CAbstractPublicKey">\AbstractPublicKey</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>see</dt>
+<dd>AbstractKeyPair::createPublicKey();</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\RSAKeyPair::createSecretKey()"></a><h4 class="method public">createSecretKey<div class="to-top"><a href="#RSAKeyPair">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">createSecretKey</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <a href="_lib_BrowserID_algs.html#%5CAbstractSecretKey">\AbstractSecretKey</a></code><p class="short-description">Creates secret key</p>
+<div class="long-description"><p>Creates a secret key using the algorithm of the extended class.</p>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_BrowserID_algs.html#%5CAbstractSecretKey">\AbstractSecretKey</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>see</dt>
+<dd>AbstractKeyPair::createSecretKey();</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\RSAKeyPair::generate()"></a><h4 class="method public">generate<div class="to-top"><a href="#RSAKeyPair">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">generate</span><span class="nb-faded-text">(
+          int $keysize
+          )
+        </span>
+        :
+        <a href="_lib_BrowserID_algs.html#%5CAbstractKeyPair">\AbstractKeyPair</a></code><p class="short-description">Generate keypair</p>
+<div class="long-description"><p>Generates a keypair for a given keysize in bits</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$keysize</dt>
+<dd>int<br><em>Keysize in bits</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_BrowserID_algs.html#%5CAbstractKeyPair">\AbstractKeyPair</a></dt>
+<dd><em>Returning an instance of the key pair</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+<dt>see</dt>
+<dd>AbstractKeyPair::generate($keysize);</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+</div>
+<a id="\RSAPublicKey"></a><h2 class="class">\RSAPublicKey<div class="to-top"><a href="#top">jump to top</a></div>
+</h2>
+<div class="class">
+<dl class="class-info">
+<dt>Extends from</dt>
+<dd><a href="_lib_BrowserID_algs.html#%5CAbstractPublicKey">\AbstractPublicKey</a></dd>
+<dt>author</dt>
+<dd>Benjamin Krämer &lt;benjamin.kraemer@alien-scripts.de&gt;</dd>
+<dt>package</dt>
+<dd>Algs</dd>
+<dt>subpackage</dt>
+<dd>RS</dd>
+<dt>version</dt>
+<dd>1.0.0</dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Properties
+              </a></dt>
+<dd><a class="property private" href="#%5CRSAPublicKey::%24rsa">$rsa</a></dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Methods
+              </a></dt>
+<dd><a class="method public" href="#%5CRSAPublicKey::__construct()">__construct</a></dd>
+<dd><a class="method protected" href="#%5CRSAPublicKey::deserializeFromObject()">deserializeFromObject</a></dd>
+<dd><a class="method protected" href="#%5CRSAPublicKey::serializeToObject()">serializeToObject</a></dd>
+<dd><a class="method public" href="#%5CRSAPublicKey::verify()">verify</a></dd>
+</dl>
+<h3>Description</h3>
+<p class="short-description">RSA public key</p>
+<div class="long-description"><p>A public key using the RSA algorithm.</p>
+</div>
+<h3>Properties</h3>
+<div>
+<a id="\RSAPublicKey::$rsa"></a><h4 class="property private">$rsa<div class="to-top"><a href="#%5CRSAPublicKey">jump to class</a></div>
+</h4>
+<div class="property">
+<code><a href="_lib_Crypt_RSA.html#%5CCrypt_RSA">\Crypt_RSA</a> <span class="highlight">$rsa</span> = ''</code><p class="short-description">RSA instance</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>
+<a href="_lib_Crypt_RSA.html#%5CCrypt_RSA">\Crypt_RSA</a><br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+<h3>Methods</h3>
+<div>
+<a id="\RSAPublicKey::__construct()"></a><h4 class="method public">__construct<div class="to-top"><a href="#RSAPublicKey">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">__construct</span><span class="nb-faded-text">(
+          string $key
+              =
+              null, \type $keysize
+              =
+              null
+          )
+        </span>
+        :
+        </code><p class="short-description">Constructor</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$key</dt>
+<dd>string<br><em>Public key in PKCS#1 or raw format</em>
+</dd>
+<dt>$keysize</dt>
+<dd>\type<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\RSAPublicKey::deserializeFromObject()"></a><h4 class="method protected">deserializeFromObject<div class="to-top"><a href="#RSAPublicKey">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">deserializeFromObject</span><span class="nb-faded-text">(
+           $obj
+          )
+        </span>
+        :
+        <a href="_lib_BrowserID_algs.html#%5CAbstractKeyInstance">\AbstractKeyInstance</a></code><p class="short-description">Deserialize from object</p>
+<div class="long-description"><p>Deserialize parameters from the parameter object depending on the algorithmic specific implementation.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$obj</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_BrowserID_algs.html#%5CAbstractKeyInstance">\AbstractKeyInstance</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>protected</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>see</dt>
+<dd>AbstractKeyInstance::deserializeFromObject($obj)</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\RSAPublicKey::serializeToObject()"></a><h4 class="method protected">serializeToObject<div class="to-top"><a href="#RSAPublicKey">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">serializeToObject</span><span class="nb-faded-text">(
+           $obj
+          )
+        </span>
+        :
+        </code><p class="short-description">Serialize to object</p>
+<div class="long-description"><p>Serializes parameters of the instance depending on the algorithmic specific
+implementation into the parameter object.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$obj</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>protected</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>see</dt>
+<dd>AbstractKeyInstance::serializeToObject($obj)</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\RSAPublicKey::verify()"></a><h4 class="method public">verify<div class="to-top"><a href="#RSAPublicKey">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">verify</span><span class="nb-faded-text">(
+          string $message, string $signature
+          )
+        </span>
+        :
+        boolean</code><p class="short-description">Verify message</p>
+<div class="long-description"><p>Verifies a message using a signature.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$message</dt>
+<dd>string<br><em>The message to be verified</em>
+</dd>
+<dt>$signature</dt>
+<dd>string<br><em>The signature to be validated</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>boolean</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>see</dt>
+<dd>AbstractPublicKey::verify($message, $signature)</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+</div>
+<a id="\RSASecretKey"></a><h2 class="class">\RSASecretKey<div class="to-top"><a href="#top">jump to top</a></div>
+</h2>
+<div class="class">
+<dl class="class-info">
+<dt>Extends from</dt>
+<dd><a href="_lib_BrowserID_algs.html#%5CAbstractSecretKey">\AbstractSecretKey</a></dd>
+<dt>author</dt>
+<dd>Benjamin Krämer &lt;benjamin.kraemer@alien-scripts.de&gt;</dd>
+<dt>package</dt>
+<dd>Algs</dd>
+<dt>subpackage</dt>
+<dd>RS</dd>
+<dt>version</dt>
+<dd>1.0.0</dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Properties
+              </a></dt>
+<dd><a class="property private" href="#%5CRSASecretKey::%24rsa">$rsa</a></dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Methods
+              </a></dt>
+<dd><a class="method public" href="#%5CRSASecretKey::__construct()">__construct</a></dd>
+<dd><a class="method protected" href="#%5CRSASecretKey::deserializeFromObject()">deserializeFromObject</a></dd>
+<dd><a class="method protected" href="#%5CRSASecretKey::serializeToObject()">serializeToObject</a></dd>
+<dd><a class="method public" href="#%5CRSASecretKey::sign()">sign</a></dd>
+</dl>
+<h3>Description</h3>
+<p class="short-description">RSA secret key</p>
+<div class="long-description"><p>A secret key using the RSA algorithm.</p>
+</div>
+<h3>Properties</h3>
+<div>
+<a id="\RSASecretKey::$rsa"></a><h4 class="property private">$rsa<div class="to-top"><a href="#%5CRSASecretKey">jump to class</a></div>
+</h4>
+<div class="property">
+<code><a href="_lib_Crypt_RSA.html#%5CCrypt_RSA">\Crypt_RSA</a> <span class="highlight">$rsa</span> = ''</code><p class="short-description">RSA instance</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>
+<a href="_lib_Crypt_RSA.html#%5CCrypt_RSA">\Crypt_RSA</a><br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+<h3>Methods</h3>
+<div>
+<a id="\RSASecretKey::__construct()"></a><h4 class="method public">__construct<div class="to-top"><a href="#RSASecretKey">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">__construct</span><span class="nb-faded-text">(
+          string $key
+              =
+              null, \type $keysize
+              =
+              null
+          )
+        </span>
+        :
+        </code><p class="short-description">Constructor</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$key</dt>
+<dd>string<br><em>Secret key in PKCS#1 or raw format</em>
+</dd>
+<dt>$keysize</dt>
+<dd>\type<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\RSASecretKey::deserializeFromObject()"></a><h4 class="method protected">deserializeFromObject<div class="to-top"><a href="#RSASecretKey">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">deserializeFromObject</span><span class="nb-faded-text">(
+           $obj
+          )
+        </span>
+        :
+        <a href="_lib_BrowserID_algs.html#%5CAbstractKeyInstance">\AbstractKeyInstance</a></code><p class="short-description">Deserialize from object</p>
+<div class="long-description"><p>Deserialize parameters from the parameter object depending on the algorithmic specific implementation.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$obj</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_BrowserID_algs.html#%5CAbstractKeyInstance">\AbstractKeyInstance</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>protected</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>see</dt>
+<dd>AbstractKeyInstance::deserializeFromObject($obj)</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\RSASecretKey::serializeToObject()"></a><h4 class="method protected">serializeToObject<div class="to-top"><a href="#RSASecretKey">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">serializeToObject</span><span class="nb-faded-text">(
+           $obj
+          )
+        </span>
+        :
+        </code><p class="short-description">Serialize to object</p>
+<div class="long-description"><p>Serializes parameters of the instance depending on the algorithmic specific
+implementation into the parameter object.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$obj</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>protected</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>see</dt>
+<dd>AbstractKeyInstance::serializeToObject($obj)</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\RSASecretKey::sign()"></a><h4 class="method public">sign<div class="to-top"><a href="#RSASecretKey">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">sign</span><span class="nb-faded-text">(
+          string $message
+          )
+        </span>
+        :
+        string</code><p class="short-description">Sign message</p>
+<div class="long-description"><p>Generate a signature for the message.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$message</dt>
+<dd>string<br><em>The message</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>string</dt>
+<dd><em>The signature</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>see</dt>
+<dd>AbstractSecretKey::sign($message)</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<small xmlns="" class="footer">Documentation was generated by <a href="http://docblox-project.org">DocBlox 0.12.0</a>.
+    </small></body></html>

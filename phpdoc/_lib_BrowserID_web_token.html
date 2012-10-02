@@ -1,0 +1,648 @@
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>DocBlox Documentation</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta><link rel="stylesheet" href="css/black-tie/jquery-ui-1.8.2.custom.css" type="text/css"></link><link rel="stylesheet" href="css/jquery.treeview.css" type="text/css"></link><link rel="stylesheet" href="css/theme.css" type="text/css"></link><script type="text/javascript" src="js/jquery-1.4.2.min.js"></script><script type="text/javascript" src="js/jquery-ui-1.8.2.custom.min.js"></script><script type="text/javascript" src="js/jquery.cookie.js"></script><script type="text/javascript" src="js/jquery.treeview.js"></script><script type="text/javascript">
+            $(document).ready(function() {
+                $(".filetree").treeview({
+                    collapsed: true,
+                    persist: "cookie"
+                });
+
+                $("#accordion").accordion({
+                    collapsible: true,
+                    autoHeight:  false,
+                    fillSpace:   true
+                });
+
+                $(".tabs").tabs();
+            });
+        </script></head><body><div xmlns="" id="content">
+<script>
+      $(document).ready(function() {
+        $('dl.function-info, dl.constant-info, dl.property-info').prev().css('cursor', 'pointer');
+        $('dl.function-info, dl.constant-info, dl.property-info').prev().click(function() {
+          if ($(this).next().is(':hidden'))
+          {
+            $(this).children('img')[0].src = 'images/arrow_down.gif';
+          } else
+          {
+            $(this).children('img')[0].src = 'images/arrow_right.gif';
+          }
+          $(this).next().slideToggle();
+        });
+      $('dl.function-info, dl.constant-info, dl.property-info').hide();
+      $('dl.function-info img, dl.constant-info img, dl.property-info img').show();
+      });
+    </script><a name="top"></a><h1 class="file">lib\BrowserID\web_token.php</h1>
+<div class="file_menu">
+<a href="#includes">Includes</a> <a href="#classes">Classes</a> </div>
+<dl class="file-info">
+<dt>author</dt>
+<dd>Benjamin Krämer &lt;benjamin.kraemer@alien-scripts.de&gt;</dd>
+<dt>copyright</dt>
+<dd>Alien-Scripts.de Benjamin Krämer</dd>
+<dt>license</dt>
+<dd>http://www.opensource.org/licenses/mit-license.html  MIT License</dd>
+<dt>package</dt>
+<dd>BrowserID</dd>
+<dt>subpackage</dt>
+<dd>WebToken</dd>
+<dt>Classes</dt>
+<dd><a class="class" href="#%5CWebToken">WebToken</a></dd>
+<dd><a class="class" href="#%5CMalformedWebTokenException">MalformedWebTokenException</a></dd>
+</dl>
+<h2>Description</h2>
+<p class="short-description">JSON Web Token implementation</p>
+<div class="long-description"><p>Implementation of the JWT protocol based on:
+http://self-issued.info/docs/draft-jones-json-web-token-01.html</p>
+
+<p>This code is also based on the scripts found at jwcryptos's github repository:
+https://github.com/mozilla/jwcrypto/blob/master/lib/jwcrypto.js</p>
+
+<p>LICENSE: Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.</p>
+</div>
+<a name="classes"></a><a id="\MalformedWebTokenException"></a><h2 class="class">\MalformedWebTokenException<div class="to-top"><a href="#top">jump to top</a></div>
+</h2>
+<div class="class">
+<dl class="class-info">
+<dt>Extends from</dt>
+<dd><a href="http://php.net/manual/en/class.exception.php">\Exception</a></dd>
+<dt>author</dt>
+<dd>Benjamin Krämer &lt;benjamin.kraemer@alien-scripts.de&gt;</dd>
+<dt>package</dt>
+<dd>BrowserID</dd>
+<dt>subpackage</dt>
+<dd>WebToken</dd>
+<dt>version</dt>
+<dd>1.0.0</dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Methods
+              </a></dt>
+<dd><a class="method public" href="#%5CMalformedWebTokenException::__construct()">__construct</a></dd>
+</dl>
+<h3>Description</h3>
+<p class="short-description">Malformed webtoken</p>
+<div class="long-description"><p>The webtoken is not well-formed</p>
+</div>
+<h3>Methods</h3>
+<div>
+<a id="\MalformedWebTokenException::__construct()"></a><h4 class="method public">__construct<div class="to-top"><a href="#MalformedWebTokenException">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">__construct</span><span class="nb-faded-text">(
+          string $message, int $code
+              =
+              0
+          )
+        </span>
+        :
+        </code><p class="short-description"></p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$message</dt>
+<dd>string<br><em>The error message</em>
+</dd>
+<dt>$code</dt>
+<dd>int<br><em>An error code</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+</div>
+<a id="\WebToken"></a><h2 class="class">\WebToken<div class="to-top"><a href="#top">jump to top</a></div>
+</h2>
+<div class="class">
+<dl class="class-info">
+<dt>author</dt>
+<dd>Benjamin Krämer &lt;benjamin.kraemer@alien-scripts.de&gt;</dd>
+<dt>package</dt>
+<dd>BrowserID</dd>
+<dt>subpackage</dt>
+<dd>WebToken</dd>
+<dt>version</dt>
+<dd>1.0.0</dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Properties
+              </a></dt>
+<dd><a class="property private" href="#%5CWebToken::%24cryptoSegment">$cryptoSegment</a></dd>
+<dd><a class="property private" href="#%5CWebToken::%24headerSegment">$headerSegment</a></dd>
+<dd><a class="property private" href="#%5CWebToken::%24payloadSegment">$payloadSegment</a></dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Methods
+              </a></dt>
+<dd><a class="method public" href="#%5CWebToken::__construct()">__construct</a></dd>
+<dd><a class="method public" href="#%5CWebToken::getCryptoSegment()">getCryptoSegment</a></dd>
+<dd><a class="method public" href="#%5CWebToken::getHeader()">getHeader</a></dd>
+<dd><a class="method public" href="#%5CWebToken::getHeaderSegment()">getHeaderSegment</a></dd>
+<dd><a class="method public" href="#%5CWebToken::getPayload()">getPayload</a></dd>
+<dd><a class="method public" href="#%5CWebToken::getPayloadSegment()">getPayloadSegment</a></dd>
+<dd><a class="method public" href="#%5CWebToken::getSignature()">getSignature</a></dd>
+<dd><a class="method public" href="#%5CWebToken::parse()">parse</a></dd>
+<dd><a class="method public" href="#%5CWebToken::serialize()">serialize</a></dd>
+<dd><a class="method public" href="#%5CWebToken::verify()">verify</a></dd>
+</dl>
+<h3>Description</h3>
+<p class="short-description">JSON Web Token implementation</p>
+<div class="long-description"><p>Implementation of the JWT protocol based on:
+http://self-issued.info/docs/draft-jones-json-web-token-01.html</p>
+</div>
+<h3>Properties</h3>
+<div>
+<a id="\WebToken::$cryptoSegment"></a><h4 class="property private">$cryptoSegment<div class="to-top"><a href="#%5CWebToken">jump to class</a></div>
+</h4>
+<div class="property">
+<code>string <span class="highlight">$cryptoSegment</span> = ''</code><p class="short-description">The signature generated from the payload using the algorithm
+given in the header</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>string<br><em>The signature</em>
+</dd>
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\WebToken::$headerSegment"></a><h4 class="property private">$headerSegment<div class="to-top"><a href="#%5CWebToken">jump to class</a></div>
+</h4>
+<div class="property">
+<code>array <span class="highlight">$headerSegment</span> = ''</code><p class="short-description">The header segment of the web token on parsing</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>array<br><em>A list of header entries (like the algorithm)</em>
+</dd>
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\WebToken::$payloadSegment"></a><h4 class="property private">$payloadSegment<div class="to-top"><a href="#%5CWebToken">jump to class</a></div>
+</h4>
+<div class="property">
+<code>string <span class="highlight">$payloadSegment</span> = ''</code><p class="short-description">The payload that was signed</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>string<br><em>The data</em>
+</dd>
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+<h3>Methods</h3>
+<div>
+<a id="\WebToken::__construct()"></a><h4 class="method public">__construct<div class="to-top"><a href="#WebToken">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">__construct</span><span class="nb-faded-text">(
+          string $object
+          )
+        </span>
+        :
+        </code><p class="short-description">Constructor</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$object</dt>
+<dd>string<br><em>The data to be signed</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\WebToken::getCryptoSegment()"></a><h4 class="method public">getCryptoSegment<div class="to-top"><a href="#WebToken">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">getCryptoSegment</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        string</code><p class="short-description">Crypto segment</p>
+<div class="long-description"><p>Returns the serialized crypto segment of the token.</p>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>string</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\WebToken::getHeader()"></a><h4 class="method public">getHeader<div class="to-top"><a href="#WebToken">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">getHeader</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        object</code><p class="short-description">Header data</p>
+<div class="long-description"><p>Returns the data of the token header, normally containing the algorithm used.</p>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>object</dt>
+<dd><em>An object of header data</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\WebToken::getHeaderSegment()"></a><h4 class="method public">getHeaderSegment<div class="to-top"><a href="#WebToken">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">getHeaderSegment</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        string</code><p class="short-description">Header segment</p>
+<div class="long-description"><p>Returns the serialized header segment of the token.</p>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>string</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\WebToken::getPayload()"></a><h4 class="method public">getPayload<div class="to-top"><a href="#WebToken">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">getPayload</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        object</code><p class="short-description">Payload data</p>
+<div class="long-description"><p>Returns the payload of the token that was to be serialized and signed.</p>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>object</dt>
+<dd><em>An object of payload data</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\WebToken::getPayloadSegment()"></a><h4 class="method public">getPayloadSegment<div class="to-top"><a href="#WebToken">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">getPayloadSegment</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        string</code><p class="short-description">Payload segment</p>
+<div class="long-description"><p>Returns the serialized payload segment of the token.</p>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>string</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\WebToken::getSignature()"></a><h4 class="method public">getSignature<div class="to-top"><a href="#WebToken">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">getSignature</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        string</code><p class="short-description">Signature</p>
+<div class="long-description"><p>Returns the signature of the token as binary data.</p>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>string</dt>
+<dd><em>The signature as binary data</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\WebToken::parse()"></a><h4 class="method public">parse<div class="to-top"><a href="#WebToken">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">parse</span><span class="nb-faded-text">(
+          string $input
+          )
+        </span>
+        :
+        <a href="_lib_BrowserID_web_token.html#%5CWebToken">\WebToken</a></code><p class="short-description">Parse serialized JWT data</p>
+<div class="long-description"><p>Generate a Webtoken object for parsing JWT data.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$input</dt>
+<dd>string<br><em>The JSON Web Token</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_BrowserID_web_token.html#%5CWebToken">\WebToken</a></dt>
+<dd><em>A Webtoken instance for verification</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>static</dt>
+<dd></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\WebToken::serialize()"></a><h4 class="method public">serialize<div class="to-top"><a href="#WebToken">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">serialize</span><span class="nb-faded-text">(
+          string $key
+          )
+        </span>
+        :
+        string</code><p class="short-description">Serialize web token</p>
+<div class="long-description"><p>Serializes data as JWT using the defined algorithm and data and signed
+with the key.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$key</dt>
+<dd>string<br><em>The key used for hashing</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>string</dt>
+<dd><em>Serialized web token</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\WebToken::verify()"></a><h4 class="method public">verify<div class="to-top"><a href="#WebToken">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">verify</span><span class="nb-faded-text">(
+          <a href="_lib_BrowserID_algs.html#%5CAbstractPublicKey">\AbstractPublicKey</a> $key
+          )
+        </span>
+        :
+        bool</code><p class="short-description">Verify web token</p>
+<div class="long-description"><p>Verifies a Webtoken against an public key.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$key</dt>
+<dd>\AbstractPublicKey<br><em>The key used to verify the webtoken</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>bool</dt>
+<dd><em>true, if the webtoken is valid</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<small xmlns="" class="footer">Documentation was generated by <a href="http://docblox-project.org">DocBlox 0.12.0</a>.
+    </small></body></html>

@@ -1,0 +1,532 @@
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>DocBlox Documentation</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta><link rel="stylesheet" href="css/black-tie/jquery-ui-1.8.2.custom.css" type="text/css"></link><link rel="stylesheet" href="css/jquery.treeview.css" type="text/css"></link><link rel="stylesheet" href="css/theme.css" type="text/css"></link><script type="text/javascript" src="js/jquery-1.4.2.min.js"></script><script type="text/javascript" src="js/jquery-ui-1.8.2.custom.min.js"></script><script type="text/javascript" src="js/jquery.cookie.js"></script><script type="text/javascript" src="js/jquery.treeview.js"></script><script type="text/javascript">
+            $(document).ready(function() {
+                $(".filetree").treeview({
+                    collapsed: true,
+                    persist: "cookie"
+                });
+
+                $("#accordion").accordion({
+                    collapsible: true,
+                    autoHeight:  false,
+                    fillSpace:   true
+                });
+
+                $(".tabs").tabs();
+            });
+        </script></head><body><div xmlns="" id="content">
+<script>
+      $(document).ready(function() {
+        $('dl.function-info, dl.constant-info, dl.property-info').prev().css('cursor', 'pointer');
+        $('dl.function-info, dl.constant-info, dl.property-info').prev().click(function() {
+          if ($(this).next().is(':hidden'))
+          {
+            $(this).children('img')[0].src = 'images/arrow_down.gif';
+          } else
+          {
+            $(this).children('img')[0].src = 'images/arrow_right.gif';
+          }
+          $(this).next().slideToggle();
+        });
+      $('dl.function-info, dl.constant-info, dl.property-info').hide();
+      $('dl.function-info img, dl.constant-info img, dl.property-info img').show();
+      });
+    </script><a name="top"></a><h1 class="file">lib\BrowserID\primary.php</h1>
+<div class="file_menu">
+<a href="#includes">Includes</a> <a href="#classes">Classes</a> </div>
+<dl class="file-info">
+<dt>author</dt>
+<dd>Benjamin Krämer &lt;benjamin.kraemer@alien-scripts.de&gt;</dd>
+<dt>copyright</dt>
+<dd>Alien-Scripts.de Benjamin Krämer</dd>
+<dt>license</dt>
+<dd>http://www.opensource.org/licenses/mit-license.html  MIT License</dd>
+<dt>package</dt>
+<dd>BrowserID</dd>
+<dt>subpackage</dt>
+<dd>Primary</dd>
+<dt>Classes</dt>
+<dd><a class="class" href="#%5CPrimary">Primary</a></dd>
+</dl>
+<h2>Description</h2>
+<p class="short-description">Identity provider</p>
+<div class="long-description"><p>LICENSE: Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.</p>
+</div>
+<a name="classes"></a><a id="\Primary"></a><h2 class="class">\Primary<div class="to-top"><a href="#top">jump to top</a></div>
+</h2>
+<div class="class">
+<dl class="class-info">
+<dt>author</dt>
+<dd>Benjamin Krämer &lt;benjamin.kraemer@alien-scripts.de&gt;</dd>
+<dt>package</dt>
+<dd>BrowserID</dd>
+<dt>subpackage</dt>
+<dd>Primary</dd>
+<dt>version</dt>
+<dd>1.0.0</dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Constants
+              </a></dt>
+<dd><a class="constant" href="#%5CPrimary::MAX_AUTHORITY_DELEGATIONS">MAX_AUTHORITY_DELEGATIONS</a></dd>
+<dd><a class="constant" href="#%5CPrimary::WELL_KNOWN_URL">WELL_KNOWN_URL</a></dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Properties
+              </a></dt>
+<dd><a class="property private" href="#%5CPrimary::%24g_shim_cache">$g_shim_cache</a></dd>
+<dd><a class="property private" href="#%5CPrimary::%24initialized">$initialized</a></dd>
+<dd><a class="property private" href="#%5CPrimary::%24public_key">$public_key</a></dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Methods
+              </a></dt>
+<dd><a class="method public" href="#%5CPrimary::checkSupport()">checkSupport</a></dd>
+<dd><a class="method public" href="#%5CPrimary::delegatesAuthority()">delegatesAuthority</a></dd>
+<dd><a class="method public" href="#%5CPrimary::getPublicKey()">getPublicKey</a></dd>
+<dd><a class="method public" href="#%5CPrimary::getWellKnown()">getWellKnown</a></dd>
+<dd><a class="method public" href="#%5CPrimary::initialize()">initialize</a></dd>
+<dd><a class="method public" href="#%5CPrimary::parseWellKnownBody()">parseWellKnownBody</a></dd>
+</dl>
+<h3>Description</h3>
+<p class="short-description">Identity Provider (Primary)</p>
+<div class="long-description"><p>To verify the validity of certificates, the public keys of the identity providers
+have to be well-known. Therefore every identity provider has offer an /.well-known/browserid
+under his domain.</p>
+
+<p>This class can check a identity provider using the 'Basic Support Document', offering his
+public key, an authentication- and an provisioning-url for his own signed identity
+certificates or the 'Delegated Support Document' stating the authority which takes care
+of the signing and key holding.</p>
+</div>
+<h3>Constants</h3>
+<div>
+<a id="\Primary::WELL_KNOWN_URL"></a><h4 class="constant">WELL_KNOWN_URL<div class="to-top"><a href="#Primary">jump to class</a></div>
+</h4>
+<div class="constant">
+<code> <span class="highlight">WELL_KNOWN_URL</span> = '/.well-known/browserid'
+      </code><p class="short-description">The path to the well-known document</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>/.well-known/browserid</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Primary::MAX_AUTHORITY_DELEGATIONS"></a><h4 class="constant">MAX_AUTHORITY_DELEGATIONS<div class="to-top"><a href="#Primary">jump to class</a></div>
+</h4>
+<div class="constant">
+<code> <span class="highlight">MAX_AUTHORITY_DELEGATIONS</span> = '6'
+      </code><p class="short-description">The maximum number of hops supported for cert chains</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>6</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+<h3>Properties</h3>
+<div>
+<a id="\Primary::$g_shim_cache"></a><h4 class="property private">$g_shim_cache<div class="to-top"><a href="#%5CPrimary">jump to class</a></div>
+</h4>
+<div class="property">
+<code>array <span class="highlight">$g_shim_cache</span> = 'array'</code><p class="short-description">Shimmed primaries</p>
+<div class="long-description"><p>A list of shimmed primaries. Used for local developement or standard
+certificates to boost up key retrieval.</p>
+
+<p>Every entry of the array contains the 'origin' where the traffic should be
+directed to and a 'body' where the public key is stored.</p>
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>array<br><em>Indixed by the domain name</em>
+</dd>
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>default</dt>
+<dd>array</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>static</dt>
+<dd></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Primary::$initialized"></a><h4 class="property private">$initialized<div class="to-top"><a href="#%5CPrimary">jump to class</a></div>
+</h4>
+<div class="property">
+<code>boolean <span class="highlight">$initialized</span> = 'false'</code><p class="short-description">Initialization status</p>
+<div class="long-description"><p>This shows if the class and static variables are already initialized.</p>
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>boolean<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>default</dt>
+<dd>false</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>static</dt>
+<dd></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Primary::$public_key"></a><h4 class="property private">$public_key<div class="to-top"><a href="#%5CPrimary">jump to class</a></div>
+</h4>
+<div class="property">
+<code><a href="_lib_BrowserID_algs.html#%5CAbstractPublicKey">\AbstractPublicKey</a> <span class="highlight">$public_key</span> = 'null'</code><p class="short-description">Public key of the Identity Provider</p>
+<div class="long-description"><p>If this server is used as identity provider, this localy public key is used
+for verification instead of using the well-known protocol.</p>
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>
+<a href="_lib_BrowserID_algs.html#%5CAbstractPublicKey">\AbstractPublicKey</a><br><em>Public key of this identity provider</em>
+</dd>
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>default</dt>
+<dd>null</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>static</dt>
+<dd></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+<h3>Methods</h3>
+<div>
+<a id="\Primary::checkSupport()"></a><h4 class="method public">checkSupport<div class="to-top"><a href="#Primary">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">checkSupport</span><span class="nb-faded-text">(
+          string $domain, array $delegates
+              =
+              null
+          )
+        </span>
+        :
+        array</code><p class="short-description">Check domain support</p>
+<div class="long-description"><p>Checks if the given domain supports BrowserID/Persona and offers a support document.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$domain</dt>
+<dd>string<br><em>The name of the domain</em>
+</dd>
+<dt>$delegates</dt>
+<dd>array<br><em>A list of already seen domains while delegating</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>array</dt>
+<dd><em>@see Primary::getWellKnown() or null if not supported</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>static</dt>
+<dd></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Primary::delegatesAuthority()"></a><h4 class="method public">delegatesAuthority<div class="to-top"><a href="#Primary">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">delegatesAuthority</span><span class="nb-faded-text">(
+          string $emailDomain, string $issuingDomain
+          )
+        </span>
+        :
+        \type</code><p class="short-description">Check for authority delegation</p>
+<div class="long-description"><p>Checking if the issuing domain is allowed to issue identity certificates for
+this email  domain. This should only be the case if the issuing domain is
+Mozilla's server or if the email domain is delegating to the issuing domain.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$emailDomain</dt>
+<dd>string<br><em>The domain of the mail, the expected issuer</em>
+</dd>
+<dt>$issuingDomain</dt>
+<dd>string<br><em>The domain that issued the assertion</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>\type</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Primary::getPublicKey()"></a><h4 class="method public">getPublicKey<div class="to-top"><a href="#Primary">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">getPublicKey</span><span class="nb-faded-text">(
+          string $domain
+          )
+        </span>
+        :
+        <a href="_lib_BrowserID_algs.html#%5CAbstractPublicKey">\AbstractPublicKey</a></code><p class="short-description">Retrieve public key for domain</p>
+<div class="long-description"><p>Gets the public key for a domain that acts as Persona Identity Provider</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$domain</dt>
+<dd>string<br><em>The domain</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_BrowserID_algs.html#%5CAbstractPublicKey">\AbstractPublicKey</a></dt>
+<dd><em>Instance of the public key</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>static</dt>
+<dd></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Primary::getWellKnown()"></a><h4 class="method public">getWellKnown<div class="to-top"><a href="#Primary">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">getWellKnown</span><span class="nb-faded-text">(
+          string $domain, array $delegates
+          )
+        </span>
+        :
+        array</code><p class="short-description">Well-Known document retrieval</p>
+<div class="long-description"><p>Get the body of the well-known document of a domain.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$domain</dt>
+<dd>string<br><em>The domain for which the well-known document should be retrieved</em>
+</dd>
+<dt>$delegates</dt>
+<dd>array<br><em>A list of already seen domains while delegating</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>array</dt>
+<dd><em>Containing the content of the document as &#039;body&#039;, &#039;domain&#039; and the already seen deletages as &#039;delegates&#039;</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>static</dt>
+<dd></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Primary::initialize()"></a><h4 class="method public">initialize<div class="to-top"><a href="#Primary">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">initialize</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        </code><p class="short-description">Initialization routine</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>static</dt>
+<dd></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Primary::parseWellKnownBody()"></a><h4 class="method public">parseWellKnownBody<div class="to-top"><a href="#Primary">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">parseWellKnownBody</span><span class="nb-faded-text">(
+          string $body, string $domain, array $delegates
+          )
+        </span>
+        :
+        array</code><p class="short-description">Well-Known document parsing</p>
+<div class="long-description"><p>Parses the reply of the well-known document, verifying that all needed
+parts are contained. 'Basic Support Documents' have to implement the keys
+'public-key', 'authentication' and 'provisioning'. 'Delegated Support Documents'
+only need an 'authority' entry.</p>
+
+<p>This is called recursive for delegated identity providers.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$body</dt>
+<dd>string<br><em>The body of the well-known document</em>
+</dd>
+<dt>$domain</dt>
+<dd>string<br><em>The domain the body belongs to</em>
+</dd>
+<dt>$delegates</dt>
+<dd>array<br><em>A list of already seen domains while delegating</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>array</dt>
+<dd><em>Containing the string &#039;publicKey&#039; (the domains public key) and the array &#039;urls&#039; (with the URL of the authentification document as &#039;auth&#039; and the URL of the provisioning document as &#039;prov&#039;)</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>static</dt>
+<dd></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<small xmlns="" class="footer">Documentation was generated by <a href="http://docblox-project.org">DocBlox 0.12.0</a>.
+    </small></body></html>

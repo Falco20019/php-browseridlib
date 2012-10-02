@@ -1,0 +1,492 @@
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>DocBlox Documentation</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta><link rel="stylesheet" href="css/black-tie/jquery-ui-1.8.2.custom.css" type="text/css"></link><link rel="stylesheet" href="css/jquery.treeview.css" type="text/css"></link><link rel="stylesheet" href="css/theme.css" type="text/css"></link><script type="text/javascript" src="js/jquery-1.4.2.min.js"></script><script type="text/javascript" src="js/jquery-ui-1.8.2.custom.min.js"></script><script type="text/javascript" src="js/jquery.cookie.js"></script><script type="text/javascript" src="js/jquery.treeview.js"></script><script type="text/javascript">
+            $(document).ready(function() {
+                $(".filetree").treeview({
+                    collapsed: true,
+                    persist: "cookie"
+                });
+
+                $("#accordion").accordion({
+                    collapsible: true,
+                    autoHeight:  false,
+                    fillSpace:   true
+                });
+
+                $(".tabs").tabs();
+            });
+        </script></head><body><div xmlns="" id="content">
+<script>
+      $(document).ready(function() {
+        $('dl.function-info, dl.constant-info, dl.property-info').prev().css('cursor', 'pointer');
+        $('dl.function-info, dl.constant-info, dl.property-info').prev().click(function() {
+          if ($(this).next().is(':hidden'))
+          {
+            $(this).children('img')[0].src = 'images/arrow_down.gif';
+          } else
+          {
+            $(this).children('img')[0].src = 'images/arrow_right.gif';
+          }
+          $(this).next().slideToggle();
+        });
+      $('dl.function-info, dl.constant-info, dl.property-info').hide();
+      $('dl.function-info img, dl.constant-info img, dl.property-info img').show();
+      });
+    </script><a name="top"></a><h1 class="file">lib\Crypt\DSA.php</h1>
+<div class="file_menu">
+<a href="#includes">Includes</a> <a href="#classes">Classes</a> </div>
+<dl class="file-info">
+<dt>author</dt>
+<dd>TSURUOKA Naoya &lt;tsuruoka@labs.cybozu.co.jp&gt;</dd>
+<dt>author</dt>
+<dd>Benjamin Krämer &lt;benjamin.kraemer@alien-scripts.de&gt;</dd>
+<dt>copyright</dt>
+<dd>2006 TSURUOKA Naoya</dd>
+<dt>license</dt>
+<dd>http://www.opensource.org/licenses/bsd-license.php The BSD License</dd>
+<dt>package</dt>
+<dd>Crypt</dd>
+<dt>see</dt>
+<dd>http://search.cpan.org/dist/Crypt-DSA/lib/Crypt/DSA.pm</dd>
+<dt>subpackage</dt>
+<dd>Crypt_DSA</dd>
+<dt>version</dt>
+<dd>0.0.4</dd>
+<dt>Classes</dt>
+<dd><a class="class" href="#%5CCrypt_DSA_Exception">Crypt_DSA_Exception</a></dd>
+<dd><a class="class" href="#%5CCrypt_DSA">Crypt_DSA</a></dd>
+</dl>
+<h2>Description</h2>
+<p class="short-description">Crypt_DSA</p>
+<div class="long-description"><p>Crypt_DSA - DSA signature verification and signing library</p>
+
+<p>LICENSE:</p>
+
+<p>Copyright (c) 2004-2006, TSURUOKA Naoya
+All rights reserved.</p>
+
+<p>Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:</p>
+
+<ul>
+<li>Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.</li>
+<li>Redistributions in binary form must reproduce the above
+copyright notice, this list of conditions and the following
+disclaimer in the documentation and/or other materials provided
+with the distribution.</li>
+<li>Neither the name of the author nor the names of its contributors
+may be used to endorse or promote products derived from this
+software without specific prior written permission.</li>
+</ul>
+
+<p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
+</div>
+<a name="classes"></a><a id="\Crypt_DSA"></a><h2 class="class">\Crypt_DSA<div class="to-top"><a href="#top">jump to top</a></div>
+</h2>
+<div class="class">
+<dl class="class-info">
+<dt>author</dt>
+<dd>TSURUOKA Naoya &lt;tsuruoka@labs.cybozu.co.jp&gt;</dd>
+<dt>author</dt>
+<dd>Benjamin Krämer &lt;benjamin.kraemer@alien-scripts.de&gt;</dd>
+<dt>package</dt>
+<dd>Crypt</dd>
+<dt>subpackage</dt>
+<dd>Crypt_DSA</dd>
+<dt>version</dt>
+<dd>0.0.4</dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Constants
+              </a></dt>
+<dd><a class="constant" href="#%5CCrypt_DSA::VERSION">VERSION</a></dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Methods
+              </a></dt>
+<dd><a class="method private" href="#%5CCrypt_DSA::_os2ip()">_os2ip</a></dd>
+<dd><a class="method private" href="#%5CCrypt_DSA::_random()">_random</a></dd>
+<dd><a class="method public" href="#%5CCrypt_DSA::generate()">generate</a></dd>
+<dd><a class="method public" href="#%5CCrypt_DSA::randomNumberMod()">randomNumberMod</a></dd>
+<dd><a class="method public" href="#%5CCrypt_DSA::sign()">sign</a></dd>
+<dd><a class="method public" href="#%5CCrypt_DSA::verify()">verify</a></dd>
+</dl>
+<h3>Description</h3>
+<p class="short-description">Crypt_DSA</p>
+<div class="long-description">
+</div>
+<h3>Constants</h3>
+<div>
+<a id="\Crypt_DSA::VERSION"></a><h4 class="constant">VERSION<div class="to-top"><a href="#Crypt_DSA">jump to class</a></div>
+</h4>
+<div class="constant">
+<code> <span class="highlight">VERSION</span> = '0.0.4'
+      </code><p class="short-description">Version of this package</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>0.0.4</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+<h3>Methods</h3>
+<div>
+<a id="\Crypt_DSA::_os2ip()"></a><h4 class="method private">_os2ip<div class="to-top"><a href="#Crypt_DSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_os2ip</span><span class="nb-faded-text">(
+          String $x
+          )
+        </span>
+        :
+        <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></code><p class="short-description">Octet-String-to-Integer primitive</p>
+<div class="long-description"><p>See {@link http://tools.ietf.org/html/rfc3447#section-4.2 RFC3447#section-4.2}.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$x</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>static</dt>
+<dd></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_DSA::_random()"></a><h4 class="method private">_random<div class="to-top"><a href="#Crypt_DSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_random</span><span class="nb-faded-text">(
+          Integer $bytes, \optional $nonzero
+              =
+              false
+          )
+        </span>
+        :
+        String</code><p class="short-description">Generates a random string x bytes long</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$bytes</dt>
+<dd>Integer<br><em></em>
+</dd>
+<dt>$nonzero</dt>
+<dd>\optional<br><em>Integer $nonzero</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>String</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>static</dt>
+<dd></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_DSA::generate()"></a><h4 class="method public">generate<div class="to-top"><a href="#Crypt_DSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">generate</span><span class="nb-faded-text">(
+          <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a> $p, <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a> $q, <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a> $g
+          )
+        </span>
+        :
+        array</code><p class="short-description">DSA keypair creation</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$p</dt>
+<dd>\Math_BigInteger<br><em>p</em>
+</dd>
+<dt>$q</dt>
+<dd>\Math_BigInteger<br><em>q</em>
+</dd>
+<dt>$g</dt>
+<dd>\Math_BigInteger<br><em>g</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>array</dt>
+<dd><em>x = private key, y = public key</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+<dt>throws</dt>
+<dd><a href="_lib_Crypt_DSA.html#%5CCrypt_DSA_Exception"></a></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_DSA::randomNumberMod()"></a><h4 class="method public">randomNumberMod<div class="to-top"><a href="#Crypt_DSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">randomNumberMod</span><span class="nb-faded-text">(
+          <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a> $q
+          )
+        </span>
+        :
+        <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></code><p class="short-description">Generate modulated number</p>
+<div class="long-description"><p>Generates a number that lies between 0 and q-1</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$q</dt>
+<dd>\Math_BigInteger<br><em>Modulation</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></dt>
+<dd><em>Generated number</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>static</dt>
+<dd></dd>
+<dt>staticvar</dt>
+<dd>Math_BigInteger $one Constant one</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_DSA::sign()"></a><h4 class="method public">sign<div class="to-top"><a href="#Crypt_DSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">sign</span><span class="nb-faded-text">(
+          string $message, string $hash_alg, <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a> $p, <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a> $q, <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a> $g, <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a> $x
+          )
+        </span>
+        :
+        array</code><p class="short-description">DSA sign</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$message</dt>
+<dd>string<br><em>message</em>
+</dd>
+<dt>$hash_alg</dt>
+<dd>string<br><em>hash algorithm</em>
+</dd>
+<dt>$p</dt>
+<dd>\Math_BigInteger<br><em>p</em>
+</dd>
+<dt>$q</dt>
+<dd>\Math_BigInteger<br><em>q</em>
+</dd>
+<dt>$g</dt>
+<dd>\Math_BigInteger<br><em>g</em>
+</dd>
+<dt>$x</dt>
+<dd>\Math_BigInteger<br><em>private key</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>array</dt>
+<dd><em>r,s key</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+<dt>throws</dt>
+<dd><a href="_lib_Crypt_DSA.html#%5CCrypt_DSA_Exception"></a></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_DSA::verify()"></a><h4 class="method public">verify<div class="to-top"><a href="#Crypt_DSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">verify</span><span class="nb-faded-text">(
+          string $message, string $hash_alg, <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a> $r, <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a> $s, <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a> $p, <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a> $q, <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a> $g, <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a> $y
+          )
+        </span>
+        :
+        bool</code><p class="short-description">DSA verify</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$message</dt>
+<dd>string<br><em>message</em>
+</dd>
+<dt>$hash_alg</dt>
+<dd>string<br><em>hash algorithm</em>
+</dd>
+<dt>$r</dt>
+<dd>\Math_BigInteger<br><em>r</em>
+</dd>
+<dt>$s</dt>
+<dd>\Math_BigInteger<br><em>s</em>
+</dd>
+<dt>$p</dt>
+<dd>\Math_BigInteger<br><em>p</em>
+</dd>
+<dt>$q</dt>
+<dd>\Math_BigInteger<br><em>q</em>
+</dd>
+<dt>$g</dt>
+<dd>\Math_BigInteger<br><em>g</em>
+</dd>
+<dt>$y</dt>
+<dd>\Math_BigInteger<br><em>public key</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>bool</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+<dt>throws</dt>
+<dd><a href="_lib_Crypt_DSA.html#%5CCrypt_DSA_Exception"></a></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+</div>
+<a id="\Crypt_DSA_Exception"></a><h2 class="class">\Crypt_DSA_Exception<div class="to-top"><a href="#top">jump to top</a></div>
+</h2>
+<div class="class">
+<dl class="class-info">
+<dt>Extends from</dt>
+<dd>\PEAR_Exception</dd>
+<dt>author</dt>
+<dd>Shin OHNO &lt;ganchiku@gmail.com&gt;</dd>
+<dt>author</dt>
+<dd>TSURUOKA Naoya &lt;tsuruoka@labs.cybozu.co.jp&gt;</dd>
+<dt>package</dt>
+<dd>Crypt</dd>
+<dt>subpackage</dt>
+<dd>Crypt_DSA</dd>
+</dl>
+<h3>Description</h3>
+<p class="short-description">Crypt_DSA_Exception</p>
+<div class="long-description"><p>This class is used in all place in the package where Exceptions
+are raised.</p>
+</div>
+</div>
+</div>
+<small xmlns="" class="footer">Documentation was generated by <a href="http://docblox-project.org">DocBlox 0.12.0</a>.
+    </small></body></html>

@@ -1,0 +1,485 @@
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>DocBlox Documentation</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta><link rel="stylesheet" href="css/black-tie/jquery-ui-1.8.2.custom.css" type="text/css"></link><link rel="stylesheet" href="css/jquery.treeview.css" type="text/css"></link><link rel="stylesheet" href="css/theme.css" type="text/css"></link><script type="text/javascript" src="js/jquery-1.4.2.min.js"></script><script type="text/javascript" src="js/jquery-ui-1.8.2.custom.min.js"></script><script type="text/javascript" src="js/jquery.cookie.js"></script><script type="text/javascript" src="js/jquery.treeview.js"></script><script type="text/javascript">
+            $(document).ready(function() {
+                $(".filetree").treeview({
+                    collapsed: true,
+                    persist: "cookie"
+                });
+
+                $("#accordion").accordion({
+                    collapsible: true,
+                    autoHeight:  false,
+                    fillSpace:   true
+                });
+
+                $(".tabs").tabs();
+            });
+        </script></head><body><div xmlns="" id="content">
+<script>
+      $(document).ready(function() {
+        $('dl.function-info, dl.constant-info, dl.property-info').prev().css('cursor', 'pointer');
+        $('dl.function-info, dl.constant-info, dl.property-info').prev().click(function() {
+          if ($(this).next().is(':hidden'))
+          {
+            $(this).children('img')[0].src = 'images/arrow_down.gif';
+          } else
+          {
+            $(this).children('img')[0].src = 'images/arrow_right.gif';
+          }
+          $(this).next().slideToggle();
+        });
+      $('dl.function-info, dl.constant-info, dl.property-info').hide();
+      $('dl.function-info img, dl.constant-info img, dl.property-info img').show();
+      });
+    </script><a name="top"></a><h1 class="file">lib\BrowserID\cert_assertion.php</h1>
+<div class="file_menu">
+<a href="#includes">Includes</a> <a href="#classes">Classes</a> </div>
+<dl class="file-info">
+<dt>author</dt>
+<dd>Benjamin Krämer &lt;benjamin.kraemer@alien-scripts.de&gt;</dd>
+<dt>copyright</dt>
+<dd>Alien-Scripts.de Benjamin Krämer</dd>
+<dt>license</dt>
+<dd>http://www.opensource.org/licenses/mit-license.html  MIT License</dd>
+<dt>package</dt>
+<dd>BrowserID</dd>
+<dt>subpackage</dt>
+<dd>CertAssertion</dd>
+<dt>Classes</dt>
+<dd><a class="class" href="#%5CCertAssertion">CertAssertion</a></dd>
+</dl>
+<h2>Description</h2>
+<p class="short-description">BrowserID certificate assertion implementation</p>
+<div class="long-description"><p>LICENSE: Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.</p>
+</div>
+<a name="classes"></a><a id="\CertAssertion"></a><h2 class="class">\CertAssertion<div class="to-top"><a href="#top">jump to top</a></div>
+</h2>
+<div class="class">
+<dl class="class-info">
+<dt>author</dt>
+<dd>Benjamin Krämer &lt;benjamin.kraemer@alien-scripts.de&gt;</dd>
+<dt>package</dt>
+<dd>BrowserID</dd>
+<dt>subpackage</dt>
+<dd>CertAssertion</dd>
+<dt>version</dt>
+<dd>1.0.0</dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Properties
+              </a></dt>
+<dd><a class="property private" href="#%5CCertAssertion::%24assertion">$assertion</a></dd>
+<dd><a class="property private" href="#%5CCertAssertion::%24audience">$audience</a></dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Methods
+              </a></dt>
+<dd><a class="method public" href="#%5CCertAssertion::__construct()">__construct</a></dd>
+<dd><a class="method private" href="#%5CCertAssertion::compareAudiences()">compareAudiences</a></dd>
+<dd><a class="method public" href="#%5CCertAssertion::createAssertion()">createAssertion</a></dd>
+<dd><a class="method public" href="#%5CCertAssertion::createIdentityCert()">createIdentityCert</a></dd>
+<dd><a class="method public" href="#%5CCertAssertion::isValid()">isValid</a></dd>
+<dd><a class="method private" href="#%5CCertAssertion::normalizeParsedURL()">normalizeParsedURL</a></dd>
+<dd><a class="method public" href="#%5CCertAssertion::verify()">verify</a></dd>
+</dl>
+<h3>Description</h3>
+<p class="short-description">Certificate assertion</p>
+<div class="long-description"><p>This class offers functions to create certified assertions, certificate identities
+or to check if a signed assertion is valid.</p>
+</div>
+<h3>Properties</h3>
+<div>
+<a id="\CertAssertion::$assertion"></a><h4 class="property private">$assertion<div class="to-top"><a href="#%5CCertAssertion">jump to class</a></div>
+</h4>
+<div class="property">
+<code>string <span class="highlight">$assertion</span> = ''</code><p class="short-description">Certified assertion</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>string<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\CertAssertion::$audience"></a><h4 class="property private">$audience<div class="to-top"><a href="#%5CCertAssertion">jump to class</a></div>
+</h4>
+<div class="property">
+<code>string <span class="highlight">$audience</span> = ''</code><p class="short-description">Audience</p>
+<div class="long-description"><p>The audience this assertion was signed for.</p>
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>string<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+<h3>Methods</h3>
+<div>
+<a id="\CertAssertion::__construct()"></a><h4 class="method public">__construct<div class="to-top"><a href="#CertAssertion">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">__construct</span><span class="nb-faded-text">(
+          string $assertion, string $audience
+          )
+        </span>
+        :
+        </code><p class="short-description">Constructor</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$assertion</dt>
+<dd>string<br><em>A certified assertion</em>
+</dd>
+<dt>$audience</dt>
+<dd>string<br><em>The audience the assertion was signed for</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\CertAssertion::compareAudiences()"></a><h4 class="method private">compareAudiences<div class="to-top"><a href="#CertAssertion">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">compareAudiences</span><span class="nb-faded-text">(
+          string $want
+          )
+        </span>
+        :
+        string</code><p class="short-description">Compare audiences</p>
+<div class="long-description"><p>Checks if the given assertion is valid for the audience.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$want</dt>
+<dd>string<br><em>The expected audience</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>string</dt>
+<dd><em>The error message if it fails or null on success</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\CertAssertion::createAssertion()"></a><h4 class="method public">createAssertion<div class="to-top"><a href="#CertAssertion">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">createAssertion</span><span class="nb-faded-text">(
+          string $audience, \AbstractSecretkey $secretKeyIdentity, array $additionalPayload
+              =
+              null, int $now
+              =
+              null
+          )
+        </span>
+        :
+        string</code><p class="short-description">Create signed assertion</p>
+<div class="long-description"><p>Create a signed assertion using the users secret key.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$audience</dt>
+<dd>string<br><em>The audience this assertion is signed for</em>
+</dd>
+<dt>$secretKeyIdentity</dt>
+<dd>\AbstractSecretkey<br><em>An instance of the secret key matching the users certificate identity</em>
+</dd>
+<dt>$additionalPayload</dt>
+<dd>array<br><em>Additional fields to assert</em>
+</dd>
+<dt>$now</dt>
+<dd>int<br><em>Unix timestamp in milliseconds or null for now</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>string</dt>
+<dd><em>The serialized signed assertion</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>static</dt>
+<dd></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\CertAssertion::createIdentityCert()"></a><h4 class="method public">createIdentityCert<div class="to-top"><a href="#CertAssertion">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">createIdentityCert</span><span class="nb-faded-text">(
+          string $principal, <a href="_lib_BrowserID_algs.html#%5CAbstractPublicKey">\AbstractPublicKey</a> $publicKeyIdentity, int $now
+              =
+              null, string $issuer
+              =
+              null
+          )
+        </span>
+        :
+        string</code><p class="short-description">Create identity certificate</p>
+<div class="long-description"><p>Create an identity certificate that is signed by this identity providers key</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$principal</dt>
+<dd>string<br><em>The mail address of the person to identify</em>
+</dd>
+<dt>$publicKeyIdentity</dt>
+<dd>\AbstractPublicKey<br><em>The public key of the person</em>
+</dd>
+<dt>$now</dt>
+<dd>int<br><em>Unix Timestamp in milliseconds or null for now</em>
+</dd>
+<dt>$issuer</dt>
+<dd>string<br><em>Issuer domain of the identity provider or null for the configured hostname</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>string</dt>
+<dd><em>The serialized signed identity certificate</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>static</dt>
+<dd></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\CertAssertion::isValid()"></a><h4 class="method public">isValid<div class="to-top"><a href="#CertAssertion">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">isValid</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        boolean</code><p class="short-description">Check validity</p>
+<div class="long-description"><p>Checks if the assertion is valid for the given audience</p>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>boolean</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\CertAssertion::normalizeParsedURL()"></a><h4 class="method private">normalizeParsedURL<div class="to-top"><a href="#CertAssertion">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">normalizeParsedURL</span><span class="nb-faded-text">(
+          array $parts
+          )
+        </span>
+        :
+        array</code><p class="short-description">Normalize parsed URL</p>
+<div class="long-description"><p>Normalizes a parsed URL, so that it contains the port part.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$parts</dt>
+<dd>array<br><em>The parts of the parsed domain</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>array</dt>
+<dd><em>The parts, but with filled port field</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>static</dt>
+<dd></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\CertAssertion::verify()"></a><h4 class="method public">verify<div class="to-top"><a href="#CertAssertion">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">verify</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        array</code><p class="short-description">Verificate validity</p>
+<div class="long-description"><p>Verify if the signed assertion is valid.</p>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>array</dt>
+<dd><em>Containing the used certificate chain as &#039;certChain&#039;, additional payload given in the assertion as &#039;payload&#039; and the assertion object as &#039;assertion&#039;</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>throws</dt>
+<dd><a href="http://php.net/manual/en/class.exception.php">Throws an exception if the verification fails</a></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<small xmlns="" class="footer">Documentation was generated by <a href="http://docblox-project.org">DocBlox 0.12.0</a>.
+    </small></body></html>

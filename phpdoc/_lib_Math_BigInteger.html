@@ -1,0 +1,2922 @@
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>DocBlox Documentation</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta><link rel="stylesheet" href="css/black-tie/jquery-ui-1.8.2.custom.css" type="text/css"></link><link rel="stylesheet" href="css/jquery.treeview.css" type="text/css"></link><link rel="stylesheet" href="css/theme.css" type="text/css"></link><script type="text/javascript" src="js/jquery-1.4.2.min.js"></script><script type="text/javascript" src="js/jquery-ui-1.8.2.custom.min.js"></script><script type="text/javascript" src="js/jquery.cookie.js"></script><script type="text/javascript" src="js/jquery.treeview.js"></script><script type="text/javascript">
+            $(document).ready(function() {
+                $(".filetree").treeview({
+                    collapsed: true,
+                    persist: "cookie"
+                });
+
+                $("#accordion").accordion({
+                    collapsible: true,
+                    autoHeight:  false,
+                    fillSpace:   true
+                });
+
+                $(".tabs").tabs();
+            });
+        </script></head><body><div xmlns="" id="content">
+<script>
+      $(document).ready(function() {
+        $('dl.function-info, dl.constant-info, dl.property-info').prev().css('cursor', 'pointer');
+        $('dl.function-info, dl.constant-info, dl.property-info').prev().click(function() {
+          if ($(this).next().is(':hidden'))
+          {
+            $(this).children('img')[0].src = 'images/arrow_down.gif';
+          } else
+          {
+            $(this).children('img')[0].src = 'images/arrow_right.gif';
+          }
+          $(this).next().slideToggle();
+        });
+      $('dl.function-info, dl.constant-info, dl.property-info').hide();
+      $('dl.function-info img, dl.constant-info img, dl.property-info img').show();
+      });
+    </script><a name="top"></a><h1 class="file">lib\Math\BigInteger.php</h1>
+<div class="file_menu">
+<a href="#constants">Constants</a> <a href="#classes">Classes</a> </div>
+<dl class="file-info">
+<dt>author</dt>
+<dd>Jim Wigginton &lt;terrafrost@php.net&gt;</dd>
+<dt>copyright</dt>
+<dd>MMVI Jim Wigginton</dd>
+<dt>license</dt>
+<dd>http://www.opensource.org/licenses/mit-license.html  MIT License</dd>
+<dt>link</dt>
+<dd><a href="http://pear.php.net/package/Math_BigInteger">http://pear.php.net/package/Math_BigInteger</a></dd>
+<dt>package</dt>
+<dd>Math</dd>
+<dt>subpackage</dt>
+<dd>Math_BigInteger</dd>
+<dt>version</dt>
+<dd>$Id: BigInteger.php,v 1.33 2010/03/22 22:32:03 terrafrost Exp $</dd>
+<dt>Constants</dt>
+<dd><a class="constant" href="#::MATH_BIGINTEGER_MONTGOMERY">MATH_BIGINTEGER_MONTGOMERY</a></dd>
+<dd><a class="constant" href="#::MATH_BIGINTEGER_BARRETT">MATH_BIGINTEGER_BARRETT</a></dd>
+<dd><a class="constant" href="#::MATH_BIGINTEGER_POWEROF2">MATH_BIGINTEGER_POWEROF2</a></dd>
+<dd><a class="constant" href="#::MATH_BIGINTEGER_CLASSIC">MATH_BIGINTEGER_CLASSIC</a></dd>
+<dd><a class="constant" href="#::MATH_BIGINTEGER_NONE">MATH_BIGINTEGER_NONE</a></dd>
+<dd><a class="constant" href="#::MATH_BIGINTEGER_VALUE">MATH_BIGINTEGER_VALUE</a></dd>
+<dd><a class="constant" href="#::MATH_BIGINTEGER_SIGN">MATH_BIGINTEGER_SIGN</a></dd>
+<dd><a class="constant" href="#::MATH_BIGINTEGER_VARIABLE">MATH_BIGINTEGER_VARIABLE</a></dd>
+<dd><a class="constant" href="#::MATH_BIGINTEGER_DATA">MATH_BIGINTEGER_DATA</a></dd>
+<dd><a class="constant" href="#::MATH_BIGINTEGER_MODE_INTERNAL">MATH_BIGINTEGER_MODE_INTERNAL</a></dd>
+<dd><a class="constant" href="#::MATH_BIGINTEGER_MODE_BCMATH">MATH_BIGINTEGER_MODE_BCMATH</a></dd>
+<dd><a class="constant" href="#::MATH_BIGINTEGER_MODE_GMP">MATH_BIGINTEGER_MODE_GMP</a></dd>
+<dd><a class="constant" href="#::MATH_BIGINTEGER_MAX_DIGIT52">MATH_BIGINTEGER_MAX_DIGIT52</a></dd>
+<dd><a class="constant" href="#::MATH_BIGINTEGER_KARATSUBA_CUTOFF">MATH_BIGINTEGER_KARATSUBA_CUTOFF</a></dd>
+<dt>Classes</dt>
+<dd><a class="class" href="#%5CMath_BigInteger">Math_BigInteger</a></dd>
+</dl>
+<h2>Description</h2>
+<p class="short-description">Pure-PHP arbitrary precision integer arithmetic library.</p>
+<div class="long-description"><p>Supports base-2, base-10, base-16, and base-256 numbers.  Uses the GMP or BCMath extensions, if available,
+and an internal implementation, otherwise.</p>
+
+<p>PHP versions 4 and 5</p>
+
+<p>{@internal (all DocBlock comments regarding implementation - such as the one that follows - refer to the
+{@link MATH_BIGINTEGER_MODE_INTERNAL MATH_BIGINTEGER_MODE_INTERNAL} mode)</p>
+
+<p>Math_BigInteger uses base-2<strong>26 to perform operations such as multiplication and division and
+base-2</strong>52 (ie. two base 2<strong>26 digits) to perform addition and subtraction.  Because the largest possible
+value when multiplying two base-2</strong>26 numbers together is a base-2**52 number, double precision floating
+point numbers - numbers that should be supported on most hardware and whose significand is 53 bits - are
+used.  As a consequence, bitwise operators such as >> and &lt;&lt; cannot be used, nor can the modulo operator %,
+which only supports integers.  Although this fact will slow this library down, the fact that such a high
+base is being used should more than compensate.</p>
+
+<p>When PHP version 6 is officially released, we'll be able to use 64-bit integers.  This should, once again,
+allow bitwise operators, and will increase the maximum possible base to 2<strong>31 (or 2</strong>62 for addition /
+subtraction).</p>
+
+<p>Numbers are stored in {@link http://en.wikipedia.org/wiki/Endianness little endian} format.  ie.
+(new Math_BigInteger(pow(2, 26)))->value = array(0, 1)</p>
+
+<p>Useful resources are as follows:</p>
+
+<ul>
+<li>{@link http://www.cacr.math.uwaterloo.ca/hac/about/chap14.pdf Handbook of Applied Cryptography (HAC)}</li>
+<li>{@link http://math.libtomcrypt.com/files/tommath.pdf Multi-Precision Math (MPM)}</li>
+<li>Java's BigInteger classes.  See /j2se/src/share/classes/java/math in jdk-1_5_0-src-jrl.zip</li>
+</ul>
+
+<p>Here's an example of how to use this library:
+<code>
+<?php
+   include('Math/BigInteger.php');
+
+   $a = new Math_BigInteger(2);
+   $b = new Math_BigInteger(3);
+
+   $c = $a->add($b);
+
+   echo $c->toString(); // outputs 5
+?>
+</code></p>
+
+<p>LICENSE: Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.</p>
+</div>
+<a name="constants"></a><h2>Constants</h2>
+<div>
+<a id="::MATH_BIGINTEGER_MONTGOMERY"></a><h3 class="constant">MATH_BIGINTEGER_MONTGOMERY<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">MATH_BIGINTEGER_MONTGOMERY</span> = '0'
+      </code><p class="short-description"></p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>0</dd>
+<dt>see</dt>
+<dd>Math_BigInteger::_montgomery()</dd>
+<dt>see</dt>
+<dd>Math_BigInteger::_prepMontgomery()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::MATH_BIGINTEGER_BARRETT"></a><h3 class="constant">MATH_BIGINTEGER_BARRETT<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">MATH_BIGINTEGER_BARRETT</span> = '1'
+      </code><p class="short-description"></p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>1</dd>
+<dt>see</dt>
+<dd>Math_BigInteger::_barrett()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::MATH_BIGINTEGER_POWEROF2"></a><h3 class="constant">MATH_BIGINTEGER_POWEROF2<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">MATH_BIGINTEGER_POWEROF2</span> = '2'
+      </code><p class="short-description"></p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>2</dd>
+<dt>see</dt>
+<dd>Math_BigInteger::_mod2()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::MATH_BIGINTEGER_CLASSIC"></a><h3 class="constant">MATH_BIGINTEGER_CLASSIC<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">MATH_BIGINTEGER_CLASSIC</span> = '3'
+      </code><p class="short-description"></p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>3</dd>
+<dt>see</dt>
+<dd>Math_BigInteger::_remainder()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::MATH_BIGINTEGER_NONE"></a><h3 class="constant">MATH_BIGINTEGER_NONE<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">MATH_BIGINTEGER_NONE</span> = '4'
+      </code><p class="short-description"></p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>4</dd>
+<dt>see</dt>
+<dd>Math_BigInteger::__clone()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::MATH_BIGINTEGER_VALUE"></a><h3 class="constant">MATH_BIGINTEGER_VALUE<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">MATH_BIGINTEGER_VALUE</span> = '0'
+      </code><p class="short-description">$result[MATH_BIGINTEGER_VALUE] contains the value.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>0</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::MATH_BIGINTEGER_SIGN"></a><h3 class="constant">MATH_BIGINTEGER_SIGN<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">MATH_BIGINTEGER_SIGN</span> = '1'
+      </code><p class="short-description">$result[MATH_BIGINTEGER_SIGN] contains the sign.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>1</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::MATH_BIGINTEGER_VARIABLE"></a><h3 class="constant">MATH_BIGINTEGER_VARIABLE<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">MATH_BIGINTEGER_VARIABLE</span> = '0'
+      </code><p class="short-description">Cache constants</p>
+<div class="long-description"><p>$cache[MATH_BIGINTEGER_VARIABLE] tells us whether or not the cached data is still valid.</p>
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>0</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::MATH_BIGINTEGER_DATA"></a><h3 class="constant">MATH_BIGINTEGER_DATA<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">MATH_BIGINTEGER_DATA</span> = '1'
+      </code><p class="short-description">$cache[MATH_BIGINTEGER_DATA] contains the cached data.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>1</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::MATH_BIGINTEGER_MODE_INTERNAL"></a><h3 class="constant">MATH_BIGINTEGER_MODE_INTERNAL<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">MATH_BIGINTEGER_MODE_INTERNAL</span> = '1'
+      </code><p class="short-description">To use the pure-PHP implementation</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>1</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::MATH_BIGINTEGER_MODE_BCMATH"></a><h3 class="constant">MATH_BIGINTEGER_MODE_BCMATH<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">MATH_BIGINTEGER_MODE_BCMATH</span> = '2'
+      </code><p class="short-description">To use the BCMath library</p>
+<div class="long-description"><p>(if enabled; otherwise, the internal implementation will be used)</p>
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>2</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::MATH_BIGINTEGER_MODE_GMP"></a><h3 class="constant">MATH_BIGINTEGER_MODE_GMP<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">MATH_BIGINTEGER_MODE_GMP</span> = '3'
+      </code><p class="short-description">To use the GMP library</p>
+<div class="long-description"><p>(if present; otherwise, either the BCMath or the internal implementation will be used)</p>
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>3</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::MATH_BIGINTEGER_MAX_DIGIT52"></a><h3 class="constant">MATH_BIGINTEGER_MAX_DIGIT52<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">MATH_BIGINTEGER_MAX_DIGIT52</span> = 'pow(2, 52)'
+      </code><div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>pow(2, 52)</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::MATH_BIGINTEGER_KARATSUBA_CUTOFF"></a><h3 class="constant">MATH_BIGINTEGER_KARATSUBA_CUTOFF<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">MATH_BIGINTEGER_KARATSUBA_CUTOFF</span> = '25'
+      </code><p class="short-description">Karatsuba Cutoff</p>
+<div class="long-description"><p>At what point do we switch between Karatsuba multiplication and schoolbook long multiplication?</p>
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>25</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+<a name="classes"></a><a id="\Math_BigInteger"></a><h2 class="class">\Math_BigInteger<div class="to-top"><a href="#top">jump to top</a></div>
+</h2>
+<div class="class">
+<dl class="class-info">
+<dt>access</dt>
+<dd>public</dd>
+<dt>author</dt>
+<dd>Jim Wigginton &lt;terrafrost@php.net&gt;</dd>
+<dt>package</dt>
+<dd>Math</dd>
+<dt>subpackage</dt>
+<dd>Math_BigInteger</dd>
+<dt>version</dt>
+<dd>1.0.0RC4</dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Properties
+              </a></dt>
+<dd><a class="property public" href="#%5CMath_BigInteger::%24bitmask">$bitmask</a></dd>
+<dd><a class="property public" href="#%5CMath_BigInteger::%24generator">$generator</a></dd>
+<dd><a class="property public" href="#%5CMath_BigInteger::%24hex">$hex</a></dd>
+<dd><a class="property public" href="#%5CMath_BigInteger::%24is_negative">$is_negative</a></dd>
+<dd><a class="property public" href="#%5CMath_BigInteger::%24precision">$precision</a></dd>
+<dd><a class="property public" href="#%5CMath_BigInteger::%24value">$value</a></dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Methods
+              </a></dt>
+<dd><a class="method public" href="#%5CMath_BigInteger::Math_BigInteger()">Math_BigInteger</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::__clone()">__clone</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::__sleep()">__sleep</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::__wakeup()">__wakeup</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::_add()">_add</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::_array_repeat()">_array_repeat</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::_barrett()">_barrett</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::_base256_lshift()">_base256_lshift</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::_base256_rshift()">_base256_rshift</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::_baseSquare()">_baseSquare</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::_bytes2int()">_bytes2int</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::_compare()">_compare</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::_divide_digit()">_divide_digit</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::_int2bytes()">_int2bytes</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::_karatsuba()">_karatsuba</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::_karatsubaSquare()">_karatsubaSquare</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::_lshift()">_lshift</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::_make_odd()">_make_odd</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::_mod2()">_mod2</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::_modInverse67108864()">_modInverse67108864</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::_montgomery()">_montgomery</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::_montgomeryMultiply()">_montgomeryMultiply</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::_multiply()">_multiply</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::_multiplyLower()">_multiplyLower</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::_multiplyReduce()">_multiplyReduce</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::_normalize()">_normalize</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::_prepMontgomery()">_prepMontgomery</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::_prepareReduce()">_prepareReduce</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::_reduce()">_reduce</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::_regularBarrett()">_regularBarrett</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::_regularMultiply()">_regularMultiply</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::_rshift()">_rshift</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::_slidingWindow()">_slidingWindow</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::_square()">_square</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::_squareReduce()">_squareReduce</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::_subtract()">_subtract</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::_trim()">_trim</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::abs()">abs</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::bitwise_leftRotate()">bitwise_leftRotate</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::bitwise_rightRotate()">bitwise_rightRotate</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::copy()">copy</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::equals()">equals</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::gcd()">gcd</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::multiply()">multiply</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::powMod()">powMod</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::random()">random</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::setPrecision()">setPrecision</a></dd>
+<dd><a class="method public" href="#%5CMath_BigInteger::setRandomGenerator()">setRandomGenerator</a></dd>
+</dl>
+<h3>Description</h3>
+<p class="short-description">Pure-PHP arbitrary precision integer arithmetic library. Supports base-2, base-10, base-16, and base-256
+numbers.</p>
+<div class="long-description">
+</div>
+<h3>Properties</h3>
+<div>
+<a id="\Math_BigInteger::$bitmask"></a><h4 class="property public">$bitmask<div class="to-top"><a href="#%5CMath_BigInteger">jump to class</a></div>
+</h4>
+<div class="property">
+<code> <span class="highlight">$bitmask</span> = 'false'</code><p class="short-description">Precision Bitmask</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd>false</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>setPrecision()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::$generator"></a><h4 class="property public">$generator<div class="to-top"><a href="#%5CMath_BigInteger">jump to class</a></div>
+</h4>
+<div class="property">
+<code> <span class="highlight">$generator</span> = 'mt_rand'</code><p class="short-description">Random number generator function</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd>mt_rand</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>setRandomGenerator()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::$hex"></a><h4 class="property public">$hex<div class="to-top"><a href="#%5CMath_BigInteger">jump to class</a></div>
+</h4>
+<div class="property">
+<code>String <span class="highlight">$hex</span> = ''</code><p class="short-description">Mode independant value used for serialization.</p>
+<div class="long-description"><p>If the bcmath or gmp extensions are installed $this->value will be a non-serializable resource, hence the need for
+a variable that'll be serializable regardless of whether or not extensions are being used.  Unlike $this->value,
+however, $this->hex is only calculated when $this->__sleep() is called.</p>
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>String<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>__sleep()</dd>
+<dt>see</dt>
+<dd>__wakeup()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::$is_negative"></a><h4 class="property public">$is_negative<div class="to-top"><a href="#%5CMath_BigInteger">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Boolean <span class="highlight">$is_negative</span> = 'false'</code><p class="short-description">Holds the BigInteger's magnitude.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Boolean<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd>false</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::$precision"></a><h4 class="property public">$precision<div class="to-top"><a href="#%5CMath_BigInteger">jump to class</a></div>
+</h4>
+<div class="property">
+<code> <span class="highlight">$precision</span> = ''</code><p class="short-description">Precision</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>setPrecision()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::$value"></a><h4 class="property public">$value<div class="to-top"><a href="#%5CMath_BigInteger">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Array <span class="highlight">$value</span> = ''</code><p class="short-description">Holds the BigInteger's value.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+<h3>Methods</h3>
+<div>
+<a id="\Math_BigInteger::Math_BigInteger()"></a><h4 class="method public">Math_BigInteger<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">Math_BigInteger</span><span class="nb-faded-text">(
+          \optional $x
+              =
+              0, \optional $base
+              =
+              10
+          )
+        </span>
+        :
+        <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></code><p class="short-description">Converts base-2, base-10, base-16, and binary strings (eg. base-256) to BigIntegers.</p>
+<div class="long-description"><p>If the second parameter - $base - is negative, then it will be assumed that the number's are encoded using
+two's compliment.  The sole exception to this is -10, which is treated the same as 10 is.</p>
+
+<p>Here's an example:
+<code>
+<?php
+   include('Math/BigInteger.php');
+
+   $a = new Math_BigInteger('0x32', 16); // 50 in base-16
+
+   echo $a->toString(); // outputs 50
+?>
+</code></p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$x</dt>
+<dd>\optional<br><em>base-10 number or base-$base number if $base set.</em>
+</dd>
+<dt>$base</dt>
+<dd>\optional<br><em>integer $base</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::__clone()"></a><h4 class="method public">__clone<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">__clone</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></code><p class="short-description">__clone() magic method</p>
+<div class="long-description"><p>Although you can call Math_BigInteger::__toString() directly in PHP5, you cannot call Math_BigInteger::__clone()
+directly in PHP5.  You can in PHP4 since it's not a magic method, but in PHP5, you have to call it by using the PHP5
+only syntax of $y = clone $x.  As such, if you're trying to write an application that works on both PHP4 and PHP5,
+call Math_BigInteger::copy(), instead.</p>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>copy()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::__sleep()"></a><h4 class="method public">__sleep<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">__sleep</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        </code><p class="short-description">__sleep() magic method</p>
+<div class="long-description"><p>Will be called, automatically, when serialize() is called on a Math_BigInteger object.</p>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>__wakeup()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::__wakeup()"></a><h4 class="method public">__wakeup<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">__wakeup</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        </code><p class="short-description">__wakeup() magic method</p>
+<div class="long-description"><p>Will be called, automatically, when unserialize() is called on a Math_BigInteger object.</p>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>__sleep()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::_add()"></a><h4 class="method public">_add<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_add</span><span class="nb-faded-text">(
+          Array $x_value, Boolean $x_negative, Array $y_value, Boolean $y_negative
+          )
+        </span>
+        :
+        Array</code><p class="short-description">Performs addition.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$x_value</dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>$x_negative</dt>
+<dd>Boolean<br><em></em>
+</dd>
+<dt>$y_value</dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>$y_negative</dt>
+<dd>Boolean<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Array</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::_array_repeat()"></a><h4 class="method public">_array_repeat<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_array_repeat</span><span class="nb-faded-text">(
+          \$input $input, \$multiplier $multiplier
+          )
+        </span>
+        :
+        Array</code><p class="short-description">Array Repeat</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$input</dt>
+<dd>\$input<br><em>Array</em>
+</dd>
+<dt>$multiplier</dt>
+<dd>\$multiplier<br><em>mixed</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Array</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::_barrett()"></a><h4 class="method public">_barrett<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_barrett</span><span class="nb-faded-text">(
+          Array $n, Array $m
+          )
+        </span>
+        :
+        Array</code><p class="short-description">Barrett Modular Reduction</p>
+<div class="long-description"><p>See {@link http://www.cacr.math.uwaterloo.ca/hac/about/chap14.pdf#page=14 HAC 14.3.3} /
+{@link http://math.libtomcrypt.com/files/tommath.pdf#page=165 MPM 6.2.5} for more information.  Modified slightly,
+so as not to require negative numbers (initially, this script didn't support negative numbers).</p>
+
+<p>Employs "folding", as described at
+{@link http://www.cosic.esat.kuleuven.be/publications/thesis-149.pdf#page=66 thesis-149.pdf#page=66}.  To quote from
+it, "the idea [behind folding] is to find a value x' such that x (mod m) = x' (mod m), with x' being smaller than x."</p>
+
+<p>Unfortunately, the "Barrett Reduction with Folding" algorithm described in thesis-149.pdf is not, as written, all that
+usable on account of (1) its not using reasonable radix points as discussed in
+{@link http://math.libtomcrypt.com/files/tommath.pdf#page=162 MPM 6.2.2} and (2) the fact that, even with reasonable
+radix points, it only works when there are an even number of digits in the denominator.  The reason for (2) is that
+(x >> 1) + (x >> 1) != x / 2 + x / 2.  If x is even, they're the same, but if x is odd, they're not.  See the in-line
+comments for details.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$n</dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>$m</dt>
+<dd>Array<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Array</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>_slidingWindow()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::_base256_lshift()"></a><h4 class="method public">_base256_lshift<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_base256_lshift</span><span class="nb-faded-text">(
+          \$x $x, \$shift $shift
+          )
+        </span>
+        :
+        String</code><p class="short-description">Logical Left Shift</p>
+<div class="long-description"><p>Shifts binary strings $shift bits, essentially multiplying by 2**$shift.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$x</dt>
+<dd>\$x<br><em>String</em>
+</dd>
+<dt>$shift</dt>
+<dd>\$shift<br><em>Integer</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>String</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::_base256_rshift()"></a><h4 class="method public">_base256_rshift<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_base256_rshift</span><span class="nb-faded-text">(
+          \$x $x, \$shift $shift
+          )
+        </span>
+        :
+        String</code><p class="short-description">Logical Right Shift</p>
+<div class="long-description"><p>Shifts binary strings $shift bits, essentially dividing by 2**$shift and returning the remainder.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$x</dt>
+<dd>\$x<br><em>String</em>
+</dd>
+<dt>$shift</dt>
+<dd>\$shift<br><em>Integer</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>String</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::_baseSquare()"></a><h4 class="method public">_baseSquare<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_baseSquare</span><span class="nb-faded-text">(
+          Array $value
+          )
+        </span>
+        :
+        Array</code><p class="short-description">Performs traditional squaring on two BigIntegers</p>
+<div class="long-description"><p>Squaring can be done faster than multiplying a number by itself can be.  See
+{@link http://www.cacr.math.uwaterloo.ca/hac/about/chap14.pdf#page=7 HAC 14.2.4} /
+{@link http://math.libtomcrypt.com/files/tommath.pdf#page=141 MPM 5.3} for more information.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$value</dt>
+<dd>Array<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Array</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::_bytes2int()"></a><h4 class="method public">_bytes2int<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_bytes2int</span><span class="nb-faded-text">(
+          String $x
+          )
+        </span>
+        :
+        Integer</code><p class="short-description">Converts bytes to 32-bit integers</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$x</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Integer</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::_compare()"></a><h4 class="method public">_compare<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_compare</span><span class="nb-faded-text">(
+          Array $x_value, Boolean $x_negative, Array $y_value, Boolean $y_negative
+          )
+        </span>
+        :
+        Integer</code><p class="short-description">Compares two numbers.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$x_value</dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>$x_negative</dt>
+<dd>Boolean<br><em></em>
+</dd>
+<dt>$y_value</dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>$y_negative</dt>
+<dd>Boolean<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Integer</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>compare()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::_divide_digit()"></a><h4 class="method public">_divide_digit<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_divide_digit</span><span class="nb-faded-text">(
+          Array $dividend, Array $divisor
+          )
+        </span>
+        :
+        Array</code><p class="short-description">Divides a BigInteger by a regular integer</p>
+<div class="long-description"><p>abc / x = a00 / x + b0 / x + c / x</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$dividend</dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>$divisor</dt>
+<dd>Array<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Array</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::_int2bytes()"></a><h4 class="method public">_int2bytes<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_int2bytes</span><span class="nb-faded-text">(
+          Integer $x
+          )
+        </span>
+        :
+        String</code><p class="short-description">Converts 32-bit integers to bytes.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$x</dt>
+<dd>Integer<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>String</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::_karatsuba()"></a><h4 class="method public">_karatsuba<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_karatsuba</span><span class="nb-faded-text">(
+          Array $x_value, Array $y_value
+          )
+        </span>
+        :
+        Array</code><p class="short-description">Performs Karatsuba multiplication on two BigIntegers</p>
+<div class="long-description"><p>See {@link http://en.wikipedia.org/wiki/Karatsuba_algorithm Karatsuba algorithm} and
+{@link http://math.libtomcrypt.com/files/tommath.pdf#page=120 MPM 5.2.3}.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$x_value</dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>$y_value</dt>
+<dd>Array<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Array</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::_karatsubaSquare()"></a><h4 class="method public">_karatsubaSquare<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_karatsubaSquare</span><span class="nb-faded-text">(
+          Array $value
+          )
+        </span>
+        :
+        Array</code><p class="short-description">Performs Karatsuba "squaring" on two BigIntegers</p>
+<div class="long-description"><p>See {@link http://en.wikipedia.org/wiki/Karatsuba_algorithm Karatsuba algorithm} and
+{@link http://math.libtomcrypt.com/files/tommath.pdf#page=151 MPM 5.3.4}.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$value</dt>
+<dd>Array<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Array</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::_lshift()"></a><h4 class="method public">_lshift<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_lshift</span><span class="nb-faded-text">(
+          Integer $shift
+          )
+        </span>
+        :
+        </code><p class="short-description">Logical Left Shift</p>
+<div class="long-description"><p>Shifts BigInteger's by $shift bits.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$shift</dt>
+<dd>Integer<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::_make_odd()"></a><h4 class="method public">_make_odd<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_make_odd</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        </code><p class="short-description">Make the current number odd</p>
+<div class="long-description"><p>If the current number is odd it'll be unchanged.  If it's even, one will be added to it.</p>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>randomPrime()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::_mod2()"></a><h4 class="method public">_mod2<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_mod2</span><span class="nb-faded-text">(
+           $n
+          )
+        </span>
+        :
+        <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></code><p class="short-description">Modulos for Powers of Two</p>
+<div class="long-description"><p>Calculates $x%$n, where $n = 2**$e, for some $e.  Since this is basically the same as doing $x &amp; ($n-1),
+we'll just use this function as a wrapper for doing that.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$n</dt>
+<dd><em>Math_BigInteger</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>_slidingWindow()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::_modInverse67108864()"></a><h4 class="method public">_modInverse67108864<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_modInverse67108864</span><span class="nb-faded-text">(
+          Array $x
+          )
+        </span>
+        :
+        Integer</code><p class="short-description">Modular Inverse of a number mod 2**26 (eg. 67108864)</p>
+<div class="long-description"><p>Based off of the bnpInvDigit function implemented and justified in the following URL:</p>
+
+<p>{@link http://www-cs-students.stanford.edu/~tjw/jsbn/jsbn.js}</p>
+
+<p>The following URL provides more info:</p>
+
+<p>{@link http://groups.google.com/group/sci.crypt/msg/7a137205c1be7d85}</p>
+
+<p>As for why we do all the bitmasking...  strange things can happen when converting from floats to ints. For
+instance, on some computers, var_dump((int) -4294967297) yields int(-1) and on others, it yields
+int(-2147483648).  To avoid problems stemming from this, we use bitmasks to guarantee that ints aren't
+auto-converted to floats.  The outermost bitmask is present because without it, there's no guarantee that
+the "residue" returned would be the so-called "common residue".  We use fmod, in the last step, because the
+maximum possible $x is 26 bits and the maximum $result is 16 bits.  Thus, we have to be able to handle up to
+40 bits, which only 64-bit floating points will support.</p>
+
+<p>Thanks to Pedro Gimeno Fortea for input!</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$x</dt>
+<dd>Array<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Integer</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>_montgomery()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::_montgomery()"></a><h4 class="method public">_montgomery<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_montgomery</span><span class="nb-faded-text">(
+          Array $x, Array $n
+          )
+        </span>
+        :
+        Array</code><p class="short-description">Montgomery Modular Reduction</p>
+<div class="long-description"><p>($x->_prepMontgomery($n))->_montgomery($n) yields $x % $n.
+{@link http://math.libtomcrypt.com/files/tommath.pdf#page=170 MPM 6.3} provides insights on how this can be
+improved upon (basically, by using the comba method).  gcd($n, 2) must be equal to one for this function
+to work correctly.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$x</dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>$n</dt>
+<dd>Array<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Array</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>_prepMontgomery()</dd>
+<dt>see</dt>
+<dd>_slidingWindow()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::_montgomeryMultiply()"></a><h4 class="method public">_montgomeryMultiply<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_montgomeryMultiply</span><span class="nb-faded-text">(
+          Array $x, Array $y, Array $m
+          )
+        </span>
+        :
+        Array</code><p class="short-description">Montgomery Multiply</p>
+<div class="long-description"><p>Interleaves the montgomery reduction and long multiplication algorithms together as described in
+{@link http://www.cacr.math.uwaterloo.ca/hac/about/chap14.pdf#page=13 HAC 14.36}</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$x</dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>$y</dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>$m</dt>
+<dd>Array<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Array</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>_prepMontgomery()</dd>
+<dt>see</dt>
+<dd>_montgomery()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::_multiply()"></a><h4 class="method public">_multiply<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_multiply</span><span class="nb-faded-text">(
+          Array $x_value, Boolean $x_negative, Array $y_value, Boolean $y_negative
+          )
+        </span>
+        :
+        Array</code><p class="short-description">Performs multiplication.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$x_value</dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>$x_negative</dt>
+<dd>Boolean<br><em></em>
+</dd>
+<dt>$y_value</dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>$y_negative</dt>
+<dd>Boolean<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Array</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::_multiplyLower()"></a><h4 class="method public">_multiplyLower<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_multiplyLower</span><span class="nb-faded-text">(
+          Array $x_value, Boolean $x_negative, Array $y_value, Boolean $y_negative,  $stop
+          )
+        </span>
+        :
+        Array</code><p class="short-description">Performs long multiplication up to $stop digits</p>
+<div class="long-description"><p>If you're going to be doing array_slice($product->value, 0, $stop), some cycles can be saved.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$x_value</dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>$x_negative</dt>
+<dd>Boolean<br><em></em>
+</dd>
+<dt>$y_value</dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>$y_negative</dt>
+<dd>Boolean<br><em></em>
+</dd>
+<dt>$stop</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Array</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>_regularBarrett()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::_multiplyReduce()"></a><h4 class="method public">_multiplyReduce<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_multiplyReduce</span><span class="nb-faded-text">(
+          Array $x, Array $y, Array $n, Integer $mode
+          )
+        </span>
+        :
+        Array</code><p class="short-description">Modular multiply</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$x</dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>$y</dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>$n</dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>$mode</dt>
+<dd>Integer<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Array</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>_slidingWindow()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::_normalize()"></a><h4 class="method public">_normalize<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_normalize</span><span class="nb-faded-text">(
+           $result
+          )
+        </span>
+        :
+        <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></code><p class="short-description">Normalize</p>
+<div class="long-description"><p>Removes leading zeros and truncates (if necessary) to maintain the appropriate precision</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$result</dt>
+<dd><em>Math_BigInteger</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>_trim()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::_prepMontgomery()"></a><h4 class="method public">_prepMontgomery<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_prepMontgomery</span><span class="nb-faded-text">(
+          Array $x, Array $n
+          )
+        </span>
+        :
+        Array</code><p class="short-description">Prepare a number for use in Montgomery Modular Reductions</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$x</dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>$n</dt>
+<dd>Array<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Array</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>_montgomery()</dd>
+<dt>see</dt>
+<dd>_slidingWindow()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::_prepareReduce()"></a><h4 class="method public">_prepareReduce<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_prepareReduce</span><span class="nb-faded-text">(
+          Array $x, Array $n, Integer $mode
+          )
+        </span>
+        :
+        Array</code><p class="short-description">Modular reduction preperation</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$x</dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>$n</dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>$mode</dt>
+<dd>Integer<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Array</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>_slidingWindow()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::_reduce()"></a><h4 class="method public">_reduce<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_reduce</span><span class="nb-faded-text">(
+          Array $x, Array $n, Integer $mode
+          )
+        </span>
+        :
+        Array</code><p class="short-description">Modular reduction</p>
+<div class="long-description"><p>For most $modes this will return the remainder.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$x</dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>$n</dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>$mode</dt>
+<dd>Integer<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Array</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>_slidingWindow()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::_regularBarrett()"></a><h4 class="method public">_regularBarrett<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_regularBarrett</span><span class="nb-faded-text">(
+          Array $x, Array $n
+          )
+        </span>
+        :
+        Array</code><p class="short-description">(Regular) Barrett Modular Reduction</p>
+<div class="long-description"><p>For numbers with more than four digits Math_BigInteger::_barrett() is faster.  The difference between that and this
+is that this function does not fold the denominator into a smaller form.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$x</dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>$n</dt>
+<dd>Array<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Array</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>_slidingWindow()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::_regularMultiply()"></a><h4 class="method public">_regularMultiply<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_regularMultiply</span><span class="nb-faded-text">(
+          Array $x_value, Array $y_value
+          )
+        </span>
+        :
+        Array</code><p class="short-description">Performs long multiplication on two BigIntegers</p>
+<div class="long-description"><p>Modeled after 'multiply' in MutableBigInteger.java.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$x_value</dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>$y_value</dt>
+<dd>Array<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Array</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::_rshift()"></a><h4 class="method public">_rshift<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_rshift</span><span class="nb-faded-text">(
+          Integer $shift
+          )
+        </span>
+        :
+        </code><p class="short-description">Logical Right Shift</p>
+<div class="long-description"><p>Shifts BigInteger's by $shift bits.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$shift</dt>
+<dd>Integer<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::_slidingWindow()"></a><h4 class="method public">_slidingWindow<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_slidingWindow</span><span class="nb-faded-text">(
+          <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a> $e, <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a> $n, Integer $mode
+          )
+        </span>
+        :
+        <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></code><p class="short-description">Sliding Window k-ary Modular Exponentiation</p>
+<div class="long-description"><p>Based on {@link http://www.cacr.math.uwaterloo.ca/hac/about/chap14.pdf#page=27 HAC 14.85} /
+{@link http://math.libtomcrypt.com/files/tommath.pdf#page=210 MPM 7.7}.  In a departure from those algorithims,
+however, this function performs a modular reduction after every multiplication and squaring operation.
+As such, this function has the same preconditions that the reductions being used do.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$e</dt>
+<dd>\Math_BigInteger<br><em></em>
+</dd>
+<dt>$n</dt>
+<dd>\Math_BigInteger<br><em></em>
+</dd>
+<dt>$mode</dt>
+<dd>Integer<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::_square()"></a><h4 class="method public">_square<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_square</span><span class="nb-faded-text">(
+          Array $x
+              =
+              false
+          )
+        </span>
+        :
+        Array</code><p class="short-description">Performs squaring</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$x</dt>
+<dd>Array<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Array</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::_squareReduce()"></a><h4 class="method public">_squareReduce<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_squareReduce</span><span class="nb-faded-text">(
+          Array $x, Array $n, Integer $mode
+          )
+        </span>
+        :
+        Array</code><p class="short-description">Modular square</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$x</dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>$n</dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>$mode</dt>
+<dd>Integer<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Array</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>_slidingWindow()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::_subtract()"></a><h4 class="method public">_subtract<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_subtract</span><span class="nb-faded-text">(
+          Array $x_value, Boolean $x_negative, Array $y_value, Boolean $y_negative
+          )
+        </span>
+        :
+        Array</code><p class="short-description">Performs subtraction.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$x_value</dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>$x_negative</dt>
+<dd>Boolean<br><em></em>
+</dd>
+<dt>$y_value</dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>$y_negative</dt>
+<dd>Boolean<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Array</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::_trim()"></a><h4 class="method public">_trim<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_trim</span><span class="nb-faded-text">(
+           $value
+          )
+        </span>
+        :
+        <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></code><p class="short-description">Trim</p>
+<div class="long-description"><p>Removes leading zeros</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$value</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::abs()"></a><h4 class="method public">abs<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">abs</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></code><p class="short-description">Absolute value.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::bitwise_leftRotate()"></a><h4 class="method public">bitwise_leftRotate<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">bitwise_leftRotate</span><span class="nb-faded-text">(
+          Integer $shift
+          )
+        </span>
+        :
+        <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></code><p class="short-description">Logical Left Rotate</p>
+<div class="long-description"><p>Instead of the top x bits being dropped they're appended to the shifted bit string.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$shift</dt>
+<dd>Integer<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::bitwise_rightRotate()"></a><h4 class="method public">bitwise_rightRotate<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">bitwise_rightRotate</span><span class="nb-faded-text">(
+          Integer $shift
+          )
+        </span>
+        :
+        <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></code><p class="short-description">Logical Right Rotate</p>
+<div class="long-description"><p>Instead of the bottom x bits being dropped they're prepended to the shifted bit string.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$shift</dt>
+<dd>Integer<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::copy()"></a><h4 class="method public">copy<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">copy</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></code><p class="short-description">Copy an object</p>
+<div class="long-description"><p>PHP5 passes objects by reference while PHP4 passes by value.  As such, we need a function to guarantee
+that all objects are passed by value, when appropriate.  More information can be found here:</p>
+
+<p>{@link http://php.net/language.oop5.basic#51624}</p>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>__clone()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::equals()"></a><h4 class="method public">equals<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">equals</span><span class="nb-faded-text">(
+          <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a> $x
+          )
+        </span>
+        :
+        Boolean</code><p class="short-description">Tests the equality of two numbers.</p>
+<div class="long-description"><p>If you need to see if one number is greater than or less than another number, use Math_BigInteger::compare()</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$x</dt>
+<dd>\Math_BigInteger<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Boolean</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>compare()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::gcd()"></a><h4 class="method public">gcd<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">gcd</span><span class="nb-faded-text">(
+          <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a> $n
+          )
+        </span>
+        :
+        <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></code><p class="short-description">Calculates the greatest common divisor</p>
+<div class="long-description"><p>Say you have 693 and 609.  The GCD is 21.</p>
+
+<p>Here's an example:
+<code>
+<?php
+   include('Math/BigInteger.php');
+
+   $a = new Math_BigInteger(693);
+   $b = new Math_BigInteger(609);
+
+   $gcd = a->extendedGCD($b);
+
+   echo $gcd->toString() . "\r\n"; // outputs 21
+?>
+</code></p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$n</dt>
+<dd>\Math_BigInteger<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::multiply()"></a><h4 class="method public">multiply<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">multiply</span><span class="nb-faded-text">(
+          <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a> $x
+          )
+        </span>
+        :
+        <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></code><p class="short-description">Multiplies two BigIntegers</p>
+<div class="long-description"><p>Here's an example:
+<code>
+<?php
+   include('Math/BigInteger.php');
+
+   $a = new Math_BigInteger('10');
+   $b = new Math_BigInteger('20');
+
+   $c = $a->multiply($b);
+
+   echo $c->toString(); // outputs 200
+?>
+</code></p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$x</dt>
+<dd>\Math_BigInteger<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::powMod()"></a><h4 class="method public">powMod<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">powMod</span><span class="nb-faded-text">(
+          <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a> $e, <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a> $n
+          )
+        </span>
+        :
+        <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></code><p class="short-description">Performs modular exponentiation.</p>
+<div class="long-description"><p>Alias for Math_BigInteger::modPow()</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$e</dt>
+<dd>\Math_BigInteger<br><em></em>
+</dd>
+<dt>$n</dt>
+<dd>\Math_BigInteger<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::random()"></a><h4 class="method public">random<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">random</span><span class="nb-faded-text">(
+          \optional $min
+              =
+              false, \optional $max
+              =
+              false
+          )
+        </span>
+        :
+        <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></code><p class="short-description">Generate a random number</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$min</dt>
+<dd>\optional<br><em>Integer $min</em>
+</dd>
+<dt>$max</dt>
+<dd>\optional<br><em>Integer $max</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::setPrecision()"></a><h4 class="method public">setPrecision<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">setPrecision</span><span class="nb-faded-text">(
+           $bits
+          )
+        </span>
+        :
+        <a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></code><p class="short-description">Set Precision</p>
+<div class="long-description"><p>Some bitwise operations give different results depending on the precision being used.  Examples include left
+shift, not, and rotates.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$bits</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_Math_BigInteger.html#%5CMath_BigInteger">\Math_BigInteger</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Math_BigInteger::setRandomGenerator()"></a><h4 class="method public">setRandomGenerator<div class="to-top"><a href="#Math_BigInteger">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">setRandomGenerator</span><span class="nb-faded-text">(
+          \optional $generator
+          )
+        </span>
+        :
+        </code><p class="short-description">Set random number generator function</p>
+<div class="long-description"><p>$generator should be the name of a random generating function whose first parameter is the minimum
+value and whose second parameter is the maximum value.  If this function needs to be seeded, it should
+be seeded prior to calling Math_BigInteger::random() or Math_BigInteger::randomPrime()</p>
+
+<p>If the random generating function is not explicitly set, it'll be assumed to be mt_rand().</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$generator</dt>
+<dd>\optional<br><em>String $generator</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>random()</dd>
+<dt>see</dt>
+<dd>randomPrime()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<small xmlns="" class="footer">Documentation was generated by <a href="http://docblox-project.org">DocBlox 0.12.0</a>.
+    </small></body></html>

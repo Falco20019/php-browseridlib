@@ -7,50 +7,69 @@ BrowserID PHP Library
 (2) Requirements
 (3) Release notes
 (4) Websites
-(5) License
+(5) Credits
+(6) License
 
 
 (1) Summary
+-----------
 
-The library offers functions for verifying BrowserID assertions directly on the server
-as relaying party. Verifying the assertions directly has the advantage that the assertion
+The library offers functions for verifying BrowserID/Persona assertions directly 
+on the server. Verifying the assertions directly has the advantage that the assertion
 is not sent over the internet and to reduce dependencies on others.
 
-Since BrowserID is highly under developement right now, this library may be out 
-of date the time you use it. Until the protocol get's stable, the usage is only 
-advised for experimental usage. If you want to use BrowserID in the experimental 
-state, it's recommented to use https://browserid.org/verify for verification.
+Since BrowserID/Persona is highly under developement right now, this library may 
+be out of date the time you use it. Until the protocol get's stable, the usage is 
+only advised for experimental usage. If you want to use BrowserID/Persona in the 
+experimental state, it's recommented to use https://browserid.org/verify for 
+verification.
+
+(See https://developer.mozilla.org/en-US/docs/Persona/FAQ#Can_I_verify_assertions_locally.2C_or_must_I_use_the_remote_verification_service.3F)
 
 
 (2) Requirements
+----------------
 
-This library uses anonymous functions and functions like openssl_get_md_methods that
-are only available since PHP 5.3.0 Therefore you must use a version >= 5.3.0 for it
-to work.
+This library uses native JSON support and cURL. Therefore you must use a 
+version >= 5.2.0 for it to work. Fallback JSON implementations may follow.
 
 
 (3) Release notes
+-----------------
 
-This library offers the working state as of 2011-07-06. All functions available at 
-https://github.com/mozilla/browserid/tree/dev/verifier/lib were ported for usage 
-with PHP.
+This library offers the working state as of 2012-10-02. This code uses some 
+ideas as showed at https://github.com/mozilla/browserid/tree/dev/lib and 
+https://github.com/mozilla/jwcrypto and ported them for PHP.
 
 
 (4) Websites
+------------
 
 BrowserID at GitHub :
 - https://github.com/mozilla/browserid
 
-The VerifiedEmailProtocol :
-- https://wiki.mozilla.org/Identity/Verified_Email_Protocol
+Persona @ MDN :
+- https://developer.mozilla.org/de/docs/persona
 
-BrowserID Main Page : 
-- https://browserid.org/
+Mozilla Persona Main Page :
+- https://login.persona.org/
 
 
-(5) License
+(5) Credits
+-----------
 
-This work is licensed under the Creative Commons Attribution 3.0 Unported 
-License. To view a copy of this license, visit http://creativecommons.org/licenses/by/3.0/ 
-or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, 
-California, 94041, USA.
+This library makes use of some external libraries. The following were adopted full or partly:
+- PHPSecLib (http://phpseclib.sourceforge.net by Jim Wigginton)
+- Math_BigInteger (http://pear.php.net/package/Math_BigInteger by Jim Wigginton)
+- Crypt_DSA (http://pear.php.net/pepr/pepr-proposal-show.php?id=467 by TSURUOKA Naoya)
+
+(6) License
+-----------
+
+Copyright (c) 2012 Benjamin Krämer
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

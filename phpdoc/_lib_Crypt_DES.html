@@ -1,0 +1,1414 @@
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>DocBlox Documentation</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta><link rel="stylesheet" href="css/black-tie/jquery-ui-1.8.2.custom.css" type="text/css"></link><link rel="stylesheet" href="css/jquery.treeview.css" type="text/css"></link><link rel="stylesheet" href="css/theme.css" type="text/css"></link><script type="text/javascript" src="js/jquery-1.4.2.min.js"></script><script type="text/javascript" src="js/jquery-ui-1.8.2.custom.min.js"></script><script type="text/javascript" src="js/jquery.cookie.js"></script><script type="text/javascript" src="js/jquery.treeview.js"></script><script type="text/javascript">
+            $(document).ready(function() {
+                $(".filetree").treeview({
+                    collapsed: true,
+                    persist: "cookie"
+                });
+
+                $("#accordion").accordion({
+                    collapsible: true,
+                    autoHeight:  false,
+                    fillSpace:   true
+                });
+
+                $(".tabs").tabs();
+            });
+        </script></head><body><div xmlns="" id="content">
+<script>
+      $(document).ready(function() {
+        $('dl.function-info, dl.constant-info, dl.property-info').prev().css('cursor', 'pointer');
+        $('dl.function-info, dl.constant-info, dl.property-info').prev().click(function() {
+          if ($(this).next().is(':hidden'))
+          {
+            $(this).children('img')[0].src = 'images/arrow_down.gif';
+          } else
+          {
+            $(this).children('img')[0].src = 'images/arrow_right.gif';
+          }
+          $(this).next().slideToggle();
+        });
+      $('dl.function-info, dl.constant-info, dl.property-info').hide();
+      $('dl.function-info img, dl.constant-info img, dl.property-info img').show();
+      });
+    </script><a name="top"></a><h1 class="file">lib\Crypt\DES.php</h1>
+<div class="file_menu">
+<a href="#constants">Constants</a> <a href="#classes">Classes</a> </div>
+<dl class="file-info">
+<dt>author</dt>
+<dd>Jim Wigginton &lt;terrafrost@php.net&gt;</dd>
+<dt>copyright</dt>
+<dd>MMVII Jim Wigginton</dd>
+<dt>license</dt>
+<dd>http://www.opensource.org/licenses/mit-license.html  MIT License</dd>
+<dt>link</dt>
+<dd><a href="http://phpseclib.sourceforge.net">http://phpseclib.sourceforge.net</a></dd>
+<dt>package</dt>
+<dd>Crypt</dd>
+<dt>subpackage</dt>
+<dd>Crypt_DES</dd>
+<dt>version</dt>
+<dd>$Id: DES.php,v 1.12 2010/02/09 06:10:26 terrafrost Exp $</dd>
+<dt>Constants</dt>
+<dd><a class="constant" href="#::CRYPT_DES_ENCRYPT">CRYPT_DES_ENCRYPT</a></dd>
+<dd><a class="constant" href="#::CRYPT_DES_DECRYPT">CRYPT_DES_DECRYPT</a></dd>
+<dd><a class="constant" href="#::CRYPT_DES_MODE_CTR">CRYPT_DES_MODE_CTR</a></dd>
+<dd><a class="constant" href="#::CRYPT_DES_MODE_ECB">CRYPT_DES_MODE_ECB</a></dd>
+<dd><a class="constant" href="#::CRYPT_DES_MODE_CBC">CRYPT_DES_MODE_CBC</a></dd>
+<dd><a class="constant" href="#::CRYPT_DES_MODE_CFB">CRYPT_DES_MODE_CFB</a></dd>
+<dd><a class="constant" href="#::CRYPT_DES_MODE_OFB">CRYPT_DES_MODE_OFB</a></dd>
+<dd><a class="constant" href="#::CRYPT_DES_MODE_INTERNAL">CRYPT_DES_MODE_INTERNAL</a></dd>
+<dd><a class="constant" href="#::CRYPT_DES_MODE_MCRYPT">CRYPT_DES_MODE_MCRYPT</a></dd>
+<dt>Classes</dt>
+<dd><a class="class" href="#%5CCrypt_DES">Crypt_DES</a></dd>
+</dl>
+<h2>Description</h2>
+<p class="short-description">Pure-PHP implementation of DES.</p>
+<div class="long-description"><p>Uses mcrypt, if available, and an internal implementation, otherwise.</p>
+
+<p>PHP versions 4 and 5</p>
+
+<p>Useful resources are as follows:</p>
+
+<ul>
+<li>{@link http://en.wikipedia.org/wiki/DES_supplementary_material Wikipedia: DES supplementary material}</li>
+<li>{@link http://www.itl.nist.gov/fipspubs/fip46-2.htm FIPS 46-2 - (DES), Data Encryption Standard}</li>
+<li>{@link http://www.cs.eku.edu/faculty/styer/460/Encrypt/JS-DES.html JavaScript DES Example}</li>
+</ul>
+
+<p>Here's a short example of how to use this library:
+<code>
+<?php
+   include('Crypt/DES.php');
+
+   $des = new Crypt_DES();
+
+   $des->setKey('abcdefgh');
+
+   $size = 10 * 1024;
+   $plaintext = '';
+   for ($i = 0; $i < $size; $i++) {
+       $plaintext.= 'a';
+   }
+
+   echo $des->decrypt($des->encrypt($plaintext));
+?>
+</code></p>
+
+<p>LICENSE: Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.</p>
+</div>
+<a name="constants"></a><h2>Constants</h2>
+<div>
+<a id="::CRYPT_DES_ENCRYPT"></a><h3 class="constant">CRYPT_DES_ENCRYPT<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_DES_ENCRYPT</span> = '0'
+      </code><p class="short-description">Contains array_reverse($keys[CRYPT_DES_DECRYPT])</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>0</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_DES_DECRYPT"></a><h3 class="constant">CRYPT_DES_DECRYPT<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_DES_DECRYPT</span> = '1'
+      </code><p class="short-description">Contains array_reverse($keys[CRYPT_DES_ENCRYPT])</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>1</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_DES_MODE_CTR"></a><h3 class="constant">CRYPT_DES_MODE_CTR<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_DES_MODE_CTR</span> = '-1'
+      </code><p class="short-description">Encrypt / decrypt using the Counter mode.</p>
+<div class="long-description"><p>Set to -1 since that's what Crypt/Random.php uses to index the CTR mode.</p>
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>-1</dd>
+<dt>link</dt>
+<dd><a href="http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Counter_.28CTR.29">http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Counter_.28CTR.29</a></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_DES_MODE_ECB"></a><h3 class="constant">CRYPT_DES_MODE_ECB<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_DES_MODE_ECB</span> = '1'
+      </code><p class="short-description">Encrypt / decrypt using the Electronic Code Book mode.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>1</dd>
+<dt>link</dt>
+<dd><a href="http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Electronic_codebook_.28ECB.29">http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Electronic_codebook_.28ECB.29</a></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_DES_MODE_CBC"></a><h3 class="constant">CRYPT_DES_MODE_CBC<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_DES_MODE_CBC</span> = '2'
+      </code><p class="short-description">Encrypt / decrypt using the Code Book Chaining mode.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>2</dd>
+<dt>link</dt>
+<dd><a href="http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Cipher-block_chaining_.28CBC.29">http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Cipher-block_chaining_.28CBC.29</a></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_DES_MODE_CFB"></a><h3 class="constant">CRYPT_DES_MODE_CFB<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_DES_MODE_CFB</span> = '3'
+      </code><p class="short-description">Encrypt / decrypt using the Cipher Feedback mode.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>3</dd>
+<dt>link</dt>
+<dd><a href="http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Cipher_feedback_.28CFB.29">http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Cipher_feedback_.28CFB.29</a></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_DES_MODE_OFB"></a><h3 class="constant">CRYPT_DES_MODE_OFB<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_DES_MODE_OFB</span> = '4'
+      </code><p class="short-description">Encrypt / decrypt using the Cipher Feedback mode.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>4</dd>
+<dt>link</dt>
+<dd><a href="http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Output_feedback_.28OFB.29">http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Output_feedback_.28OFB.29</a></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_DES_MODE_INTERNAL"></a><h3 class="constant">CRYPT_DES_MODE_INTERNAL<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_DES_MODE_INTERNAL</span> = '1'
+      </code><p class="short-description">Toggles the internal implementation</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>1</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_DES_MODE_MCRYPT"></a><h3 class="constant">CRYPT_DES_MODE_MCRYPT<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_DES_MODE_MCRYPT</span> = '2'
+      </code><p class="short-description">Toggles the mcrypt implementation</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>2</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+<a name="classes"></a><a id="\Crypt_DES"></a><h2 class="class">\Crypt_DES<div class="to-top"><a href="#top">jump to top</a></div>
+</h2>
+<div class="class">
+<dl class="class-info">
+<dt>access</dt>
+<dd>public</dd>
+<dt>author</dt>
+<dd>Jim Wigginton &lt;terrafrost@php.net&gt;</dd>
+<dt>package</dt>
+<dd>Crypt</dd>
+<dt>subpackage</dt>
+<dd>Crypt_DES</dd>
+<dt>version</dt>
+<dd>0.1.0</dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Properties
+              </a></dt>
+<dd><a class="property public" href="#%5CCrypt_DES::%24continuousBuffer">$continuousBuffer</a></dd>
+<dd><a class="property public" href="#%5CCrypt_DES::%24debuffer">$debuffer</a></dd>
+<dd><a class="property public" href="#%5CCrypt_DES::%24dechanged">$dechanged</a></dd>
+<dd><a class="property public" href="#%5CCrypt_DES::%24decryptIV">$decryptIV</a></dd>
+<dd><a class="property public" href="#%5CCrypt_DES::%24demcrypt">$demcrypt</a></dd>
+<dd><a class="property public" href="#%5CCrypt_DES::%24ecb">$ecb</a></dd>
+<dd><a class="property public" href="#%5CCrypt_DES::%24enbuffer">$enbuffer</a></dd>
+<dd><a class="property public" href="#%5CCrypt_DES::%24enchanged">$enchanged</a></dd>
+<dd><a class="property public" href="#%5CCrypt_DES::%24encryptIV">$encryptIV</a></dd>
+<dd><a class="property public" href="#%5CCrypt_DES::%24enmcrypt">$enmcrypt</a></dd>
+<dd><a class="property public" href="#%5CCrypt_DES::%24iv">$iv</a></dd>
+<dd><a class="property public" href="#%5CCrypt_DES::%24keys">$keys</a></dd>
+<dd><a class="property public" href="#%5CCrypt_DES::%24mode">$mode</a></dd>
+<dd><a class="property public" href="#%5CCrypt_DES::%24paddable">$paddable</a></dd>
+<dd><a class="property public" href="#%5CCrypt_DES::%24padding">$padding</a></dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Methods
+              </a></dt>
+<dd><a class="method public" href="#%5CCrypt_DES::Crypt_DES()">Crypt_DES</a></dd>
+<dd><a class="method public" href="#%5CCrypt_DES::_generate_xor()">_generate_xor</a></dd>
+<dd><a class="method public" href="#%5CCrypt_DES::_pad()">_pad</a></dd>
+<dd><a class="method public" href="#%5CCrypt_DES::_prepareKey()">_prepareKey</a></dd>
+<dd><a class="method public" href="#%5CCrypt_DES::_processBlock()">_processBlock</a></dd>
+<dd><a class="method public" href="#%5CCrypt_DES::_string_shift()">_string_shift</a></dd>
+<dd><a class="method public" href="#%5CCrypt_DES::_unpad()">_unpad</a></dd>
+<dd><a class="method public" href="#%5CCrypt_DES::decrypt()">decrypt</a></dd>
+<dd><a class="method public" href="#%5CCrypt_DES::disableContinuousBuffer()">disableContinuousBuffer</a></dd>
+<dd><a class="method public" href="#%5CCrypt_DES::disablePadding()">disablePadding</a></dd>
+<dd><a class="method public" href="#%5CCrypt_DES::enableContinuousBuffer()">enableContinuousBuffer</a></dd>
+<dd><a class="method public" href="#%5CCrypt_DES::enablePadding()">enablePadding</a></dd>
+<dd><a class="method public" href="#%5CCrypt_DES::encrypt()">encrypt</a></dd>
+<dd><a class="method public" href="#%5CCrypt_DES::setIV()">setIV</a></dd>
+<dd><a class="method public" href="#%5CCrypt_DES::setKey()">setKey</a></dd>
+</dl>
+<h3>Description</h3>
+<p class="short-description">Pure-PHP implementation of DES.</p>
+<div class="long-description">
+</div>
+<h3>Properties</h3>
+<div>
+<a id="\Crypt_DES::$continuousBuffer"></a><h4 class="property public">$continuousBuffer<div class="to-top"><a href="#%5CCrypt_DES">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Boolean <span class="highlight">$continuousBuffer</span> = 'false'</code><p class="short-description">Continuous Buffer status</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Boolean<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd>false</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_DES::enableContinuousBuffer()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_DES::$debuffer"></a><h4 class="property public">$debuffer<div class="to-top"><a href="#%5CCrypt_DES">jump to class</a></div>
+</h4>
+<div class="property">
+<code>String <span class="highlight">$debuffer</span> = ''</code><p class="short-description">Decryption buffer for CTR, OFB and CFB modes</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>String<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_DES::decrypt()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_DES::$dechanged"></a><h4 class="property public">$dechanged<div class="to-top"><a href="#%5CCrypt_DES">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Boolean <span class="highlight">$dechanged</span> = 'true'</code><p class="short-description">Does the demcrypt resource need to be (re)initialized?</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Boolean<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd>true</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_DES::setKey()</dd>
+<dt>see</dt>
+<dd>Crypt_DES::setIV()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_DES::$decryptIV"></a><h4 class="property public">$decryptIV<div class="to-top"><a href="#%5CCrypt_DES">jump to class</a></div>
+</h4>
+<div class="property">
+<code>String <span class="highlight">$decryptIV</span> = '\0\0\0\0\0\0\0\0'</code><p class="short-description">A "sliding" Initialization Vector</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>String<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd>\0\0\0\0\0\0\0\0</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_DES::enableContinuousBuffer()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_DES::$demcrypt"></a><h4 class="property public">$demcrypt<div class="to-top"><a href="#%5CCrypt_DES">jump to class</a></div>
+</h4>
+<div class="property">
+<code>String <span class="highlight">$demcrypt</span> = ''</code><p class="short-description">mcrypt resource for decryption</p>
+<div class="long-description"><p>The mcrypt resource can be recreated every time something needs to be created or it can be created just once.
+Since mcrypt operates in continuous mode, by default, it'll need to be recreated when in non-continuous mode.</p>
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>String<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_DES::decrypt()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_DES::$ecb"></a><h4 class="property public">$ecb<div class="to-top"><a href="#%5CCrypt_DES">jump to class</a></div>
+</h4>
+<div class="property">
+<code>String <span class="highlight">$ecb</span> = ''</code><p class="short-description">mcrypt resource for CFB mode</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>String<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_DES::encrypt()</dd>
+<dt>see</dt>
+<dd>Crypt_DES::decrypt()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_DES::$enbuffer"></a><h4 class="property public">$enbuffer<div class="to-top"><a href="#%5CCrypt_DES">jump to class</a></div>
+</h4>
+<div class="property">
+<code>String <span class="highlight">$enbuffer</span> = ''</code><p class="short-description">Encryption buffer for CTR, OFB and CFB modes</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>String<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_DES::encrypt()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_DES::$enchanged"></a><h4 class="property public">$enchanged<div class="to-top"><a href="#%5CCrypt_DES">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Boolean <span class="highlight">$enchanged</span> = 'true'</code><p class="short-description">Does the enmcrypt resource need to be (re)initialized?</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Boolean<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd>true</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_DES::setKey()</dd>
+<dt>see</dt>
+<dd>Crypt_DES::setIV()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_DES::$encryptIV"></a><h4 class="property public">$encryptIV<div class="to-top"><a href="#%5CCrypt_DES">jump to class</a></div>
+</h4>
+<div class="property">
+<code>String <span class="highlight">$encryptIV</span> = '\0\0\0\0\0\0\0\0'</code><p class="short-description">A "sliding" Initialization Vector</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>String<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd>\0\0\0\0\0\0\0\0</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_DES::enableContinuousBuffer()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_DES::$enmcrypt"></a><h4 class="property public">$enmcrypt<div class="to-top"><a href="#%5CCrypt_DES">jump to class</a></div>
+</h4>
+<div class="property">
+<code>String <span class="highlight">$enmcrypt</span> = ''</code><p class="short-description">mcrypt resource for encryption</p>
+<div class="long-description"><p>The mcrypt resource can be recreated every time something needs to be created or it can be created just once.
+Since mcrypt operates in continuous mode, by default, it'll need to be recreated when in non-continuous mode.</p>
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>String<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_DES::encrypt()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_DES::$iv"></a><h4 class="property public">$iv<div class="to-top"><a href="#%5CCrypt_DES">jump to class</a></div>
+</h4>
+<div class="property">
+<code>String <span class="highlight">$iv</span> = '\0\0\0\0\0\0\0\0'</code><p class="short-description">The Initialization Vector</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>String<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd>\0\0\0\0\0\0\0\0</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_DES::setIV()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_DES::$keys"></a><h4 class="property public">$keys<div class="to-top"><a href="#%5CCrypt_DES">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Array <span class="highlight">$keys</span> = '\0\0\0\0\0\0\0\0'</code><p class="short-description">The Key Schedule</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd>\0\0\0\0\0\0\0\0</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_DES::setKey()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_DES::$mode"></a><h4 class="property public">$mode<div class="to-top"><a href="#%5CCrypt_DES">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Integer <span class="highlight">$mode</span> = ''</code><p class="short-description">The Encryption Mode</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Integer<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_DES::Crypt_DES()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_DES::$paddable"></a><h4 class="property public">$paddable<div class="to-top"><a href="#%5CCrypt_DES">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Boolean <span class="highlight">$paddable</span> = 'false'</code><p class="short-description">Is the mode one that is paddable?</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Boolean<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd>false</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_DES::Crypt_DES()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_DES::$padding"></a><h4 class="property public">$padding<div class="to-top"><a href="#%5CCrypt_DES">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Boolean <span class="highlight">$padding</span> = 'true'</code><p class="short-description">Padding status</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Boolean<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd>true</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_DES::enablePadding()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+<h3>Methods</h3>
+<div>
+<a id="\Crypt_DES::Crypt_DES()"></a><h4 class="method public">Crypt_DES<div class="to-top"><a href="#Crypt_DES">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">Crypt_DES</span><span class="nb-faded-text">(
+          \optional $mode
+              =
+              CRYPT_MODE_DES_CBC
+          )
+        </span>
+        :
+        <a href="_lib_Crypt_DES.html#%5CCrypt_DES">\Crypt_DES</a></code><p class="short-description">Default Constructor.</p>
+<div class="long-description"><p>Determines whether or not the mcrypt extension should be used.  $mode should only, at present, be
+CRYPT_DES_MODE_ECB or CRYPT_DES_MODE_CBC.  If not explictly set, CRYPT_DES_MODE_CBC will be used.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$mode</dt>
+<dd>\optional<br><em>Integer $mode</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_Crypt_DES.html#%5CCrypt_DES">\Crypt_DES</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_DES::_generate_xor()"></a><h4 class="method public">_generate_xor<div class="to-top"><a href="#Crypt_DES">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_generate_xor</span><span class="nb-faded-text">(
+          Integer $length, String $iv
+          )
+        </span>
+        :
+        </code><p class="short-description">Generate CTR XOR encryption key</p>
+<div class="long-description"><p>Encrypt the output of this and XOR it against the ciphertext / plaintext to get the
+plaintext / ciphertext in CTR mode.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$length</dt>
+<dd>Integer<br><em></em>
+</dd>
+<dt>$iv</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>Crypt_DES::decrypt()</dd>
+<dt>see</dt>
+<dd>Crypt_DES::encrypt()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_DES::_pad()"></a><h4 class="method public">_pad<div class="to-top"><a href="#Crypt_DES">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_pad</span><span class="nb-faded-text">(
+           $text
+          )
+        </span>
+        :
+        </code><p class="short-description">Pads a string</p>
+<div class="long-description"><p>Pads a string using the RSA PKCS padding standards so that its length is a multiple of the blocksize (8).
+8 - (strlen($text) &amp; 7) bytes are added, each of which is equal to chr(8 - (strlen($text) &amp; 7)</p>
+
+<p>If padding is disabled and $text is not a multiple of the blocksize, the string will be padded regardless
+and padding will, hence forth, be enabled.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$text</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_DES::_unpad()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_DES::_prepareKey()"></a><h4 class="method public">_prepareKey<div class="to-top"><a href="#Crypt_DES">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_prepareKey</span><span class="nb-faded-text">(
+          String $key
+          )
+        </span>
+        :
+        Array</code><p class="short-description">Creates the key schedule.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$key</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Array</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_DES::_processBlock()"></a><h4 class="method public">_processBlock<div class="to-top"><a href="#Crypt_DES">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_processBlock</span><span class="nb-faded-text">(
+          String $block, Integer $mode
+          )
+        </span>
+        :
+        String</code><p class="short-description">Encrypts or decrypts a 64-bit block</p>
+<div class="long-description"><p>$mode should be either CRYPT_DES_ENCRYPT or CRYPT_DES_DECRYPT.  See
+{@link http://en.wikipedia.org/wiki/Image:Feistel.png Feistel.png} to get a general
+idea of what this function does.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$block</dt>
+<dd>String<br><em></em>
+</dd>
+<dt>$mode</dt>
+<dd>Integer<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>String</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_DES::_string_shift()"></a><h4 class="method public">_string_shift<div class="to-top"><a href="#Crypt_DES">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_string_shift</span><span class="nb-faded-text">(
+          String $string, \optional $index
+              =
+              1
+          )
+        </span>
+        :
+        String</code><p class="short-description">String Shift</p>
+<div class="long-description"><p>Inspired by array_shift</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$string</dt>
+<dd>String<br><em></em>
+</dd>
+<dt>$index</dt>
+<dd>\optional<br><em>Integer $index</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>String</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_DES::_unpad()"></a><h4 class="method public">_unpad<div class="to-top"><a href="#Crypt_DES">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_unpad</span><span class="nb-faded-text">(
+           $text
+          )
+        </span>
+        :
+        </code><p class="short-description">Unpads a string</p>
+<div class="long-description"><p>If padding is enabled and the reported padding length is invalid the encryption key will be assumed to be wrong
+and false will be returned.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$text</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_DES::_pad()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_DES::decrypt()"></a><h4 class="method public">decrypt<div class="to-top"><a href="#Crypt_DES">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">decrypt</span><span class="nb-faded-text">(
+          String $ciphertext
+          )
+        </span>
+        :
+        </code><p class="short-description">Decrypts a message.</p>
+<div class="long-description"><p>If strlen($ciphertext) is not a multiple of 8, null bytes will be added to the end of the string until it is.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$ciphertext</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>Crypt_DES::encrypt()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_DES::disableContinuousBuffer()"></a><h4 class="method public">disableContinuousBuffer<div class="to-top"><a href="#Crypt_DES">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">disableContinuousBuffer</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        </code><p class="short-description">Treat consecutive packets as if they are a discontinuous buffer.</p>
+<div class="long-description"><p>The default behavior.</p>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>Crypt_DES::enableContinuousBuffer()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_DES::disablePadding()"></a><h4 class="method public">disablePadding<div class="to-top"><a href="#Crypt_DES">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">disablePadding</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        </code><p class="short-description">Do not pad packets.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>Crypt_DES::enablePadding()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_DES::enableContinuousBuffer()"></a><h4 class="method public">enableContinuousBuffer<div class="to-top"><a href="#Crypt_DES">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">enableContinuousBuffer</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        </code><p class="short-description">Treat consecutive "packets" as if they are a continuous buffer.</p>
+<div class="long-description"><p>Say you have a 16-byte plaintext $plaintext.  Using the default behavior, the two following code snippets
+will yield different outputs:</p>
+
+<p><code>
+   echo $des->encrypt(substr($plaintext, 0, 8));
+   echo $des->encrypt(substr($plaintext, 8, 8));
+</code>
+<code>
+   echo $des->encrypt($plaintext);
+</code></p>
+
+<p>The solution is to enable the continuous buffer.  Although this will resolve the above discrepancy, it creates
+another, as demonstrated with the following:</p>
+
+<p><code>
+   $des->encrypt(substr($plaintext, 0, 8));
+   echo $des->decrypt($des->encrypt(substr($plaintext, 8, 8)));
+</code>
+<code>
+   echo $des->decrypt($des->encrypt(substr($plaintext, 8, 8)));
+</code></p>
+
+<p>With the continuous buffer disabled, these would yield the same output.  With it enabled, they yield different
+outputs.  The reason is due to the fact that the initialization vector's change after every encryption /
+decryption round when the continuous buffer is enabled.  When it's disabled, they remain constant.</p>
+
+<p>Put another way, when the continuous buffer is enabled, the state of the Crypt_DES() object changes after each
+encryption / decryption round, whereas otherwise, it'd remain constant.  For this reason, it's recommended that
+continuous buffers not be used.  They do offer better security and are, in fact, sometimes required (SSH uses them),
+however, they are also less intuitive and more likely to cause you problems.</p>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>Crypt_DES::disableContinuousBuffer()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_DES::enablePadding()"></a><h4 class="method public">enablePadding<div class="to-top"><a href="#Crypt_DES">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">enablePadding</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        </code><p class="short-description">Pad "packets".</p>
+<div class="long-description"><p>DES works by encrypting eight bytes at a time.  If you ever need to encrypt or decrypt something that's not
+a multiple of eight, it becomes necessary to pad the input so that it's length is a multiple of eight.</p>
+
+<p>Padding is enabled by default.  Sometimes, however, it is undesirable to pad strings.  Such is the case in SSH1,
+where "packets" are padded with random bytes before being encrypted.  Unpad these packets and you risk stripping
+away characters that shouldn't be stripped away. (SSH knows how many bytes are added because the length is
+transmitted separately)</p>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>Crypt_DES::disablePadding()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_DES::encrypt()"></a><h4 class="method public">encrypt<div class="to-top"><a href="#Crypt_DES">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">encrypt</span><span class="nb-faded-text">(
+          String $plaintext
+          )
+        </span>
+        :
+        </code><p class="short-description">Encrypts a message.</p>
+<div class="long-description"><p>$plaintext will be padded with up to 8 additional bytes.  Other DES implementations may or may not pad in the
+same manner.  Other common approaches to padding and the reasons why it's necessary are discussed in the following
+URL:</p>
+
+<p>{@link http://www.di-mgt.com.au/cryptopad.html http://www.di-mgt.com.au/cryptopad.html}</p>
+
+<p>An alternative to padding is to, separately, send the length of the file.  This is what SSH, in fact, does.
+strlen($plaintext) will still need to be a multiple of 8, however, arbitrary values can be added to make it that
+length.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$plaintext</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>Crypt_DES::decrypt()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_DES::setIV()"></a><h4 class="method public">setIV<div class="to-top"><a href="#Crypt_DES">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">setIV</span><span class="nb-faded-text">(
+          String $iv
+          )
+        </span>
+        :
+        </code><p class="short-description">Sets the initialization vector. (optional)</p>
+<div class="long-description"><p>SetIV is not required when CRYPT_DES_MODE_ECB is being used.  If not explictly set, it'll be assumed
+to be all zero's.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$iv</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_DES::setKey()"></a><h4 class="method public">setKey<div class="to-top"><a href="#Crypt_DES">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">setKey</span><span class="nb-faded-text">(
+          String $key
+          )
+        </span>
+        :
+        </code><p class="short-description">Sets the key.</p>
+<div class="long-description"><p>Keys can be of any length.  DES, itself, uses 64-bit keys (eg. strlen($key) == 8), however, we
+only use the first eight, if $key has more then eight characters in it, and pad $key with the
+null byte if it is less then eight characters long.</p>
+
+<p>DES also requires that every eighth bit be a parity bit, however, we'll ignore that.</p>
+
+<p>If the key is not explicitly set, it'll be assumed to be all zero's.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$key</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<small xmlns="" class="footer">Documentation was generated by <a href="http://docblox-project.org">DocBlox 0.12.0</a>.
+    </small></body></html>

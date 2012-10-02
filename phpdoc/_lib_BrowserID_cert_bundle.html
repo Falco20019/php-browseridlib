@@ -1,0 +1,491 @@
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>DocBlox Documentation</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta><link rel="stylesheet" href="css/black-tie/jquery-ui-1.8.2.custom.css" type="text/css"></link><link rel="stylesheet" href="css/jquery.treeview.css" type="text/css"></link><link rel="stylesheet" href="css/theme.css" type="text/css"></link><script type="text/javascript" src="js/jquery-1.4.2.min.js"></script><script type="text/javascript" src="js/jquery-ui-1.8.2.custom.min.js"></script><script type="text/javascript" src="js/jquery.cookie.js"></script><script type="text/javascript" src="js/jquery.treeview.js"></script><script type="text/javascript">
+            $(document).ready(function() {
+                $(".filetree").treeview({
+                    collapsed: true,
+                    persist: "cookie"
+                });
+
+                $("#accordion").accordion({
+                    collapsible: true,
+                    autoHeight:  false,
+                    fillSpace:   true
+                });
+
+                $(".tabs").tabs();
+            });
+        </script></head><body><div xmlns="" id="content">
+<script>
+      $(document).ready(function() {
+        $('dl.function-info, dl.constant-info, dl.property-info').prev().css('cursor', 'pointer');
+        $('dl.function-info, dl.constant-info, dl.property-info').prev().click(function() {
+          if ($(this).next().is(':hidden'))
+          {
+            $(this).children('img')[0].src = 'images/arrow_down.gif';
+          } else
+          {
+            $(this).children('img')[0].src = 'images/arrow_right.gif';
+          }
+          $(this).next().slideToggle();
+        });
+      $('dl.function-info, dl.constant-info, dl.property-info').hide();
+      $('dl.function-info img, dl.constant-info img, dl.property-info img').show();
+      });
+    </script><a name="top"></a><h1 class="file">lib\BrowserID\cert_bundle.php</h1>
+<div class="file_menu">
+<a href="#includes">Includes</a> <a href="#classes">Classes</a> </div>
+<dl class="file-info">
+<dt>author</dt>
+<dd>Benjamin Krämer &lt;benjamin.kraemer@alien-scripts.de&gt;</dd>
+<dt>copyright</dt>
+<dd>Alien-Scripts.de Benjamin Krämer</dd>
+<dt>license</dt>
+<dd>http://www.opensource.org/licenses/mit-license.html  MIT License</dd>
+<dt>package</dt>
+<dd>BrowserID</dd>
+<dt>subpackage</dt>
+<dd>CertBundle</dd>
+<dt>Classes</dt>
+<dd><a class="class" href="#%5CCertBundle">CertBundle</a></dd>
+</dl>
+<h2>Description</h2>
+<p class="short-description">Certificate bundle</p>
+<div class="long-description"><p>LICENSE: Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.</p>
+</div>
+<a name="classes"></a><a id="\CertBundle"></a><h2 class="class">\CertBundle<div class="to-top"><a href="#top">jump to top</a></div>
+</h2>
+<div class="class">
+<dl class="class-info">
+<dt>author</dt>
+<dd>Benjamin Krämer &lt;benjamin.kraemer@alien-scripts.de&gt;</dd>
+<dt>package</dt>
+<dd>BrowserID</dd>
+<dt>subpackage</dt>
+<dd>CertBundle</dd>
+<dt>version</dt>
+<dd>1.0.0</dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Properties
+              </a></dt>
+<dd><a class="property private" href="#%5CCertBundle::%24certs">$certs</a></dd>
+<dd><a class="property private" href="#%5CCertBundle::%24signedAssertion">$signedAssertion</a></dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Methods
+              </a></dt>
+<dd><a class="method public" href="#%5CCertBundle::__construct()">__construct</a></dd>
+<dd><a class="method public" href="#%5CCertBundle::bundle()">bundle</a></dd>
+<dd><a class="method public" href="#%5CCertBundle::getCerts()">getCerts</a></dd>
+<dd><a class="method public" href="#%5CCertBundle::getPublicKey()">getPublicKey</a></dd>
+<dd><a class="method public" href="#%5CCertBundle::getSignedAssertion()">getSignedAssertion</a></dd>
+<dd><a class="method public" href="#%5CCertBundle::unbundle()">unbundle</a></dd>
+<dd><a class="method public" href="#%5CCertBundle::verify()">verify</a></dd>
+<dd><a class="method private" href="#%5CCertBundle::verifyChain()">verifyChain</a></dd>
+</dl>
+<h3>Description</h3>
+<p class="short-description">Certificate bundle</p>
+<div class="long-description"><p>A bundle consisting of an signed assertion and a list of identity certificates.</p>
+</div>
+<h3>Properties</h3>
+<div>
+<a id="\CertBundle::$certs"></a><h4 class="property private">$certs<div class="to-top"><a href="#%5CCertBundle">jump to class</a></div>
+</h4>
+<div class="property">
+<code>array <span class="highlight">$certs</span> = ''</code><p class="short-description">Identity certificates</p>
+<div class="long-description"><p>A list of signed identity certificates</p>
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>array<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\CertBundle::$signedAssertion"></a><h4 class="property private">$signedAssertion<div class="to-top"><a href="#%5CCertBundle">jump to class</a></div>
+</h4>
+<div class="property">
+<code>string <span class="highlight">$signedAssertion</span> = ''</code><p class="short-description">Signed assertion</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>string<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+<h3>Methods</h3>
+<div>
+<a id="\CertBundle::__construct()"></a><h4 class="method public">__construct<div class="to-top"><a href="#CertBundle">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">__construct</span><span class="nb-faded-text">(
+          string $assertion, array $certificates
+          )
+        </span>
+        :
+        </code><p class="short-description">Constructor</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$assertion</dt>
+<dd>string<br><em>Signed assertion</em>
+</dd>
+<dt>$certificates</dt>
+<dd>array<br><em>List of signed identity certificates</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\CertBundle::bundle()"></a><h4 class="method public">bundle<div class="to-top"><a href="#CertBundle">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">bundle</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        string</code><p class="short-description">Bundle assertion</p>
+<div class="long-description"><p>Bundle the signed assertion and the list of identity certificates into an bundled assertion.</p>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>string</dt>
+<dd><em>Bundled assertion</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\CertBundle::getCerts()"></a><h4 class="method public">getCerts<div class="to-top"><a href="#CertBundle">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">getCerts</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        array</code><p class="short-description">Identity certificates</p>
+<div class="long-description"><p>Gets the list of identity certificates.</p>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>array</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\CertBundle::getPublicKey()"></a><h4 class="method public">getPublicKey<div class="to-top"><a href="#CertBundle">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">getPublicKey</span><span class="nb-faded-text">(
+          string $issuer
+          )
+        </span>
+        :
+        <a href="_lib_BrowserID_algs.html#%5CAbstractPublicKey">\AbstractPublicKey</a></code><p class="short-description">Get public key</p>
+<div class="long-description"><p>Gets the public key for the issuer. If our own identity provider is the issuer, we
+can load our own public key avoiding network traffic.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$issuer</dt>
+<dd>string<br><em>The issuers domain</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_BrowserID_algs.html#%5CAbstractPublicKey">\AbstractPublicKey</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>static</dt>
+<dd></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\CertBundle::getSignedAssertion()"></a><h4 class="method public">getSignedAssertion<div class="to-top"><a href="#CertBundle">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">getSignedAssertion</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        string</code><p class="short-description">Signed assertion</p>
+<div class="long-description"><p>Gets the signed assertion.</p>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>string</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\CertBundle::unbundle()"></a><h4 class="method public">unbundle<div class="to-top"><a href="#CertBundle">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">unbundle</span><span class="nb-faded-text">(
+          string $bundle
+          )
+        </span>
+        :
+        <a href="_lib_BrowserID_cert_bundle.html#%5CCertBundle">\CertBundle</a></code><p class="short-description">Unbundle assertion</p>
+<div class="long-description"><p>Creates an instance by parsing a bundled assertion.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$bundle</dt>
+<dd>string<br><em>Bundled assertion</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_BrowserID_cert_bundle.html#%5CCertBundle">\CertBundle</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>true</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>static</dt>
+<dd></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\CertBundle::verify()"></a><h4 class="method public">verify<div class="to-top"><a href="#CertBundle">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">verify</span><span class="nb-faded-text">(
+          int $now
+          )
+        </span>
+        :
+        array</code><p class="short-description">Verify the bundled assertion</p>
+<div class="long-description"><p>Verifies if the bundled assertion is valid.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$now</dt>
+<dd>int<br><em>Unix timestamp in milliseconds</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>array</dt>
+<dd><em>Containing the array of certificates as &#039;certChain&#039;, the additional assertion payload as &#039;payload&#039; and an assertion object as &#039;assertion&#039;</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\CertBundle::verifyChain()"></a><h4 class="method private">verifyChain<div class="to-top"><a href="#CertBundle">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">verifyChain</span><span class="nb-faded-text">(
+          int $now
+          )
+        </span>
+        :
+        array</code><p class="short-description">Verify certificate chain</p>
+<div class="long-description"><p>Verifies the chain of certificates based on the first one as root certificate.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$now</dt>
+<dd>int<br><em>Unix timestamp in milliseconds</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>array</dt>
+<dd><em>An array of Cert-objects based on the identity certificates</em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>private</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<small xmlns="" class="footer">Documentation was generated by <a href="http://docblox-project.org">DocBlox 0.12.0</a>.
+    </small></body></html>

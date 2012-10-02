@@ -1,0 +1,669 @@
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>DocBlox Documentation</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta><link rel="stylesheet" href="css/black-tie/jquery-ui-1.8.2.custom.css" type="text/css"></link><link rel="stylesheet" href="css/jquery.treeview.css" type="text/css"></link><link rel="stylesheet" href="css/theme.css" type="text/css"></link><script type="text/javascript" src="js/jquery-1.4.2.min.js"></script><script type="text/javascript" src="js/jquery-ui-1.8.2.custom.min.js"></script><script type="text/javascript" src="js/jquery.cookie.js"></script><script type="text/javascript" src="js/jquery.treeview.js"></script><script type="text/javascript">
+            $(document).ready(function() {
+                $(".filetree").treeview({
+                    collapsed: true,
+                    persist: "cookie"
+                });
+
+                $("#accordion").accordion({
+                    collapsible: true,
+                    autoHeight:  false,
+                    fillSpace:   true
+                });
+
+                $(".tabs").tabs();
+            });
+        </script></head><body><div xmlns="" id="content">
+<script>
+      $(document).ready(function() {
+        $('dl.function-info, dl.constant-info, dl.property-info').prev().css('cursor', 'pointer');
+        $('dl.function-info, dl.constant-info, dl.property-info').prev().click(function() {
+          if ($(this).next().is(':hidden'))
+          {
+            $(this).children('img')[0].src = 'images/arrow_down.gif';
+          } else
+          {
+            $(this).children('img')[0].src = 'images/arrow_right.gif';
+          }
+          $(this).next().slideToggle();
+        });
+      $('dl.function-info, dl.constant-info, dl.property-info').hide();
+      $('dl.function-info img, dl.constant-info img, dl.property-info img').show();
+      });
+    </script><a name="top"></a><h1 class="file">lib\Crypt\AES.php</h1>
+<div class="file_menu">
+<a href="#includes">Includes</a> <a href="#constants">Constants</a> <a href="#classes">Classes</a> </div>
+<dl class="file-info">
+<dt>author</dt>
+<dd>Jim Wigginton &lt;terrafrost@php.net&gt;</dd>
+<dt>copyright</dt>
+<dd>MMVIII Jim Wigginton</dd>
+<dt>license</dt>
+<dd>http://www.opensource.org/licenses/mit-license.html  MIT License</dd>
+<dt>link</dt>
+<dd><a href="http://phpseclib.sourceforge.net">http://phpseclib.sourceforge.net</a></dd>
+<dt>package</dt>
+<dd>Crypt</dd>
+<dt>subpackage</dt>
+<dd>Crypt_AES</dd>
+<dt>version</dt>
+<dd>$Id: AES.php,v 1.7 2010/02/09 06:10:25 terrafrost Exp $</dd>
+<dt>Constants</dt>
+<dd><a class="constant" href="#::CRYPT_AES_MODE_CTR">CRYPT_AES_MODE_CTR</a></dd>
+<dd><a class="constant" href="#::CRYPT_AES_MODE_ECB">CRYPT_AES_MODE_ECB</a></dd>
+<dd><a class="constant" href="#::CRYPT_AES_MODE_CBC">CRYPT_AES_MODE_CBC</a></dd>
+<dd><a class="constant" href="#::CRYPT_AES_MODE_CFB">CRYPT_AES_MODE_CFB</a></dd>
+<dd><a class="constant" href="#::CRYPT_AES_MODE_OFB">CRYPT_AES_MODE_OFB</a></dd>
+<dd><a class="constant" href="#::CRYPT_AES_MODE_INTERNAL">CRYPT_AES_MODE_INTERNAL</a></dd>
+<dd><a class="constant" href="#::CRYPT_AES_MODE_MCRYPT">CRYPT_AES_MODE_MCRYPT</a></dd>
+<dt>Classes</dt>
+<dd><a class="class" href="#%5CCrypt_AES">Crypt_AES</a></dd>
+</dl>
+<h2>Description</h2>
+<p class="short-description">Pure-PHP implementation of AES.</p>
+<div class="long-description"><p>Uses mcrypt, if available, and an internal implementation, otherwise.</p>
+
+<p>PHP versions 4 and 5</p>
+
+<p>If {@link Crypt_AES::setKeyLength() setKeyLength()} isn't called, it'll be calculated from
+{@link Crypt_AES::setKey() setKey()}.  ie. if the key is 128-bits, the key length will be 128-bits.  If it's 136-bits
+it'll be null-padded to 160-bits and 160 bits will be the key length until {@link Crypt_Rijndael::setKey() setKey()}
+is called, again, at which point, it'll be recalculated.</p>
+
+<p>Since Crypt_AES extends Crypt_Rijndael, some functions are available to be called that, in the context of AES, don't
+make a whole lot of sense.  {@link Crypt_AES::setBlockLength() setBlockLength()}, for instance.  Calling that function,
+however possible, won't do anything (AES has a fixed block length whereas Rijndael has a variable one).</p>
+
+<p>Here's a short example of how to use this library:
+<code>
+<?php
+   include('Crypt/AES.php');
+
+   $aes = new Crypt_AES();
+
+   $aes->setKey('abcdefghijklmnop');
+
+   $size = 10 * 1024;
+   $plaintext = '';
+   for ($i = 0; $i < $size; $i++) {
+       $plaintext.= 'a';
+   }
+
+   echo $aes->decrypt($aes->encrypt($plaintext));
+?>
+</code></p>
+
+<p>LICENSE: Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.</p>
+</div>
+<a name="constants"></a><h2>Constants</h2>
+<div>
+<a id="::CRYPT_AES_MODE_CTR"></a><h3 class="constant">CRYPT_AES_MODE_CTR<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_AES_MODE_CTR</span> = '-1'
+      </code><p class="short-description">Encrypt / decrypt using the Counter mode.</p>
+<div class="long-description"><p>Set to -1 since that's what Crypt/Random.php uses to index the CTR mode.</p>
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>-1</dd>
+<dt>link</dt>
+<dd><a href="http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Counter_.28CTR.29">http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Counter_.28CTR.29</a></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_AES_MODE_ECB"></a><h3 class="constant">CRYPT_AES_MODE_ECB<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_AES_MODE_ECB</span> = '1'
+      </code><p class="short-description">Encrypt / decrypt using the Electronic Code Book mode.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>1</dd>
+<dt>link</dt>
+<dd><a href="http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Electronic_codebook_.28ECB.29">http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Electronic_codebook_.28ECB.29</a></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_AES_MODE_CBC"></a><h3 class="constant">CRYPT_AES_MODE_CBC<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_AES_MODE_CBC</span> = '2'
+      </code><p class="short-description">Encrypt / decrypt using the Code Book Chaining mode.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>2</dd>
+<dt>link</dt>
+<dd><a href="http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Cipher-block_chaining_.28CBC.29">http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Cipher-block_chaining_.28CBC.29</a></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_AES_MODE_CFB"></a><h3 class="constant">CRYPT_AES_MODE_CFB<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_AES_MODE_CFB</span> = '3'
+      </code><p class="short-description">Encrypt / decrypt using the Cipher Feedback mode.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>3</dd>
+<dt>link</dt>
+<dd><a href="http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Cipher_feedback_.28CFB.29">http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Cipher_feedback_.28CFB.29</a></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_AES_MODE_OFB"></a><h3 class="constant">CRYPT_AES_MODE_OFB<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_AES_MODE_OFB</span> = '4'
+      </code><p class="short-description">Encrypt / decrypt using the Cipher Feedback mode.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>4</dd>
+<dt>link</dt>
+<dd><a href="http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Output_feedback_.28OFB.29">http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Output_feedback_.28OFB.29</a></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_AES_MODE_INTERNAL"></a><h3 class="constant">CRYPT_AES_MODE_INTERNAL<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_AES_MODE_INTERNAL</span> = '1'
+      </code><p class="short-description">Toggles the internal implementation</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>1</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_AES_MODE_MCRYPT"></a><h3 class="constant">CRYPT_AES_MODE_MCRYPT<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_AES_MODE_MCRYPT</span> = '2'
+      </code><p class="short-description">Toggles the mcrypt implementation</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>2</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+<a name="classes"></a><a id="\Crypt_AES"></a><h2 class="class">\Crypt_AES<div class="to-top"><a href="#top">jump to top</a></div>
+</h2>
+<div class="class">
+<dl class="class-info">
+<dt>Extends from</dt>
+<dd><a href="_lib_Crypt_Rijndael.html#%5CCrypt_Rijndael">\Crypt_Rijndael</a></dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>author</dt>
+<dd>Jim Wigginton &lt;terrafrost@php.net&gt;</dd>
+<dt>package</dt>
+<dd>Crypt</dd>
+<dt>subpackage</dt>
+<dd>Crypt_AES</dd>
+<dt>version</dt>
+<dd>0.1.0</dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Properties
+              </a></dt>
+<dd><a class="property public" href="#%5CCrypt_AES::%24demcrypt">$demcrypt</a></dd>
+<dd><a class="property public" href="#%5CCrypt_AES::%24ecb">$ecb</a></dd>
+<dd><a class="property public" href="#%5CCrypt_AES::%24enmcrypt">$enmcrypt</a></dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Methods
+              </a></dt>
+<dd><a class="method public" href="#%5CCrypt_AES::Crypt_AES()">Crypt_AES</a></dd>
+<dd><a class="method public" href="#%5CCrypt_AES::_decryptBlock()">_decryptBlock</a></dd>
+<dd><a class="method public" href="#%5CCrypt_AES::_encryptBlock()">_encryptBlock</a></dd>
+<dd><a class="method public" href="#%5CCrypt_AES::_mcryptSetup()">_mcryptSetup</a></dd>
+<dd><a class="method public" href="#%5CCrypt_AES::decrypt()">decrypt</a></dd>
+<dd><a class="method public" href="#%5CCrypt_AES::encrypt()">encrypt</a></dd>
+<dd><a class="method public" href="#%5CCrypt_AES::setBlockLength()">setBlockLength</a></dd>
+</dl>
+<h3>Description</h3>
+<p class="short-description">Pure-PHP implementation of AES.</p>
+<div class="long-description">
+</div>
+<h3>Properties</h3>
+<div>
+<a id="\Crypt_AES::$demcrypt"></a><h4 class="property public">$demcrypt<div class="to-top"><a href="#%5CCrypt_AES">jump to class</a></div>
+</h4>
+<div class="property">
+<code>String <span class="highlight">$demcrypt</span> = ''</code><p class="short-description">mcrypt resource for decryption</p>
+<div class="long-description"><p>The mcrypt resource can be recreated every time something needs to be created or it can be created just once.
+Since mcrypt operates in continuous mode, by default, it'll need to be recreated when in non-continuous mode.</p>
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>String<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_AES::decrypt()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_AES::$ecb"></a><h4 class="property public">$ecb<div class="to-top"><a href="#%5CCrypt_AES">jump to class</a></div>
+</h4>
+<div class="property">
+<code>String <span class="highlight">$ecb</span> = ''</code><p class="short-description">mcrypt resource for CFB mode</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>String<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_AES::encrypt()</dd>
+<dt>see</dt>
+<dd>Crypt_AES::decrypt()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_AES::$enmcrypt"></a><h4 class="property public">$enmcrypt<div class="to-top"><a href="#%5CCrypt_AES">jump to class</a></div>
+</h4>
+<div class="property">
+<code>String <span class="highlight">$enmcrypt</span> = ''</code><p class="short-description">mcrypt resource for encryption</p>
+<div class="long-description"><p>The mcrypt resource can be recreated every time something needs to be created or it can be created just once.
+Since mcrypt operates in continuous mode, by default, it'll need to be recreated when in non-continuous mode.</p>
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>String<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_AES::encrypt()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+<h3>Methods</h3>
+<div>
+<a id="\Crypt_AES::Crypt_AES()"></a><h4 class="method public">Crypt_AES<div class="to-top"><a href="#Crypt_AES">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">Crypt_AES</span><span class="nb-faded-text">(
+          \optional $mode
+              =
+              CRYPT_AES_MODE_CBC
+          )
+        </span>
+        :
+        <a href="_lib_Crypt_AES.html#%5CCrypt_AES">\Crypt_AES</a></code><p class="short-description">Default Constructor.</p>
+<div class="long-description"><p>Determines whether or not the mcrypt extension should be used.  $mode should only, at present, be
+CRYPT_AES_MODE_ECB or CRYPT_AES_MODE_CBC.  If not explictly set, CRYPT_AES_MODE_CBC will be used.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$mode</dt>
+<dd>\optional<br><em>Integer $mode</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_Crypt_AES.html#%5CCrypt_AES">\Crypt_AES</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_AES::_decryptBlock()"></a><h4 class="method public">_decryptBlock<div class="to-top"><a href="#Crypt_AES">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_decryptBlock</span><span class="nb-faded-text">(
+          String $in
+          )
+        </span>
+        :
+        String</code><p class="short-description">Decrypts a block</p>
+<div class="long-description"><p>Optimized over Crypt_Rijndael's implementation by means of loop unrolling.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$in</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>String</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_Rijndael::_decryptBlock()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_AES::_encryptBlock()"></a><h4 class="method public">_encryptBlock<div class="to-top"><a href="#Crypt_AES">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_encryptBlock</span><span class="nb-faded-text">(
+          String $in
+          )
+        </span>
+        :
+        String</code><p class="short-description">Encrypts a block</p>
+<div class="long-description"><p>Optimized over Crypt_Rijndael's implementation by means of loop unrolling.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$in</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>String</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_Rijndael::_encryptBlock()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_AES::_mcryptSetup()"></a><h4 class="method public">_mcryptSetup<div class="to-top"><a href="#Crypt_AES">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_mcryptSetup</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        </code><p class="short-description">Setup mcrypt</p>
+<div class="long-description"><p>Validates all the variables.</p>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_AES::decrypt()"></a><h4 class="method public">decrypt<div class="to-top"><a href="#Crypt_AES">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">decrypt</span><span class="nb-faded-text">(
+          String $ciphertext
+          )
+        </span>
+        :
+        </code><p class="short-description">Decrypts a message.</p>
+<div class="long-description"><p>If strlen($ciphertext) is not a multiple of 16, null bytes will be added to the end of the string until it is.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$ciphertext</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>Crypt_AES::encrypt()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_AES::encrypt()"></a><h4 class="method public">encrypt<div class="to-top"><a href="#Crypt_AES">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">encrypt</span><span class="nb-faded-text">(
+          String $plaintext
+          )
+        </span>
+        :
+        </code><p class="short-description">Encrypts a message.</p>
+<div class="long-description"><p>$plaintext will be padded with up to 16 additional bytes.  Other AES implementations may or may not pad in the
+same manner.  Other common approaches to padding and the reasons why it's necessary are discussed in the following
+URL:</p>
+
+<p>{@link http://www.di-mgt.com.au/cryptopad.html http://www.di-mgt.com.au/cryptopad.html}</p>
+
+<p>An alternative to padding is to, separately, send the length of the file.  This is what SSH, in fact, does.
+strlen($plaintext) will still need to be a multiple of 16, however, arbitrary values can be added to make it that
+length.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$plaintext</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>Crypt_AES::decrypt()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_AES::setBlockLength()"></a><h4 class="method public">setBlockLength<div class="to-top"><a href="#Crypt_AES">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">setBlockLength</span><span class="nb-faded-text">(
+          Integer $length
+          )
+        </span>
+        :
+        </code><p class="short-description">Dummy function</p>
+<div class="long-description"><p>Since Crypt_AES extends Crypt_Rijndael, this function is, technically, available, but it doesn't do anything.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$length</dt>
+<dd>Integer<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<small xmlns="" class="footer">Documentation was generated by <a href="http://docblox-project.org">DocBlox 0.12.0</a>.
+    </small></body></html>

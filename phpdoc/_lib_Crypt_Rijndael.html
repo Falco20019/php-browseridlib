@@ -1,0 +1,1796 @@
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>DocBlox Documentation</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta><link rel="stylesheet" href="css/black-tie/jquery-ui-1.8.2.custom.css" type="text/css"></link><link rel="stylesheet" href="css/jquery.treeview.css" type="text/css"></link><link rel="stylesheet" href="css/theme.css" type="text/css"></link><script type="text/javascript" src="js/jquery-1.4.2.min.js"></script><script type="text/javascript" src="js/jquery-ui-1.8.2.custom.min.js"></script><script type="text/javascript" src="js/jquery.cookie.js"></script><script type="text/javascript" src="js/jquery.treeview.js"></script><script type="text/javascript">
+            $(document).ready(function() {
+                $(".filetree").treeview({
+                    collapsed: true,
+                    persist: "cookie"
+                });
+
+                $("#accordion").accordion({
+                    collapsible: true,
+                    autoHeight:  false,
+                    fillSpace:   true
+                });
+
+                $(".tabs").tabs();
+            });
+        </script></head><body><div xmlns="" id="content">
+<script>
+      $(document).ready(function() {
+        $('dl.function-info, dl.constant-info, dl.property-info').prev().css('cursor', 'pointer');
+        $('dl.function-info, dl.constant-info, dl.property-info').prev().click(function() {
+          if ($(this).next().is(':hidden'))
+          {
+            $(this).children('img')[0].src = 'images/arrow_down.gif';
+          } else
+          {
+            $(this).children('img')[0].src = 'images/arrow_right.gif';
+          }
+          $(this).next().slideToggle();
+        });
+      $('dl.function-info, dl.constant-info, dl.property-info').hide();
+      $('dl.function-info img, dl.constant-info img, dl.property-info img').show();
+      });
+    </script><a name="top"></a><h1 class="file">lib\Crypt\Rijndael.php</h1>
+<div class="file_menu">
+<a href="#constants">Constants</a> <a href="#classes">Classes</a> </div>
+<dl class="file-info">
+<dt>author</dt>
+<dd>Jim Wigginton &lt;terrafrost@php.net&gt;</dd>
+<dt>copyright</dt>
+<dd>MMVIII Jim Wigginton</dd>
+<dt>license</dt>
+<dd>http://www.opensource.org/licenses/mit-license.html  MIT License</dd>
+<dt>link</dt>
+<dd><a href="http://phpseclib.sourceforge.net">http://phpseclib.sourceforge.net</a></dd>
+<dt>package</dt>
+<dd>Crypt</dd>
+<dt>subpackage</dt>
+<dd>Crypt_Rijndael</dd>
+<dt>version</dt>
+<dd>$Id: Rijndael.php,v 1.12 2010/02/09 06:10:26 terrafrost Exp $</dd>
+<dt>Constants</dt>
+<dd><a class="constant" href="#::CRYPT_RIJNDAEL_MODE_CTR">CRYPT_RIJNDAEL_MODE_CTR</a></dd>
+<dd><a class="constant" href="#::CRYPT_RIJNDAEL_MODE_ECB">CRYPT_RIJNDAEL_MODE_ECB</a></dd>
+<dd><a class="constant" href="#::CRYPT_RIJNDAEL_MODE_CBC">CRYPT_RIJNDAEL_MODE_CBC</a></dd>
+<dd><a class="constant" href="#::CRYPT_RIJNDAEL_MODE_CFB">CRYPT_RIJNDAEL_MODE_CFB</a></dd>
+<dd><a class="constant" href="#::CRYPT_RIJNDAEL_MODE_OFB">CRYPT_RIJNDAEL_MODE_OFB</a></dd>
+<dd><a class="constant" href="#::CRYPT_RIJNDAEL_MODE_INTERNAL">CRYPT_RIJNDAEL_MODE_INTERNAL</a></dd>
+<dd><a class="constant" href="#::CRYPT_RIJNDAEL_MODE_MCRYPT">CRYPT_RIJNDAEL_MODE_MCRYPT</a></dd>
+<dt>Classes</dt>
+<dd><a class="class" href="#%5CCrypt_Rijndael">Crypt_Rijndael</a></dd>
+</dl>
+<h2>Description</h2>
+<p class="short-description">Pure-PHP implementation of Rijndael.</p>
+<div class="long-description"><p>Does not use mcrypt, even when available, for reasons that are explained below.</p>
+
+<p>PHP versions 4 and 5</p>
+
+<p>If {@link Crypt_Rijndael::setBlockLength() setBlockLength()} isn't called, it'll be assumed to be 128 bits.  If
+{@link Crypt_Rijndael::setKeyLength() setKeyLength()} isn't called, it'll be calculated from
+{@link Crypt_Rijndael::setKey() setKey()}.  ie. if the key is 128-bits, the key length will be 128-bits.  If it's
+136-bits it'll be null-padded to 160-bits and 160 bits will be the key length until
+{@link Crypt_Rijndael::setKey() setKey()} is called, again, at which point, it'll be recalculated.</p>
+
+<p>Not all Rijndael implementations may support 160-bits or 224-bits as the block length / key length.  mcrypt, for example,
+does not.  AES, itself, only supports block lengths of 128 and key lengths of 128, 192, and 256.
+{@link http://csrc.nist.gov/archive/aes/rijndael/Rijndael-ammended.pdf#page=10 Rijndael-ammended.pdf#page=10} defines the
+algorithm for block lengths of 192 and 256 but not for block lengths / key lengths of 160 and 224.  Indeed, 160 and 224
+are first defined as valid key / block lengths in
+{@link http://csrc.nist.gov/archive/aes/rijndael/Rijndael-ammended.pdf#page=44 Rijndael-ammended.pdf#page=44}:
+Extensions: Other block and Cipher Key lengths.</p>
+
+<p>{@internal The variable names are the same as those in
+{@link http://www.csrc.nist.gov/publications/fips/fips197/fips-197.pdf#page=10 fips-197.pdf#page=10}.}}</p>
+
+<p>Here's a short example of how to use this library:
+<code>
+<?php
+   include('Crypt/Rijndael.php');
+
+   $rijndael = new Crypt_Rijndael();
+
+   $rijndael->setKey('abcdefghijklmnop');
+
+   $size = 10 * 1024;
+   $plaintext = '';
+   for ($i = 0; $i < $size; $i++) {
+       $plaintext.= 'a';
+   }
+
+   echo $rijndael->decrypt($rijndael->encrypt($plaintext));
+?>
+</code></p>
+
+<p>LICENSE: Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.</p>
+</div>
+<a name="constants"></a><h2>Constants</h2>
+<div>
+<a id="::CRYPT_RIJNDAEL_MODE_CTR"></a><h3 class="constant">CRYPT_RIJNDAEL_MODE_CTR<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_RIJNDAEL_MODE_CTR</span> = '-1'
+      </code><p class="short-description">Encrypt / decrypt using the Counter mode.</p>
+<div class="long-description"><p>Set to -1 since that's what Crypt/Random.php uses to index the CTR mode.</p>
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>-1</dd>
+<dt>link</dt>
+<dd><a href="http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Counter_.28CTR.29">http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Counter_.28CTR.29</a></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_RIJNDAEL_MODE_ECB"></a><h3 class="constant">CRYPT_RIJNDAEL_MODE_ECB<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_RIJNDAEL_MODE_ECB</span> = '1'
+      </code><p class="short-description">Encrypt / decrypt using the Electronic Code Book mode.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>1</dd>
+<dt>link</dt>
+<dd><a href="http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Electronic_codebook_.28ECB.29">http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Electronic_codebook_.28ECB.29</a></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_RIJNDAEL_MODE_CBC"></a><h3 class="constant">CRYPT_RIJNDAEL_MODE_CBC<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_RIJNDAEL_MODE_CBC</span> = '2'
+      </code><p class="short-description">Encrypt / decrypt using the Code Book Chaining mode.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>2</dd>
+<dt>link</dt>
+<dd><a href="http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Cipher-block_chaining_.28CBC.29">http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Cipher-block_chaining_.28CBC.29</a></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_RIJNDAEL_MODE_CFB"></a><h3 class="constant">CRYPT_RIJNDAEL_MODE_CFB<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_RIJNDAEL_MODE_CFB</span> = '3'
+      </code><p class="short-description">Encrypt / decrypt using the Cipher Feedback mode.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>3</dd>
+<dt>link</dt>
+<dd><a href="http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Cipher_feedback_.28CFB.29">http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Cipher_feedback_.28CFB.29</a></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_RIJNDAEL_MODE_OFB"></a><h3 class="constant">CRYPT_RIJNDAEL_MODE_OFB<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_RIJNDAEL_MODE_OFB</span> = '4'
+      </code><p class="short-description">Encrypt / decrypt using the Cipher Feedback mode.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>4</dd>
+<dt>link</dt>
+<dd><a href="http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Output_feedback_.28OFB.29">http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Output_feedback_.28OFB.29</a></dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_RIJNDAEL_MODE_INTERNAL"></a><h3 class="constant">CRYPT_RIJNDAEL_MODE_INTERNAL<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_RIJNDAEL_MODE_INTERNAL</span> = '1'
+      </code><p class="short-description">Toggles the internal implementation</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>1</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_RIJNDAEL_MODE_MCRYPT"></a><h3 class="constant">CRYPT_RIJNDAEL_MODE_MCRYPT<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_RIJNDAEL_MODE_MCRYPT</span> = '2'
+      </code><p class="short-description">Toggles the mcrypt implementation</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>2</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+<a name="classes"></a><a id="\Crypt_Rijndael"></a><h2 class="class">\Crypt_Rijndael<div class="to-top"><a href="#top">jump to top</a></div>
+</h2>
+<div class="class">
+<dl class="class-info">
+<dt>access</dt>
+<dd>public</dd>
+<dt>author</dt>
+<dd>Jim Wigginton &lt;terrafrost@php.net&gt;</dd>
+<dt>package</dt>
+<dd>Crypt</dd>
+<dt>subpackage</dt>
+<dd>Crypt_Rijndael</dd>
+<dt>version</dt>
+<dd>0.1.0</dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Properties
+              </a></dt>
+<dd><a class="property public" href="#%5CCrypt_Rijndael::%24c">$c</a></dd>
+<dd><a class="property public" href="#%5CCrypt_Rijndael::%24changed">$changed</a></dd>
+<dd><a class="property public" href="#%5CCrypt_Rijndael::%24continuousBuffer">$continuousBuffer</a></dd>
+<dd><a class="property public" href="#%5CCrypt_Rijndael::%24debuffer">$debuffer</a></dd>
+<dd><a class="property public" href="#%5CCrypt_Rijndael::%24decryptIV">$decryptIV</a></dd>
+<dd><a class="property public" href="#%5CCrypt_Rijndael::%24dt0">$dt0</a></dd>
+<dd><a class="property public" href="#%5CCrypt_Rijndael::%24dt1">$dt1</a></dd>
+<dd><a class="property public" href="#%5CCrypt_Rijndael::%24dt2">$dt2</a></dd>
+<dd><a class="property public" href="#%5CCrypt_Rijndael::%24dt3">$dt3</a></dd>
+<dd><a class="property public" href="#%5CCrypt_Rijndael::%24dw">$dw</a></dd>
+<dd><a class="property public" href="#%5CCrypt_Rijndael::%24enbuffer">$enbuffer</a></dd>
+<dd><a class="property public" href="#%5CCrypt_Rijndael::%24encryptIV">$encryptIV</a></dd>
+<dd><a class="property public" href="#%5CCrypt_Rijndael::%24explicit_key_length">$explicit_key_length</a></dd>
+<dd><a class="property public" href="#%5CCrypt_Rijndael::%24iv">$iv</a></dd>
+<dd><a class="property public" href="#%5CCrypt_Rijndael::%24key">$key</a></dd>
+<dd><a class="property public" href="#%5CCrypt_Rijndael::%24mode">$mode</a></dd>
+<dd><a class="property public" href="#%5CCrypt_Rijndael::%24paddable">$paddable</a></dd>
+<dd><a class="property public" href="#%5CCrypt_Rijndael::%24padding">$padding</a></dd>
+<dd><a class="property public" href="#%5CCrypt_Rijndael::%24t0">$t0</a></dd>
+<dd><a class="property public" href="#%5CCrypt_Rijndael::%24t1">$t1</a></dd>
+<dd><a class="property public" href="#%5CCrypt_Rijndael::%24t2">$t2</a></dd>
+<dd><a class="property public" href="#%5CCrypt_Rijndael::%24t3">$t3</a></dd>
+<dd><a class="property public" href="#%5CCrypt_Rijndael::%24w">$w</a></dd>
+<dt><a href="#" onclick="$(this).children('img').toggle().parents('dt').nextUntil('dt').slideToggle(); return false;"><img src="images/arrow_down.gif"><img src="images/arrow_right.gif" style="display: none">
+                Methods
+              </a></dt>
+<dd><a class="method public" href="#%5CCrypt_Rijndael::Crypt_Rijndael()">Crypt_Rijndael</a></dd>
+<dd><a class="method public" href="#%5CCrypt_Rijndael::_decryptBlock()">_decryptBlock</a></dd>
+<dd><a class="method public" href="#%5CCrypt_Rijndael::_encryptBlock()">_encryptBlock</a></dd>
+<dd><a class="method public" href="#%5CCrypt_Rijndael::_generate_xor()">_generate_xor</a></dd>
+<dd><a class="method public" href="#%5CCrypt_Rijndael::_invSubWord()">_invSubWord</a></dd>
+<dd><a class="method public" href="#%5CCrypt_Rijndael::_pad()">_pad</a></dd>
+<dd><a class="method public" href="#%5CCrypt_Rijndael::_setup()">_setup</a></dd>
+<dd><a class="method public" href="#%5CCrypt_Rijndael::_string_shift()">_string_shift</a></dd>
+<dd><a class="method public" href="#%5CCrypt_Rijndael::_subWord()">_subWord</a></dd>
+<dd><a class="method public" href="#%5CCrypt_Rijndael::_unpad()">_unpad</a></dd>
+<dd><a class="method public" href="#%5CCrypt_Rijndael::decrypt()">decrypt</a></dd>
+<dd><a class="method public" href="#%5CCrypt_Rijndael::disableContinuousBuffer()">disableContinuousBuffer</a></dd>
+<dd><a class="method public" href="#%5CCrypt_Rijndael::disablePadding()">disablePadding</a></dd>
+<dd><a class="method public" href="#%5CCrypt_Rijndael::enableContinuousBuffer()">enableContinuousBuffer</a></dd>
+<dd><a class="method public" href="#%5CCrypt_Rijndael::enablePadding()">enablePadding</a></dd>
+<dd><a class="method public" href="#%5CCrypt_Rijndael::encrypt()">encrypt</a></dd>
+<dd><a class="method public" href="#%5CCrypt_Rijndael::setBlockLength()">setBlockLength</a></dd>
+<dd><a class="method public" href="#%5CCrypt_Rijndael::setIV()">setIV</a></dd>
+<dd><a class="method public" href="#%5CCrypt_Rijndael::setKey()">setKey</a></dd>
+<dd><a class="method public" href="#%5CCrypt_Rijndael::setKeyLength()">setKeyLength</a></dd>
+</dl>
+<h3>Description</h3>
+<p class="short-description">Pure-PHP implementation of Rijndael.</p>
+<div class="long-description">
+</div>
+<h3>Properties</h3>
+<div>
+<a id="\Crypt_Rijndael::$c"></a><h4 class="property public">$c<div class="to-top"><a href="#%5CCrypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Array <span class="highlight">$c</span> = ''</code><p class="short-description">Shift offsets</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::$changed"></a><h4 class="property public">$changed<div class="to-top"><a href="#%5CCrypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Boolean <span class="highlight">$changed</span> = 'true'</code><p class="short-description">Does the key schedule need to be (re)calculated?</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Boolean<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd>true</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>setKey()</dd>
+<dt>see</dt>
+<dd>setBlockLength()</dd>
+<dt>see</dt>
+<dd>setKeyLength()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::$continuousBuffer"></a><h4 class="property public">$continuousBuffer<div class="to-top"><a href="#%5CCrypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Boolean <span class="highlight">$continuousBuffer</span> = 'false'</code><p class="short-description">Continuous Buffer status</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Boolean<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd>false</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_Rijndael::enableContinuousBuffer()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::$debuffer"></a><h4 class="property public">$debuffer<div class="to-top"><a href="#%5CCrypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="property">
+<code>String <span class="highlight">$debuffer</span> = 'array'</code><p class="short-description">Decryption buffer for CTR, OFB and CFB modes</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>String<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd>array</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_Rijndael::decrypt()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::$decryptIV"></a><h4 class="property public">$decryptIV<div class="to-top"><a href="#%5CCrypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="property">
+<code>String <span class="highlight">$decryptIV</span> = ''</code><p class="short-description">A "sliding" Initialization Vector</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>String<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_Rijndael::enableContinuousBuffer()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::$dt0"></a><h4 class="property public">$dt0<div class="to-top"><a href="#%5CCrypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Array <span class="highlight">$dt0</span> = ''</code><p class="short-description">Precomputed invMixColumns table</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_Rijndael()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::$dt1"></a><h4 class="property public">$dt1<div class="to-top"><a href="#%5CCrypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Array <span class="highlight">$dt1</span> = ''</code><p class="short-description">Precomputed invMixColumns table</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_Rijndael()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::$dt2"></a><h4 class="property public">$dt2<div class="to-top"><a href="#%5CCrypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Array <span class="highlight">$dt2</span> = ''</code><p class="short-description">Precomputed invMixColumns table</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_Rijndael()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::$dt3"></a><h4 class="property public">$dt3<div class="to-top"><a href="#%5CCrypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Array <span class="highlight">$dt3</span> = ''</code><p class="short-description">Precomputed invMixColumns table</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_Rijndael()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::$dw"></a><h4 class="property public">$dw<div class="to-top"><a href="#%5CCrypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Array <span class="highlight">$dw</span> = ''</code><p class="short-description">The Inverse Key Schedule</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>_setup()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::$enbuffer"></a><h4 class="property public">$enbuffer<div class="to-top"><a href="#%5CCrypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="property">
+<code>String <span class="highlight">$enbuffer</span> = 'array'</code><p class="short-description">Encryption buffer for CTR, OFB and CFB modes</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>String<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd>array</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_Rijndael::encrypt()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::$encryptIV"></a><h4 class="property public">$encryptIV<div class="to-top"><a href="#%5CCrypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="property">
+<code>String <span class="highlight">$encryptIV</span> = ''</code><p class="short-description">A "sliding" Initialization Vector</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>String<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_Rijndael::enableContinuousBuffer()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::$explicit_key_length"></a><h4 class="property public">$explicit_key_length<div class="to-top"><a href="#%5CCrypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Boolean <span class="highlight">$explicit_key_length</span> = 'false'</code><p class="short-description">Has the key length explicitly been set or should it be derived from the key, itself?</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Boolean<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd>false</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>setKeyLength()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::$iv"></a><h4 class="property public">$iv<div class="to-top"><a href="#%5CCrypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="property">
+<code>String <span class="highlight">$iv</span> = ''</code><p class="short-description">The Initialization Vector</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>String<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_Rijndael::setIV()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::$key"></a><h4 class="property public">$key<div class="to-top"><a href="#%5CCrypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="property">
+<code>String <span class="highlight">$key</span> = '\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0'</code><p class="short-description">The Key</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>String<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd>\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_Rijndael::setKey()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::$mode"></a><h4 class="property public">$mode<div class="to-top"><a href="#%5CCrypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Integer <span class="highlight">$mode</span> = ''</code><p class="short-description">The Encryption Mode</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Integer<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_Rijndael::Crypt_Rijndael()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::$paddable"></a><h4 class="property public">$paddable<div class="to-top"><a href="#%5CCrypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Boolean <span class="highlight">$paddable</span> = 'false'</code><p class="short-description">Is the mode one that is paddable?</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Boolean<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd>false</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_Rijndael::Crypt_Rijndael()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::$padding"></a><h4 class="property public">$padding<div class="to-top"><a href="#%5CCrypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Boolean <span class="highlight">$padding</span> = 'true'</code><p class="short-description">Padding status</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Boolean<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd>true</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_Rijndael::enablePadding()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::$t0"></a><h4 class="property public">$t0<div class="to-top"><a href="#%5CCrypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Array <span class="highlight">$t0</span> = ''</code><p class="short-description">Precomputed mixColumns table</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_Rijndael()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::$t1"></a><h4 class="property public">$t1<div class="to-top"><a href="#%5CCrypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Array <span class="highlight">$t1</span> = ''</code><p class="short-description">Precomputed mixColumns table</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_Rijndael()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::$t2"></a><h4 class="property public">$t2<div class="to-top"><a href="#%5CCrypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Array <span class="highlight">$t2</span> = ''</code><p class="short-description">Precomputed mixColumns table</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_Rijndael()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::$t3"></a><h4 class="property public">$t3<div class="to-top"><a href="#%5CCrypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Array <span class="highlight">$t3</span> = ''</code><p class="short-description">Precomputed mixColumns table</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_Rijndael()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::$w"></a><h4 class="property public">$w<div class="to-top"><a href="#%5CCrypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="property">
+<code>Array <span class="highlight">$w</span> = ''</code><p class="short-description">The Key Schedule</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="property-info">
+<dt></dt>
+<dd>Array<br><em></em>
+</dd>
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>default</dt>
+<dd></dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>_setup()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+<h3>Methods</h3>
+<div>
+<a id="\Crypt_Rijndael::Crypt_Rijndael()"></a><h4 class="method public">Crypt_Rijndael<div class="to-top"><a href="#Crypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">Crypt_Rijndael</span><span class="nb-faded-text">(
+          \optional $mode
+              =
+              CRYPT_RIJNDAEL_MODE_CBC
+          )
+        </span>
+        :
+        <a href="_lib_Crypt_Rijndael.html#%5CCrypt_Rijndael">\Crypt_Rijndael</a></code><p class="short-description">Default Constructor.</p>
+<div class="long-description"><p>Determines whether or not the mcrypt extension should be used.  $mode should only, at present, be
+CRYPT_RIJNDAEL_MODE_ECB or CRYPT_RIJNDAEL_MODE_CBC.  If not explictly set, CRYPT_RIJNDAEL_MODE_CBC will be used.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$mode</dt>
+<dd>\optional<br><em>Integer $mode</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt><a href="_lib_Crypt_Rijndael.html#%5CCrypt_Rijndael">\Crypt_Rijndael</a></dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::_decryptBlock()"></a><h4 class="method public">_decryptBlock<div class="to-top"><a href="#Crypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_decryptBlock</span><span class="nb-faded-text">(
+          String $in
+          )
+        </span>
+        :
+        String</code><p class="short-description">Decrypts a block</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$in</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>String</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::_encryptBlock()"></a><h4 class="method public">_encryptBlock<div class="to-top"><a href="#Crypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_encryptBlock</span><span class="nb-faded-text">(
+          String $in
+          )
+        </span>
+        :
+        String</code><p class="short-description">Encrypts a block</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$in</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>String</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::_generate_xor()"></a><h4 class="method public">_generate_xor<div class="to-top"><a href="#Crypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_generate_xor</span><span class="nb-faded-text">(
+          Integer $length, String $iv
+          )
+        </span>
+        :
+        </code><p class="short-description">Generate CTR XOR encryption key</p>
+<div class="long-description"><p>Encrypt the output of this and XOR it against the ciphertext / plaintext to get the
+plaintext / ciphertext in CTR mode.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$length</dt>
+<dd>Integer<br><em></em>
+</dd>
+<dt>$iv</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>Crypt_Rijndael::decrypt()</dd>
+<dt>see</dt>
+<dd>Crypt_Rijndael::encrypt()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::_invSubWord()"></a><h4 class="method public">_invSubWord<div class="to-top"><a href="#Crypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_invSubWord</span><span class="nb-faded-text">(
+           $word
+          )
+        </span>
+        :
+        </code><p class="short-description">Performs inverse S-Box substitutions</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$word</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::_pad()"></a><h4 class="method public">_pad<div class="to-top"><a href="#Crypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_pad</span><span class="nb-faded-text">(
+           $text
+          )
+        </span>
+        :
+        </code><p class="short-description">Pads a string</p>
+<div class="long-description"><p>Pads a string using the RSA PKCS padding standards so that its length is a multiple of the blocksize.
+$block_size - (strlen($text) % $block_size) bytes are added, each of which is equal to
+chr($block_size - (strlen($text) % $block_size)</p>
+
+<p>If padding is disabled and $text is not a multiple of the blocksize, the string will be padded regardless
+and padding will, hence forth, be enabled.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$text</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_Rijndael::_unpad()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::_setup()"></a><h4 class="method public">_setup<div class="to-top"><a href="#Crypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_setup</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        </code><p class="short-description">Setup Rijndael</p>
+<div class="long-description"><p>Validates all the variables and calculates $Nr - the number of rounds that need to be performed - and $w - the key
+key schedule.</p>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::_string_shift()"></a><h4 class="method public">_string_shift<div class="to-top"><a href="#Crypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_string_shift</span><span class="nb-faded-text">(
+          String $string, \optional $index
+              =
+              1
+          )
+        </span>
+        :
+        String</code><p class="short-description">String Shift</p>
+<div class="long-description"><p>Inspired by array_shift</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$string</dt>
+<dd>String<br><em></em>
+</dd>
+<dt>$index</dt>
+<dd>\optional<br><em>Integer $index</em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>String</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::_subWord()"></a><h4 class="method public">_subWord<div class="to-top"><a href="#Crypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_subWord</span><span class="nb-faded-text">(
+           $word
+          )
+        </span>
+        :
+        </code><p class="short-description">Performs S-Box substitutions</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$word</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::_unpad()"></a><h4 class="method public">_unpad<div class="to-top"><a href="#Crypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_unpad</span><span class="nb-faded-text">(
+           $text
+          )
+        </span>
+        :
+        </code><p class="short-description">Unpads a string.</p>
+<div class="long-description"><p>If padding is enabled and the reported padding length is invalid the encryption key will be assumed to be wrong
+and false will be returned.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$text</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+<dt>see</dt>
+<dd>Crypt_Rijndael::_pad()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::decrypt()"></a><h4 class="method public">decrypt<div class="to-top"><a href="#Crypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">decrypt</span><span class="nb-faded-text">(
+          String $ciphertext
+          )
+        </span>
+        :
+        </code><p class="short-description">Decrypts a message.</p>
+<div class="long-description"><p>If strlen($ciphertext) is not a multiple of the block size, null bytes will be added to the end of the string until
+it is.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$ciphertext</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>Crypt_Rijndael::encrypt()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::disableContinuousBuffer()"></a><h4 class="method public">disableContinuousBuffer<div class="to-top"><a href="#Crypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">disableContinuousBuffer</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        </code><p class="short-description">Treat consecutive packets as if they are a discontinuous buffer.</p>
+<div class="long-description"><p>The default behavior.</p>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>Crypt_Rijndael::enableContinuousBuffer()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::disablePadding()"></a><h4 class="method public">disablePadding<div class="to-top"><a href="#Crypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">disablePadding</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        </code><p class="short-description">Do not pad packets.</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>Crypt_Rijndael::enablePadding()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::enableContinuousBuffer()"></a><h4 class="method public">enableContinuousBuffer<div class="to-top"><a href="#Crypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">enableContinuousBuffer</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        </code><p class="short-description">Treat consecutive "packets" as if they are a continuous buffer.</p>
+<div class="long-description"><p>Say you have a 32-byte plaintext $plaintext.  Using the default behavior, the two following code snippets
+will yield different outputs:</p>
+
+<p><code>
+   echo $rijndael->encrypt(substr($plaintext,  0, 16));
+   echo $rijndael->encrypt(substr($plaintext, 16, 16));
+</code>
+<code>
+   echo $rijndael->encrypt($plaintext);
+</code></p>
+
+<p>The solution is to enable the continuous buffer.  Although this will resolve the above discrepancy, it creates
+another, as demonstrated with the following:</p>
+
+<p><code>
+   $rijndael->encrypt(substr($plaintext, 0, 16));
+   echo $rijndael->decrypt($des->encrypt(substr($plaintext, 16, 16)));
+</code>
+<code>
+   echo $rijndael->decrypt($des->encrypt(substr($plaintext, 16, 16)));
+</code></p>
+
+<p>With the continuous buffer disabled, these would yield the same output.  With it enabled, they yield different
+outputs.  The reason is due to the fact that the initialization vector's change after every encryption /
+decryption round when the continuous buffer is enabled.  When it's disabled, they remain constant.</p>
+
+<p>Put another way, when the continuous buffer is enabled, the state of the Crypt_Rijndael() object changes after each
+encryption / decryption round, whereas otherwise, it'd remain constant.  For this reason, it's recommended that
+continuous buffers not be used.  They do offer better security and are, in fact, sometimes required (SSH uses them),
+however, they are also less intuitive and more likely to cause you problems.</p>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>Crypt_Rijndael::disableContinuousBuffer()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::enablePadding()"></a><h4 class="method public">enablePadding<div class="to-top"><a href="#Crypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">enablePadding</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        </code><p class="short-description">Pad "packets".</p>
+<div class="long-description"><p>Rijndael works by encrypting between sixteen and thirty-two bytes at a time, provided that number is also a multiple
+of four.  If you ever need to encrypt or decrypt something that isn't of the proper length, it becomes necessary to
+pad the input so that it is of the proper length.</p>
+
+<p>Padding is enabled by default.  Sometimes, however, it is undesirable to pad strings.  Such is the case in SSH,
+where "packets" are padded with random bytes before being encrypted.  Unpad these packets and you risk stripping
+away characters that shouldn't be stripped away. (SSH knows how many bytes are added because the length is
+transmitted separately)</p>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>Crypt_Rijndael::disablePadding()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::encrypt()"></a><h4 class="method public">encrypt<div class="to-top"><a href="#Crypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">encrypt</span><span class="nb-faded-text">(
+          String $plaintext
+          )
+        </span>
+        :
+        </code><p class="short-description">Encrypts a message.</p>
+<div class="long-description"><p>$plaintext will be padded with additional bytes such that it's length is a multiple of the block size.  Other Rjindael
+implementations may or may not pad in the same manner.  Other common approaches to padding and the reasons why it's
+necessary are discussed in the following
+URL:</p>
+
+<p>{@link http://www.di-mgt.com.au/cryptopad.html http://www.di-mgt.com.au/cryptopad.html}</p>
+
+<p>An alternative to padding is to, separately, send the length of the file.  This is what SSH, in fact, does.
+strlen($plaintext) will still need to be a multiple of 8, however, arbitrary values can be added to make it that
+length.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$plaintext</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+<dt>see</dt>
+<dd>Crypt_Rijndael::decrypt()</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::setBlockLength()"></a><h4 class="method public">setBlockLength<div class="to-top"><a href="#Crypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">setBlockLength</span><span class="nb-faded-text">(
+          Integer $length
+          )
+        </span>
+        :
+        </code><p class="short-description">Sets the block length</p>
+<div class="long-description"><p>Valid block lengths are 128, 160, 192, 224, and 256.  If the length is less than 128, it will be rounded up to
+128.  If the length is greater then 128 and invalid, it will be rounded down to the closest valid amount.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$length</dt>
+<dd>Integer<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::setIV()"></a><h4 class="method public">setIV<div class="to-top"><a href="#Crypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">setIV</span><span class="nb-faded-text">(
+          String $iv
+          )
+        </span>
+        :
+        </code><p class="short-description">Sets the initialization vector. (optional)</p>
+<div class="long-description"><p>SetIV is not required when CRYPT_RIJNDAEL_MODE_ECB is being used.  If not explictly set, it'll be assumed
+to be all zero's.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$iv</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::setKey()"></a><h4 class="method public">setKey<div class="to-top"><a href="#Crypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">setKey</span><span class="nb-faded-text">(
+          String $key
+          )
+        </span>
+        :
+        </code><p class="short-description">Sets the key.</p>
+<div class="long-description"><p>Keys can be of any length.  Rijndael, itself, requires the use of a key that's between 128-bits and 256-bits long and
+whose length is a multiple of 32.  If the key is less than 256-bits and the key length isn't set, we round the length
+up to the closest valid key length, padding $key with null bytes.  If the key is more than 256-bits, we trim the
+excess bits.</p>
+
+<p>If the key is not explicitly set, it'll be assumed to be all null bytes.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$key</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_Rijndael::setKeyLength()"></a><h4 class="method public">setKeyLength<div class="to-top"><a href="#Crypt_Rijndael">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">setKeyLength</span><span class="nb-faded-text">(
+          Integer $length
+          )
+        </span>
+        :
+        </code><p class="short-description">Sets the key length</p>
+<div class="long-description"><p>Valid key lengths are 128, 160, 192, 224, and 256.  If the length is less than 128, it will be rounded up to
+128.  If the length is greater then 128 and invalid, it will be rounded down to the closest valid amount.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$length</dt>
+<dd>Integer<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<small xmlns="" class="footer">Documentation was generated by <a href="http://docblox-project.org">DocBlox 0.12.0</a>.
+    </small></body></html>
