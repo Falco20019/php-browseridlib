@@ -168,10 +168,14 @@ class Primary {
             throw new Exception("malformed declaration of support for '" . $domain . "': " . $e->getMessage());
         }
 
-        $want = array( 'public-key', 'authentication', 'provisioning' );
+        $want = array( 'public-key' );
+        if ($domain != Configuration::getInstance()->get("master_idp")) { // TODO: This is only valid for mozillas main idp
+			$want = array_merge( $want, array ('authentication', 'provisioning' ) );
+        }
+		
         $got = array();
         if (is_array($v)) {
-            $got = array_keys(get_object_vars($v));
+            $got = array_keys($v);
         }
         
         foreach ($got as $k) {
@@ -197,13 +201,11 @@ class Primary {
         }
         
         $missing_keys = array();
-        if ($domain != Configuration::getInstance()->get("master_idp")) { // TODO: This is only valid for mozillas main idp)
-            foreach ($want as $k) {
-                if (array_search($k, $got) === false) {
-                    array_push($missing_keys, $k);
-                }
-            }
-        }
+		foreach ($want as $k) {
+			if (array_search($k, $got) === false) {
+				array_push($missing_keys, $k);
+			}
+		}
         
         if (sizeof($missing_keys) > 0) {
             throw new Exception("missing required key: " . join(', ', $missing_keys));
