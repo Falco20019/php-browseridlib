@@ -57,7 +57,9 @@
 /**
  * Include Crypt_DES
  */
-require_once(BROWSERID_BASE_PATH.'lib/Crypt/DES.php');
+if (!class_exists('Crypt_DES')) {
+    require_once(BROWSERID_BASE_PATH.'lib/Crypt/DES.php');
+}
 
 /**
  * Encrypt / decrypt using inner chaining
@@ -249,10 +251,7 @@ class Crypt_TripleDES {
     {
         if ( !defined('CRYPT_DES_MODE') ) {
             switch (true) {
-                case extension_loaded('mcrypt'):
-                    // i'd check to see if des was supported, by doing in_array('des', mcrypt_list_algorithms('')),
-                    // but since that can be changed after the object has been created, there doesn't seem to be
-                    // a lot of point...
+                case extension_loaded('mcrypt') && in_array('tripledes', mcrypt_list_algorithms()):
                     define('CRYPT_DES_MODE', CRYPT_DES_MODE_MCRYPT);
                     break;
                 default:
@@ -362,6 +361,58 @@ class Crypt_TripleDES {
                 $this->des[2]->setKey(substr($key, 16, 8));
         }
         $this->enchanged = $this->dechanged = true;
+    }
+
+    /**
+     * Sets the password.
+     *
+     * Depending on what $method is set to, setPassword()'s (optional) parameters are as follows:
+     *     {@link http://en.wikipedia.org/wiki/PBKDF2 pbkdf2}:
+     *         $hash, $salt, $method
+     *
+     * @param String $password
+     * @param optional String $method
+     * @access public
+     */
+    function setPassword($password, $method = 'pbkdf2')
+    {
+        $key = '';
+
+        switch ($method) {
+            default: // 'pbkdf2'
+                list(, , $hash, $salt, $count) = func_get_args();
+                if (!isset($hash)) {
+                    $hash = 'sha1';
+                }
+                // WPA and WPA use the SSID as the salt
+                if (!isset($salt)) {
+                    $salt = 'phpseclib';
+                }
+                // RFC2898#section-4.2 uses 1,000 iterations by default
+                // WPA and WPA2 use 4,096.
+                if (!isset($count)) {
+                    $count = 1000;
+                }
+
+                if (!class_exists('Crypt_Hash')) {
+                    require_once(BROWSERID_BASE_PATH.'lib/Crypt/Hash.php');
+                }
+
+                $i = 1;
+                while (strlen($key) < 24) { // $dkLen == 24
+                    $hmac = new Crypt_Hash();
+                    $hmac->setHash($hash);
+                    $hmac->setKey($password);
+                    $f = $u = $hmac->hash($salt . pack('N', $i++));
+                    for ($j = 2; $j <= $count; $j++) {
+                        $u = $hmac->hash($u);
+                        $f^= $u;
+                    }
+                    $key.= $f;
+                }
+        }
+
+        $this->setKey($key);
     }
 
     /**
@@ -537,15 +588,15 @@ class Crypt_TripleDES {
                 break;
             case CRYPT_DES_MODE_CTR:
                 $xor = $this->encryptIV;
-                if (strlen($buffer)) {
+                if (strlen($buffer['encrypted'])) {
                     for ($i = 0; $i < strlen($plaintext); $i+=8) {
                         $block = substr($plaintext, $i, 8);
                         $key = $this->_generate_xor(8, $xor);
                         $key = $des[0]->_processBlock($key, CRYPT_DES_ENCRYPT);
                         $key = $des[1]->_processBlock($key, CRYPT_DES_DECRYPT);
                         $key = $des[2]->_processBlock($key, CRYPT_DES_ENCRYPT);
-                        $buffer.= $key;
-                        $key = $this->_string_shift($buffer, 8);
+                        $buffer['encrypted'].= $key;
+                        $key = $this->_string_shift($buffer['encrypted'], 8);
                         $ciphertext.= $block ^ $key;
                     }
                 } else {
@@ -561,7 +612,7 @@ class Crypt_TripleDES {
                 if ($this->continuousBuffer) {
                     $this->encryptIV = $xor;
                     if ($start = strlen($plaintext) & 7) {
-                        $buffer = substr($key, $start) . $buffer;
+                        $buffer['encrypted'] = substr($key, $start) . $buffer;
                     }
                 }
                 break;
@@ -742,15 +793,15 @@ class Crypt_TripleDES {
                 break;
             case CRYPT_DES_MODE_CTR:
                 $xor = $this->decryptIV;
-                if (strlen($buffer)) {
+                if (strlen($buffer['ciphertext'])) {
                     for ($i = 0; $i < strlen($ciphertext); $i+=8) {
                         $block = substr($ciphertext, $i, 8);
                         $key = $this->_generate_xor(8, $xor);
                         $key = $des[0]->_processBlock($key, CRYPT_DES_ENCRYPT);
                         $key = $des[1]->_processBlock($key, CRYPT_DES_DECRYPT);
                         $key = $des[2]->_processBlock($key, CRYPT_DES_ENCRYPT);
-                        $buffer.= $key;
-                        $key = $this->_string_shift($buffer, 8);
+                        $buffer['ciphertext'].= $key;
+                        $key = $this->_string_shift($buffer['ciphertext'], 8);
                         $plaintext.= $block ^ $key;
                     }
                 } else {
@@ -766,7 +817,7 @@ class Crypt_TripleDES {
                 if ($this->continuousBuffer) {
                     $this->decryptIV = $xor;
                     if ($start = strlen($plaintext) & 7) {
-                        $buffer = substr($key, $start) . $buffer;
+                        $buffer['ciphertext'] = substr($key, $start) . $buffer['ciphertext'];
                     }
                 }
                 break;

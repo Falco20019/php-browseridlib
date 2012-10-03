@@ -70,7 +70,7 @@
  * @author     Jim Wigginton <terrafrost@php.net>
  * @copyright  MMVI Jim Wigginton
  * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
- * @version    $Id: BigInteger.php,v 1.33 2010/03/22 22:32:03 terrafrost Exp $
+ * @version    $Id: BigInteger.php 326530 2012-07-07 22:05:25Z terrafrost $
  * @link       http://pear.php.net/package/Math_BigInteger
  */
 
@@ -298,7 +298,9 @@ class Math_BigInteger {
                 $this->value = array();
         }
 
-        if (empty($x)) {
+        // '0' counts as empty() but when the base is 256 '0' is equal to ord('0') or 48
+        // '0' is the only  value like this per http://php.net/empty
+        if (empty($x) && (abs($base) != 256 || $x !== '0')) {
             return;
         }
 
@@ -2329,13 +2331,13 @@ class Math_BigInteger {
             $one = new Math_BigInteger(1);
         }
 
-        // $x mod $n == $x mod -$n.
+        // $x mod -$n == $x mod $n.
         $n = $n->abs();
 
         if ($this->compare($zero) < 0) {
             $temp = $this->abs();
             $temp = $temp->modInverse($n);
-            return $negated === false ? false : $this->_normalize($n->subtract($temp));
+            return $this->_normalize($n->subtract($temp));
         }
 
         extract($this->extendedGCD($n));
@@ -2350,12 +2352,12 @@ class Math_BigInteger {
     }
 
     /**
-     * Calculates the greatest common divisor and B�zout's identity.
+     * Calculates the greatest common divisor and Bézout's identity.
      *
-     * Say you have 693 and 609.  The GCD is 21.  B�zout's identity states that there exist integers x and y such that
+     * Say you have 693 and 609.  The GCD is 21.  Bézout's identity states that there exist integers x and y such that
      * 693*x + 609*y == 21.  In point of fact, there are actually an infinite number of x and y combinations and which
      * combination is returned is dependant upon which mode is in use.  See
-     * {@link http://en.wikipedia.org/wiki/B%C3%A9zout%27s_identity B�zout's identity - Wikipedia} for more information.
+     * {@link http://en.wikipedia.org/wiki/B%C3%A9zout%27s_identity Bézout's identity - Wikipedia} for more information.
      *
      * Here's an example:
      * <code>

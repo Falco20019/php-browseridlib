@@ -66,7 +66,9 @@
 /**
  * Include Crypt_Rijndael
  */
-require_once 'Rijndael.php';
+if (!class_exists('Crypt_Rijndael')) {
+    require_once BROWSERID_BASE_PATH.'lib/Crypt/Rijndael.php';
+}
 
 /**#@+
  * @access public
@@ -179,10 +181,7 @@ class Crypt_AES extends Crypt_Rijndael {
     {
         if ( !defined('CRYPT_AES_MODE') ) {
             switch (true) {
-                case extension_loaded('mcrypt'):
-                    // i'd check to see if aes was supported, by doing in_array('des', mcrypt_list_algorithms('')),
-                    // but since that can be changed after the object has been created, there doesn't seem to be
-                    // a lot of point...
+                case extension_loaded('mcrypt') && in_array('rijndael-128', mcrypt_list_algorithms()):
                     define('CRYPT_AES_MODE', CRYPT_AES_MODE_MCRYPT);
                     break;
                 default:
@@ -257,6 +256,24 @@ class Crypt_AES extends Crypt_Rijndael {
     function setBlockLength($length)
     {
         return;
+    }
+
+
+    /**
+     * Sets the initialization vector. (optional)
+     *
+     * SetIV is not required when CRYPT_RIJNDAEL_MODE_ECB is being used.  If not explictly set, it'll be assumed
+     * to be all zero's.
+     *
+     * @access public
+     * @param String $iv
+     */
+    function setIV($iv)
+    {
+        parent::setIV($iv);
+        if ( CRYPT_AES_MODE == CRYPT_AES_MODE_MCRYPT ) {
+            $this->changed = true;
+        }
     }
 
     /**

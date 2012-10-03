@@ -54,6 +54,7 @@
 <dd><a class="constant" href="#::CRYPT_RSA_SIGNATURE_PSS">CRYPT_RSA_SIGNATURE_PSS</a></dd>
 <dd><a class="constant" href="#::CRYPT_RSA_SIGNATURE_PKCS1">CRYPT_RSA_SIGNATURE_PKCS1</a></dd>
 <dd><a class="constant" href="#::CRYPT_RSA_ASN1_INTEGER">CRYPT_RSA_ASN1_INTEGER</a></dd>
+<dd><a class="constant" href="#::CRYPT_RSA_ASN1_BITSTRING">CRYPT_RSA_ASN1_BITSTRING</a></dd>
 <dd><a class="constant" href="#::CRYPT_RSA_ASN1_SEQUENCE">CRYPT_RSA_ASN1_SEQUENCE</a></dd>
 <dd><a class="constant" href="#::CRYPT_RSA_MODE_INTERNAL">CRYPT_RSA_MODE_INTERNAL</a></dd>
 <dd><a class="constant" href="#::CRYPT_RSA_MODE_OPENSSL">CRYPT_RSA_MODE_OPENSSL</a></dd>
@@ -219,6 +220,23 @@ compatability with protocols (like SSH-2) written before PSS's introduction.</p>
 <dl class="constant-info">
 <dt>value</dt>
 <dd>2</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="::CRYPT_RSA_ASN1_BITSTRING"></a><h3 class="constant">CRYPT_RSA_ASN1_BITSTRING<div class="to-top"><a href="#top">jump to top</a></div>
+</h3>
+<div class="constant">
+<code> <span class="highlight">CRYPT_RSA_ASN1_BITSTRING</span> = '3'
+      </code><p class="short-description">ASN1 Bit String</p>
+<div class="long-description">
+</div>
+<div class="api-section">
+<h4 class="info">
+<img src="images/arrow_right.gif"> Details</h4>
+<dl class="constant-info">
+<dt>value</dt>
+<dd>3</dd>
 </dl>
 <div class="clear"></div>
 </div>
@@ -454,6 +472,7 @@ compatability with protocols (like SSH-2) written before PSS's introduction.</p>
 <dd><a class="method public" href="#%5CCrypt_RSA::_emsa_pss_encode()">_emsa_pss_encode</a></dd>
 <dd><a class="method public" href="#%5CCrypt_RSA::_emsa_pss_verify()">_emsa_pss_verify</a></dd>
 <dd><a class="method public" href="#%5CCrypt_RSA::_encodeLength()">_encodeLength</a></dd>
+<dd><a class="method public" href="#%5CCrypt_RSA::_equals()">_equals</a></dd>
 <dd><a class="method public" href="#%5CCrypt_RSA::_exponentiate()">_exponentiate</a></dd>
 <dd><a class="method public" href="#%5CCrypt_RSA::_generateMinMax()">_generateMinMax</a></dd>
 <dd><a class="method public" href="#%5CCrypt_RSA::_i2osp()">_i2osp</a></dd>
@@ -1349,7 +1368,7 @@ Returns $x->modPow($this->exponents[$i], $this->primes[$i])</p>
         :
         Integer</code><p class="short-description">DER-decode the length</p>
 <div class="long-description"><p>DER supports lengths up to (2<strong>8)</strong>127, however, we'll only support lengths up to (2<strong>8)</strong>4.  See
-{@link http://itu.int/ITU-T/studygroups/com17/languages/X.690-0207.pdf#p=13 X.690 � 8.1.3} for more information.</p>
+{@link http://itu.int/ITU-T/studygroups/com17/languages/X.690-0207.pdf#p=13 X.690 § 8.1.3} for more information.</p>
 </div>
 <div class="api-section">
 <h5 class="arguments">Arguments</h5>
@@ -1530,7 +1549,7 @@ Returns $x->modPow($this->exponents[$i], $this->primes[$i])</p>
         :
         String</code><p class="short-description">DER-encode the length</p>
 <div class="long-description"><p>DER supports lengths up to (2<strong>8)</strong>127, however, we'll only support lengths up to (2<strong>8)</strong>4.  See
-{@link http://itu.int/ITU-T/studygroups/com17/languages/X.690-0207.pdf#p=13 X.690 � 8.1.3} for more information.</p>
+{@link http://itu.int/ITU-T/studygroups/com17/languages/X.690-0207.pdf#p=13 X.690 § 8.1.3} for more information.</p>
 </div>
 <div class="api-section">
 <h5 class="arguments">Arguments</h5>
@@ -1545,6 +1564,57 @@ Returns $x->modPow($this->exponents[$i], $this->primes[$i])</p>
 <h5 class="output">Output</h5>
 <dl class="return-info">
 <dt>String</dt>
+<dd><em></em></dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>private</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_RSA::_equals()"></a><h4 class="method public">_equals<div class="to-top"><a href="#Crypt_RSA">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">_equals</span><span class="nb-faded-text">(
+          String $x, String $y
+          )
+        </span>
+        :
+        Boolean</code><p class="short-description">Performs blinded RSA equality testing</p>
+<div class="long-description"><p>Protects against a particular type of timing attack described.</p>
+
+<p>See {@link http://codahale.com/a-lesson-in-timing-attacks/ A Lesson In Timing Attacks (or, Don’t use MessageDigest.isEquals)}</p>
+
+<p>Thanks for the heads up singpolyma!</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$x</dt>
+<dd>String<br><em></em>
+</dd>
+<dt>$y</dt>
+<dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="output">Output</h5>
+<dl class="return-info">
+<dt>Boolean</dt>
 <dd><em></em></dd>
 </dl>
 <div class="clear"></div>
@@ -3088,9 +3158,11 @@ Or rather, pass in $password such that empty($password) is true.</p>
 </h4>
 <div class="method">
 <code><span class="highlight">setPublicKey</span><span class="nb-faded-text">(
-          String $key, Integer $type
+          String $key
               =
-              CRYPT_RSA_PUBLIC_FORMAT_PKCS1
+              false, Integer $type
+              =
+              false
           )
         </span>
         :
@@ -3109,7 +3181,7 @@ exponent this won't work unless you manually add the public exponent.</p>
 <h5 class="arguments">Arguments</h5>
 <dl class="argument-info">
 <dt>$key</dt>
-<dd>String<br><em></em>
+<dd>String<br><em>optional</em>
 </dd>
 <dt>$type</dt>
 <dd>Integer<br><em>optional</em>

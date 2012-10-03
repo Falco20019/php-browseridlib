@@ -183,6 +183,7 @@ THE SOFTWARE.</p>
 <dd><a class="method public" href="#%5CCrypt_TripleDES::encrypt()">encrypt</a></dd>
 <dd><a class="method public" href="#%5CCrypt_TripleDES::setIV()">setIV</a></dd>
 <dd><a class="method public" href="#%5CCrypt_TripleDES::setKey()">setKey</a></dd>
+<dd><a class="method public" href="#%5CCrypt_TripleDES::setPassword()">setPassword</a></dd>
 </dl>
 <h3>Description</h3>
 <p class="short-description">Pure-PHP implementation of Triple DES.</p>
@@ -1163,6 +1164,49 @@ to be all zero's.</p>
 <dl class="argument-info">
 <dt>$key</dt>
 <dd>String<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_TripleDES::setPassword()"></a><h4 class="method public">setPassword<div class="to-top"><a href="#Crypt_TripleDES">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">setPassword</span><span class="nb-faded-text">(
+          String $password, \optional $method
+              =
+              pbkdf2
+          )
+        </span>
+        :
+        </code><p class="short-description">Sets the password.</p>
+<div class="long-description"><p>Depending on what $method is set to, setPassword()'s (optional) parameters are as follows:
+    {@link http://en.wikipedia.org/wiki/PBKDF2 pbkdf2}:
+        $hash, $salt, $method</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$password</dt>
+<dd>String<br><em></em>
+</dd>
+<dt>$method</dt>
+<dd>\optional<br><em>String $method</em>
 </dd>
 </dl>
 <div class="clear"></div>

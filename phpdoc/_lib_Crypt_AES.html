@@ -275,6 +275,7 @@ THE SOFTWARE.</p>
 <dd><a class="method public" href="#%5CCrypt_AES::decrypt()">decrypt</a></dd>
 <dd><a class="method public" href="#%5CCrypt_AES::encrypt()">encrypt</a></dd>
 <dd><a class="method public" href="#%5CCrypt_AES::setBlockLength()">setBlockLength</a></dd>
+<dd><a class="method public" href="#%5CCrypt_AES::setIV()">setIV</a></dd>
 </dl>
 <h3>Description</h3>
 <p class="short-description">Pure-PHP implementation of AES.</p>
@@ -642,6 +643,43 @@ length.</p>
 <dl class="argument-info">
 <dt>$length</dt>
 <dd>Integer<br><em></em>
+</dd>
+</dl>
+<div class="clear"></div>
+</div>
+<div class="api-section">
+<h5 class="info">
+<img src="images/arrow_right.gif"> Details</h5>
+<dl class="function-info">
+<dt>visibility</dt>
+<dd>public</dd>
+<dt>final</dt>
+<dd>false</dd>
+<dt>static</dt>
+<dd>false</dd>
+<dt>access</dt>
+<dd>public</dd>
+</dl>
+<div class="clear"></div>
+</div>
+</div>
+<a id="\Crypt_AES::setIV()"></a><h4 class="method public">setIV<div class="to-top"><a href="#Crypt_AES">jump to class</a></div>
+</h4>
+<div class="method">
+<code><span class="highlight">setIV</span><span class="nb-faded-text">(
+          String $iv
+          )
+        </span>
+        :
+        </code><p class="short-description">Sets the initialization vector. (optional)</p>
+<div class="long-description"><p>SetIV is not required when CRYPT_RIJNDAEL_MODE_ECB is being used.  If not explictly set, it'll be assumed
+to be all zero's.</p>
+</div>
+<div class="api-section">
+<h5 class="arguments">Arguments</h5>
+<dl class="argument-info">
+<dt>$iv</dt>
+<dd>String<br><em></em>
 </dd>
 </dl>
 <div class="clear"></div>
