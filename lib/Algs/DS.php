@@ -32,7 +32,7 @@
 /**
  * Include Utils
  */
-require_once(BROWSERID_BASE_PATH."lib/BrowserID/Utils.php");
+require_once(BROWSERID_BASE_PATH."lib/BrowserID/utils.php");
 
 /**
  * Include Crypt_DSA

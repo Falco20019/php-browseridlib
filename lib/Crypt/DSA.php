@@ -46,11 +46,6 @@
  */
 
 /**
- * uses PEAR_Exception
- */
-require_once 'PEAR/Exception.php';
-
-/**
  * Include Math_BigInteger
  */
 require_once(BROWSERID_BASE_PATH.'lib/Math/BigInteger.php');
@@ -64,40 +59,6 @@ require_once(BROWSERID_BASE_PATH.'lib/Crypt/Random.php');
  * Include Crypt_Hash
  */
 require_once(BROWSERID_BASE_PATH.'lib/Crypt/Hash.php');
-
-/**
- * Crypt_DSA_Exception
- *
- * This class is used in all place in the package where Exceptions
- * are raised.
- *
- * @package     Crypt
- * @subpackage  Crypt_DSA
- * @author      Shin OHNO <ganchiku@gmail.com>
- * @author      TSURUOKA Naoya <tsuruoka@labs.cybozu.co.jp>
- */
-class Crypt_DSA_Exception extends PEAR_Exception
-{
-    /**
-     * errorHandlerCallback
-     *
-     * @param int $code
-     * @param string $string
-     * @param string $file
-     * @param int $line
-     * @param array $context
-     * @static
-     * @access public
-     * throw Crypt_DSA_Exception
-     */
-    public static function errorHandlerCallback($code, $string, $file, $line, $context)
-    {
-        $e = new self($string, $code);
-        $e->line = $line;
-        $e->file = $file;
-        throw $e;
-    }
-}
 
 /**
  * Crypt_DSA
@@ -188,7 +149,6 @@ class Crypt_DSA
      * @param Math_BigInteger $q q
      * @param Math_BigInteger $g g
      * @return array x = private key, y = public key
-     * @throws Crypt_DSA_Exception
      */
     static public function generate($p, $q, $g)
     {
@@ -213,7 +173,6 @@ class Crypt_DSA
      * @param Math_BigInteger $g g
      * @param Math_BigInteger $x private key
      * @return array r,s key
-     * @throws Crypt_DSA_Exception
      */
     static public function sign($message, $hash_alg, $p, $q, $g, $x)
     {
@@ -278,7 +237,6 @@ class Crypt_DSA
      * @param Math_BigInteger $g g
      * @param Math_BigInteger $y public key
      * @return bool
-     * @throws Crypt_DSA_Exception
      */
     static public function verify($message, $hash_alg, $r, $s, $p, $q, $g, $y)
     {
