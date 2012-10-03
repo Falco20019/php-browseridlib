@@ -135,7 +135,7 @@ class Primary {
             list($domain, $origin, $path) = explode("|", $primary);
             Primary::$g_shim_cache[$domain] = array(
                 "origin" => $origin,
-                "body" => @file_get_contents(Utils::path_concat(Configuration::getInstance()->get("shimmed_path"), $path))
+                "body" => @file_get_contents(Utils::path_concat(Configuration::getInstance()->get("shimmed_path"), $path)) // TODO: Remove body and implement this into PrimaryCache!
             );
             //logger.info("inserted primary info for '" + domain + "' into cache, TODO point at '" + origin + "'");
         }
@@ -243,6 +243,7 @@ class Primary {
      * @return array Containing the content of the document as 'body', 'domain' and the already seen deletages as 'delegates'
      */
     public static function getWellKnown($domain, $delegates) {
+		// TODO: Replace with primary cache here!
         if (Primary::$g_shim_cache[$domain]) {
             return array(
                 "body" => Primary::$g_shim_cache[$domain]["body"],
@@ -250,6 +251,7 @@ class Primary {
                 "delegates" => $delegates
             );
         }
+		// TODO: Replace with primary cache here!
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, "https://" . $domain . Primary::WELL_KNOWN_URL);
@@ -268,6 +270,8 @@ class Primary {
             //logger.debug(domain + ' is not a browserid primary: ' + e.toString());
             throw new Exception($domain . ' is not a browserid primary.');
         }
+		
+		// TODO: Insert requested data into primary cache here
 
         return array(
             "body" => $buffer,

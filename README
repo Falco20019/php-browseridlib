@@ -120,3 +120,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 Some more data checking of fields needed before accessing them and  removal of 
 the call-time pass-by-reference usages since they got deprecated.
 
+Implement public key cache. First try it with authenticating using the cached public 
+key, if this fails, try it with fetching the well-known public key. The cache should 
+also expire the keys since it is possible that the public key of a provider may change 
+in case it is compromised.

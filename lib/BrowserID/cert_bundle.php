@@ -173,7 +173,11 @@ class CertBundle {
             // can't extract components
             throw new Exception("malformed signature");
         }
+		
+		// TODO: Check if PrimaryCache entry exists, try verifyChainAgainstKey with cached entry.
+		// If it fails, remove the cache entry and retry verifyChainAgainstKey with newly fetched key.
         
+		// TODO: Extract this into verifyChainAgainstKey
         $rootPK = CertBundle::getPublicKey($rootIssuer);
           
         $certResult = array();
@@ -185,6 +189,7 @@ class CertBundle {
             
             $certResult[] = $cert;
         }
+		// TODO: Extract this into verifyChainAgainstKey
         
         return $certResult;
     }
