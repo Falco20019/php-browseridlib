@@ -6,9 +6,10 @@ BrowserID PHP Library
 (1) Summary
 (2) Requirements
 (3) Release notes
-(4) Websites
-(5) Credits
-(6) License
+(4) Usage
+(5) Websites
+(6) Credits
+(7) License
 
 
 (1) Summary
@@ -42,7 +43,45 @@ ideas as showed at https://github.com/mozilla/browserid/tree/dev/lib and
 https://github.com/mozilla/jwcrypto and ported them for PHP.
 
 
-(4) Websites
+(4) Usage
+---------
+
+Example for verifying an assertion:
+==============================================================
+include('lib/browserid.php');
+$response = Verifier::verify($assertion, 'yoursite.org');
+if ($response["status"] == "okay") {
+    $_SESSION['email'] = $response["email"];
+    ...
+} else {
+    echo $response["reason"];
+    ...
+}
+==============================================================
+
+For more usage examples see the examples folder. Please configure the file 
+lib/BrowserID/configuration.php before testing (especially hostname and base_path)
+
+- examples/createKeys.php
+    The library is offering some functions for helping to implement identity 
+    providers. This example shows how to create and save a key pair later used 
+    for signing identity certificates. The created certificates will be saved as 
+    var/root.cert (public key) and var/root.secretkey. To obtain these keys for 
+    signing, you can call Secrets::loadPublicKey() and Secrets::loadSecretKey().
+
+- examples/createBundle.php
+    This example creates an bundled assertion, just like the browser would do.
+    The variables $publicKeyIdentity and $secretKeyIdentity contain the keys that 
+    normally would be created by the browser.
+
+    CertAssertion::createAssertion() creates the assertion claim and signs it with 
+    the users identity certificate ($secretKeyIdentity). The public key of the 
+    identity certificate will be signed by calling CertAssertion::createIdentityCert() 
+    acting like a identity provider would do while provisioning using the public 
+    key stored in Secrets::loadPublicKey().
+
+
+(5) Websites
 ------------
 
 BrowserID at GitHub :
@@ -55,7 +94,7 @@ Mozilla Persona Main Page :
 - https://login.persona.org/
 
 
-(5) Credits
+(6) Credits
 -----------
 
 This library makes use of some external libraries. The following were adopted full or partly:
@@ -63,7 +102,7 @@ This library makes use of some external libraries. The following were adopted fu
 - Math_BigInteger (http://pear.php.net/package/Math_BigInteger by Jim Wigginton)
 - Crypt_DSA (http://pear.php.net/pepr/pepr-proposal-show.php?id=467 by TSURUOKA Naoya)
 
-(6) License
+(7) License
 -----------
 
 Copyright (c) 2012 Benjamin Krämer
