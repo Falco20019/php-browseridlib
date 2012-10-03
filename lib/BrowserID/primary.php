@@ -170,7 +170,7 @@ class Primary {
 
         $want = array( 'public-key', 'authentication', 'provisioning' );
         $got = array();
-        if (is_object($v)) {
+        if (is_array($v)) {
             $got = array_keys(get_object_vars($v));
         }
         
@@ -204,7 +204,7 @@ class Primary {
                 }
             }
         }
-
+        
         if (sizeof($missing_keys) > 0) {
             throw new Exception("missing required key: " . join(', ', $missing_keys));
         };
