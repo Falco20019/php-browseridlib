@@ -170,7 +170,7 @@ class Primary {
 
         $want = array( 'public-key' );
         if ($domain != Configuration::getInstance()->get("master_idp")) { // TODO: This is only valid for mozillas main idp
-			$want = array_merge( $want, array ('authentication', 'provisioning' ) );
+            $want = array_merge( $want, array ('authentication', 'provisioning' ) );
         }
 		
         $got = array();
@@ -201,11 +201,11 @@ class Primary {
         }
         
         $missing_keys = array();
-		foreach ($want as $k) {
-			if (array_search($k, $got) === false) {
-				array_push($missing_keys, $k);
-			}
-		}
+        foreach ($want as $k) {
+            if (array_search($k, $got) === false) {
+                array_push($missing_keys, $k);
+            }
+        }
         
         if (sizeof($missing_keys) > 0) {
             throw new Exception("missing required key: " . join(', ', $missing_keys));
@@ -245,7 +245,7 @@ class Primary {
      * @return array Containing the content of the document as 'body', 'domain' and the already seen deletages as 'delegates'
      */
     public static function getWellKnown($domain, $delegates) {
-		// TODO: Replace with primary cache here!
+        // TODO: Replace with primary cache here!
         if (Primary::$g_shim_cache[$domain]) {
             return array(
                 "body" => Primary::$g_shim_cache[$domain]["body"],
@@ -253,7 +253,7 @@ class Primary {
                 "delegates" => $delegates
             );
         }
-		// TODO: Replace with primary cache here!
+        // TODO: Replace with primary cache here!
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, "https://" . $domain . Primary::WELL_KNOWN_URL);
@@ -273,7 +273,7 @@ class Primary {
             throw new Exception($domain . ' is not a browserid primary.');
         }
 		
-		// TODO: Insert requested data into primary cache here
+        // TODO: Insert requested data into primary cache here
 
         return array(
             "body" => $buffer,

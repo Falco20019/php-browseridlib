@@ -29,7 +29,7 @@
  */
 
 // Disable error messages
-error_reporting(0);
+//error_reporting(0);
 
 /**
  * Include BrowserID library

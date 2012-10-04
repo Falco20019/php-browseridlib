@@ -34,6 +34,11 @@
 require_once("BrowserID/configuration.php");
 
 /**
+ * Activates the environmental settings for developement
+ */
+//Configuration::getInstance()->setEnvironment("developement");
+
+/**
  * Define BrowserID library base path
  */
 define("BROWSERID_BASE_PATH", Configuration::getInstance()->get("base_path"));
@@ -43,18 +48,21 @@ define("BROWSERID_BASE_PATH", Configuration::getInstance()->get("base_path"));
  */
 require_once(BROWSERID_BASE_PATH."lib/BrowserID/verifier.php");
 
-/**
- * Include CertAssertion
- */
-require_once(BROWSERID_BASE_PATH."lib/BrowserID/cert_assertion.php");
+if (!Configuration::getInstance()->get('use_remote_verifier'))
+{
+    /**
+     * Include CertAssertion
+     */
+    require_once(BROWSERID_BASE_PATH."lib/BrowserID/cert_assertion.php");
 
-/**
- * Include Utils
- */
-require_once(BROWSERID_BASE_PATH."lib/BrowserID/utils.php");
+    /**
+     * Include Utils
+     */
+    require_once(BROWSERID_BASE_PATH."lib/BrowserID/utils.php");
 
-/**
- * Include BrowserID library
- */
-require_once(BROWSERID_BASE_PATH."lib/BrowserID/secrets.php");
+    /**
+     * Include BrowserID library
+     */
+    require_once(BROWSERID_BASE_PATH."lib/BrowserID/secrets.php");
+}
 ?>

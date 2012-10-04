@@ -104,21 +104,23 @@ class Configuration {
             'port' => '443',
             'scheme' => 'https',
             'master_idp' => 'login.persona.org',
+            'remote_verifier_url' => 'https://login.persona.org/verify',
+            'use_remote_verifier' => true,
             'assertion_validity' => 300,
             'identity_validity' => 86400,
             'base_path' => 'C:/xampp/htdocs/browserid_sample/browseridlib/',
             'var_path' => 'var',
-            'primaries_path' => 'shimmed_primaries',
             'shimmed_path' => 'shimmed_primaries',
-            'shimmed_primaries' => array(
-                    'login.persona.org|https://login.persona.org|persona.org'
-                )
+            'shimmed_primaries' => array()
         );
         
-        // development (dev.diresworb.org) the only difference from production
-        // is, again, the hostname
+        // development the only difference from production is that the local 
+        // verifier is used 
         $this->g_configs['developement'] = $this->g_configs['production'];
-        $this->g_configs['developement']['hostname'] = 'your.server.org';
+        $this->g_configs['developement']['use_remote_verifier'] = false;
+        $this->g_configs['developement']['shimmed_primaries'] = array(
+                'login.persona.org|https://login.persona.org|persona.org'
+            );
         
         $this->setEnvironment($this->environment);
     }

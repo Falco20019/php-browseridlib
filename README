@@ -16,17 +16,28 @@ BrowserID PHP Library
 (1) Summary
 -----------
 
-The library offers functions for verifying BrowserID/Persona assertions directly 
-on the server. Verifying the assertions directly has the advantage that the assertion
-is not sent over the internet and to reduce dependencies on others.
+The library offers functions for verifying BrowserID/Persona assertions either directly 
+on the server or using Mozillas fallback verifier. Verifying the assertions directly 
+has the advantage that the assertion is not sent over the internet and to reduce 
+dependencies on others.
 
-Since BrowserID/Persona is highly under developement right now, this library may 
-be out of date the time you use it. Until the protocol get's stable, the usage is 
-only advised for experimental usage. If you want to use BrowserID/Persona in the 
-experimental state, it's recommented to use https://browserid.org/verify for 
-verification.
+Since BrowserID/Persona is highly under developement right now, this libraries local 
+verifier may be out of date the time you use it. Until the protocol get's stable, 
+the usage is only advised for experimental usage. If you want to use BrowserID/Persona 
+in an productional environment, it's recommented to use Mozillas verifier instead of 
+verifying locally.
 
-(See https://developer.mozilla.org/en-US/docs/Persona/FAQ#Can_I_verify_assertions_locally.2C_or_must_I_use_the_remote_verification_service.3F)
+Using the remote verifier is currently the default mode if the environment is set 
+to "production". To use the local verifier, open the file /lib/browserid.php and 
+uncomment the following line:
+
+Configuration::getInstance()->setEnvironment("developement");
+
+!!! THIS IS NOT ADVISED FOR PRODUCTIONAL USE !!!
+
+This will enable all currently configured developement features like the local verifier 
+or shimmed primaries. To get back into the safe production environment, just comment the 
+line out again.
 
 
 (2) Requirements
@@ -80,6 +91,15 @@ lib/BrowserID/configuration.php before testing (especially hostname and base_pat
     identity certificate will be signed by calling CertAssertion::createIdentityCert() 
     acting like a identity provider would do while provisioning using the public 
     key stored in Secrets::loadPublicKey().
+
+NOTICE:
+If you only want to use the remote verifier on your server, you only have to upload 
+the following files without configuring anything:
+    - verify.php
+    - lib/browserid.php
+    - lib/BrowserID/configuration.php
+    - lib/BrowserID/utils.php
+    - lib/BrowserID/verifier.php
 
 
 (5) Websites

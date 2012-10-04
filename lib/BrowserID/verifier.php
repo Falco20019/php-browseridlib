@@ -48,19 +48,14 @@
  */
 
 /**
- * Include CertAssertion
- */
-require_once(BROWSERID_BASE_PATH."lib/BrowserID/cert_assertion.php");
-
-/**
- * Include Primary
- */
-require_once(BROWSERID_BASE_PATH."lib/BrowserID/primary.php");
-
-/**
  * Include Configuration
  */
 require_once(BROWSERID_BASE_PATH."lib/BrowserID/configuration.php");
+
+/**
+ * Include Utils
+ */
+require_once(BROWSERID_BASE_PATH."lib/BrowserID/utils.php");
 
 /**
  * Verifier
@@ -75,11 +70,39 @@ class Verifier {
     /**
      * Verifies a given assertion bundle for validity and against the audience.
      * 
+     * @access public
+     * @static
      * @param String $assertion The serialized assertion bundle
      * @param String $audience The audience as valid URL
      * @return array An array containing status okay on success or failure on error
      */
     public static function verify($assertion, $audience) {
+        if (Configuration::getInstance()->get('use_remote_verifier'))
+            return Verifier::verifyRemote($assertion, $audience);
+        else
+            return Verifier::verifyLocally($assertion, $audience);
+    }
+    
+    /**
+     * Verifies a given assertion bundle for validity and against the audience 
+     * using the local server and without requesting Mozilla's fallback verifier.
+     * 
+     * !!! THIS IS THE CURRENTLY __NOT__ ADVISED METHOD WHEN USED IN PRODUCTION MODE !!!
+     * 
+     * @access private
+     * @static
+     * @param String $assertion The serialized assertion bundle
+     * @param String $audience The audience as valid URL
+     * @return array An array containing status okay on success or failure on error
+     */
+    private static function verifyLocally($assertion, $audience)
+    {
+
+        /**
+         * Include CertAssertion
+         */
+        require_once(BROWSERID_BASE_PATH."lib/BrowserID/cert_assertion.php");
+
         try {
             $certassertion = new CertAssertion($assertion, $audience);
             $result = $certassertion->verify();
@@ -106,6 +129,39 @@ class Verifier {
             //console.log($e->getTraceAsString());
             return json_encode(array("status"=>"failure", "reason"=>$e->getMessage()));
         }
+    }
+    
+    /**
+     * Verifies a given assertion bundle for validity and against the audience 
+     * by requesting Mozilla's fallback verifier.
+     * 
+     * !!! THIS IS THE CURRENTLY ADVISED METHOD WHEN USED IN PRODUCTION MODE !!!
+     * 
+     * @access private
+     * @static
+     * @param String $assertion The serialized assertion bundle
+     * @param String $audience The audience as valid URL
+     * @return array An array containing status okay on success or failure on error
+     */
+    private static function verifyRemote($assertion, $audience)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, Configuration::getInstance()->get('remote_verifier_url'));
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(array("assertion" => $assertion, "audience" => $audience)));
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+        if (substr(PHP_OS, 0, 3) == 'WIN') {
+            if (!isset($cabundle)) {
+                $inst = Configuration::getInstance();
+                $cabundle = Utils::path_concat($inst->get('base_path'), $inst->get('var_path'), 'cabundle.crt');
+            }
+            curl_setopt($ch, CURLOPT_CAINFO, $cabundle);
+        }
+        $buffer = curl_exec($ch);
+        curl_close($ch);
+        return $buffer;
     }
 }
 ?>
