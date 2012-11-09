@@ -104,7 +104,7 @@ class Configuration {
             'port' => '443',
             'scheme' => 'https',
             'master_idp' => 'login.persona.org',
-            'remote_verifier_url' => 'https://login.persona.org/verify',
+            'remote_verifier_url' => 'https://verifier.login.persona.org/verify',
             'use_remote_verifier' => true,
             'assertion_validity' => 300,
             'identity_validity' => 86400,
