@@ -124,7 +124,12 @@ class Assertion {
      * @return Assertion An instance of an assertion
      */
     public static function deserialize(&$params) {
-        $assertion = new Assertion($params["iat"], $params["exp"], $params["iss"], $params["aud"]);
+        $assertion = new Assertion(
+            isset($params["iat"]) ? $params["iat"] : null,
+            isset($params["exp"]) ? $params["exp"] : null,
+            isset($params["iss"]) ? $params["iss"] : null,
+            isset($params["aud"]) ? $params["aud"] : null
+        );
         unset($params["iat"], $params["exp"], $params["iss"], $params["aud"]);
         return $assertion;
     }
@@ -192,7 +197,7 @@ class Assertion {
         $allParams = array();
         if ($additionalPayload != null)
             $allParams = array_merge($allParams, $additionalPayload);
-        $this->serialize(&$allParams);
+        $allParams = $this->serialize($allParams);
         
         $token = new WebToken($allParams);
         return $token->serialize($secretKey);

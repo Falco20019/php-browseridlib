@@ -118,19 +118,6 @@ abstract class AbstractKeyPair extends AbstractKey {
     protected $secretKey;
     
     /**
-     * Generate keypair
-     * 
-     * Generates a keypair for a given keysize in bits
-     * 
-     * @abstract
-     * @access public
-     * @static
-     * @param int $keysize Keysize in bits
-     * @return AbstractKeyPair Returning an instance of the key pair
-     */
-    abstract public static function generate($keysize);
-    
-    /**
      * Creates public key
      * 
      * Creates a public key using the algorithm of the extended class.
@@ -217,32 +204,6 @@ abstract class AbstractKeyInstance extends AbstractKey {
     abstract protected function serializeToObject(&$obj);
     
     /**
-     * Unflatten key
-     * 
-     * Creates an key instance from the parameters.
-     * 
-     * @abstract
-     * @access public
-     * @static
-     * @param array $obj Parameters of the key
-     * @return AbstractKeyInstance
-     */
-    abstract public static function fromSimpleObject($obj);
-    
-    /**
-     * Deserialize key
-     * 
-     * Deserializes the key.
-     * 
-     * @abstract
-     * @access public
-     * @static
-     * @param string $str Serialized parmeters of the key
-     * @return AbstractKeyInstance
-     */
-    abstract public static function deserialize($str);
-    
-    /**
      * Flatten key
      * 
      * Extracts the parameters of the key.
@@ -297,7 +258,15 @@ abstract class AbstractPublicKey extends AbstractKeyInstance {
     abstract public function verify($message, $signature);
     
     /**
-     * @see AbstractKeyInstance::fromSimpleObject($obj)
+     * Unflatten key
+     * 
+     * Creates an key instance from the parameters.
+     * 
+     * @abstract
+     * @access public
+     * @static
+     * @param array $obj Parameters of the key
+     * @return AbstractPublicKey
      */
     public static function fromSimpleObject($obj) {
         if (!isset($GLOBALS["ALGS"][$obj["algorithm"]]))
@@ -310,7 +279,15 @@ abstract class AbstractPublicKey extends AbstractKeyInstance {
     }
     
     /**
-     * @see AbstractKeyInstance::deserialize($str)
+     * Deserialize key
+     * 
+     * Deserializes the key.
+     * 
+     * @abstract
+     * @access public
+     * @static
+     * @param string $str Serialized parmeters of the key
+     * @return AbstractPublicKey
      */
     public static function deserialize($str) {
         return AbstractPublicKey::fromSimpleObject(json_decode($str, true));
@@ -342,7 +319,15 @@ abstract class AbstractSecretKey extends AbstractKeyInstance {
     abstract public function sign($message);
     
     /**
-     * @see AbstractKeyInstance::fromSimpleObject($obj)
+     * Unflatten key
+     * 
+     * Creates an key instance from the parameters.
+     * 
+     * @abstract
+     * @access public
+     * @static
+     * @param array $obj Parameters of the key
+     * @return AbstractSecretKey
      */
     public static function fromSimpleObject($obj) {
         if (!isset($GLOBALS["ALGS"][$obj["algorithm"]]))
@@ -355,7 +340,15 @@ abstract class AbstractSecretKey extends AbstractKeyInstance {
     }
     
     /**
-     * @see AbstractKeyInstance::deserialize($str)
+     * Deserialize key
+     * 
+     * Deserializes the key.
+     * 
+     * @abstract
+     * @access public
+     * @static
+     * @param string $str Serialized parmeters of the key
+     * @return AbstractSecretKey
      */
     public static function deserialize($str) {
         return AbstractSecretKey::fromSimpleObject(json_decode($str, true));

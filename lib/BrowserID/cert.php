@@ -106,8 +106,8 @@ class Cert {
             $params = array();
         
         $this->payload = $params;
-        $this->assertion->serialize(&$params);
-        $this->certParams->serialize(&$params);
+        $params = $this->assertion->serialize($params);
+        $params = $this->certParams->serialize($params);
         
         return $params;
     }
@@ -198,7 +198,7 @@ class Cert {
         $payload = array();
         if ($additionalPayload !== null)
             $payload = array_merge($additionalPayload, $payload);
-        $this->serialize(&$payload);
+        $payload = $this->serialize($payload);
         
         return $this->assertion->sign($secretKey, $payload);
     }

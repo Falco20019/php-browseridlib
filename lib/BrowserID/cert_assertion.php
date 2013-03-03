@@ -97,7 +97,7 @@ class CertAssertion {
      * @return array The parts, but with filled port field
      */
     private static function normalizeParsedURL($parts) {
-        if (!$parts['port']) $parts['port'] = $parts['scheme'] === 'https:' ? 443 : 80;
+        if (!isset($parts['port'])) $parts['port'] = $parts['scheme'] === 'https:' ? 443 : 80;
         return $parts;
     }
     

@@ -171,7 +171,15 @@ class DSAKeyPair extends AbstractKeyPair {
     }
 
     /**
-     * @see AbstractKeyPair::generate($keysize);
+     * Generate keypair
+     * 
+     * Generates a keypair for a given keysize in bits
+     * 
+     * @abstract
+     * @access public
+     * @static
+     * @param int $keysize Keysize in bits
+     * @return DSAKeyPair Returning an instance of the key pair
      */
     public static function generate($keysize) {
         if (!isset(self::$KEYSIZES[$keysize]))
