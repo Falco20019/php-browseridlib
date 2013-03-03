@@ -139,6 +139,7 @@ class CertAssertion {
             else {
                 $this->audience_domain = $this->audience;
             }
+            if (!isset($this->audience_domain)) throw new Exception("domain mismatch");
 
             // now parse "want" url
             $want = CertAssertion::normalizeParsedURL(parse_url($want));

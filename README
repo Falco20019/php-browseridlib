@@ -137,7 +137,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 (8) TODOs
 ---------
 
-Some more data checking of fields needed before accessing them.
+Some more data checking of fields needed before accessing them and adding IdP Proxies.
 
 Implement public key cache. First try it with authenticating using the cached public 
 key, if this fails, try it with fetching the well-known public key. The cache should 
