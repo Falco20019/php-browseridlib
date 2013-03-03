@@ -53,8 +53,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package    Crypt
- * @subpackage Crypt_RC4
+ * @category   Crypt
+ * @package    Crypt_RC4
  * @author     Jim Wigginton <terrafrost@php.net>
  * @copyright  MMVII Jim Wigginton
  * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
@@ -87,11 +87,10 @@ define('CRYPT_RC4_DECRYPT', 1);
 /**
  * Pure-PHP implementation of RC4.
  *
- * @author     Jim Wigginton <terrafrost@php.net>
- * @version    0.1.0
- * @access     public
- * @package    Crypt
- * @subpackage Crypt_RC4
+ * @author  Jim Wigginton <terrafrost@php.net>
+ * @version 0.1.0
+ * @access  public
+ * @package Crypt_RC4
  */
 class Crypt_RC4 {
     /**
@@ -265,7 +264,7 @@ class Crypt_RC4 {
                 }
 
                 if (!class_exists('Crypt_Hash')) {
-                    require_once(BROWSERID_BASE_PATH.'lib/Crypt/Hash.php');
+                    require_once('Crypt/Hash.php');
                 }
 
                 $i = 1;
