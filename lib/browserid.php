@@ -36,7 +36,7 @@ require_once("BrowserID/configuration.php");
 /**
  * Activates the environmental settings for developement
  */
-Configuration::getInstance()->setEnvironment("developement");
+//Configuration::getInstance()->setEnvironment("developement");
 
 /**
  * Define BrowserID library base path
